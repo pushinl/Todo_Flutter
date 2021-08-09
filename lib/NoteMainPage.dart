@@ -6,7 +6,7 @@ import 'package:todo_flutter/sqlite/SqliteHelper.dart';
 import 'package:toast/toast.dart';
 
 import 'Constants.dart';
-import 'bean/note_bean_entity.dart';
+import 'package:todo_flutter/bean/note_bean_entity.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 
 class NoteMainPage extends StatefulWidget {
@@ -20,12 +20,7 @@ class NoteMainPage extends StatefulWidget {
 
 
 class _NoteMainPageState extends State<NoteMainPage> {
-//侧滑条
-  final List<String> _tabValues = [
-    '语文',
-    '英语',
 
-  ];
   TabController _controller;
 
 
@@ -59,10 +54,6 @@ class _NoteMainPageState extends State<NoteMainPage> {
       appBar: AppBar(
         title: Text("备忘录"),
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.more),
-            onPressed: (){},
-        ),
         actions: [
           IconButton(
               onPressed: () {
@@ -73,11 +64,6 @@ class _NoteMainPageState extends State<NoteMainPage> {
                 });
               },
               icon: Icon(Icons.add)),
-          IconButton(
-              onPressed: () {
-                deleteAll();
-              },
-              icon: Icon(Icons.delete))
         ],
       // bottom: TabBar(
       //   tabs: _tabValues.map((f){
@@ -137,62 +123,14 @@ class _NoteMainPageState extends State<NoteMainPage> {
                                         BorderRadius.all(Radius.circular(10))),
                                 hintText: "输入搜索的内容",
                                 hintStyle: TextStyle(
-                                    color: ColorUtils.color_grey_dd)))),
-                    Image.asset(
+                                    color: ColorUtils.color_grey_666)))),
+                    Image.asset  (
                       "assets/images/search_search.png",
                       width: 25,
                       height: 25,
                     )
                   ],
                 ),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-              height: 40,
-              child: Flex(
-                direction: Axis.horizontal,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        isListView = !isListView;
-                      });
-                    },
-                    child: Image.asset(
-                      "assets/images/icon_menu.png",
-                      width: 20,
-                      height: 20,
-                    ),
-                  ),
-                  Expanded(
-                      child: InkWell(
-                    onTap: () {
-                      showPicker(context);
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          selectType == 1
-                              ? "按dd排序"
-                                  : "按优先级排序",
-                          textAlign: TextAlign.end,
-                          style: TextStyle(color: ColorUtils.color_godden_dark),
-                        ),
-                        Image.asset("assets/images/icon_down_narrow.png",
-                            width: 20, height: 20)
-                      ],
-                    ),
-                  ))
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-              child: Divider(
-                color: ColorUtils.color_grey_dd,
-                height: 1,
               ),
             ),
             Expanded(
