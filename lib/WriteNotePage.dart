@@ -133,6 +133,7 @@ class _WriteNotePageState extends State<WriteNotePage> {
       print(value.noteId);
       if (value.noteId > 0) {
         Toast.show("新增成功", context, gravity: Toast.CENTER);
+        exit(context);
       }
     });
     await sqliteHelper.close();
@@ -147,6 +148,7 @@ class _WriteNotePageState extends State<WriteNotePage> {
     await sqliteHelper.update(arguments).then((value) {
       if (value > 0) {
         Toast.show("修改成功", context, gravity: Toast.CENTER);
+        exit(context);
       }
     });
   }
