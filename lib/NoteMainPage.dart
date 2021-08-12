@@ -125,7 +125,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
                                 hintStyle: TextStyle(
                                     color: ColorUtils.color_grey_666)))),
                     Image.asset  (
-                      "assets/images/search_search.png",
+                      'assets/images/search_search.png',
                       width: 25,
                       height: 25,
                     )
@@ -165,14 +165,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
                             itemCount: noteList.length,
                             itemBuilder: getItemBuilder),
                       )),
-            Container(
-              color: ColorUtils.color_grey_999,
-              height: 40,
-              child: Text("${noteList.length}个备忘录",
-                  style:
-                      TextStyle(fontSize: 10, color: ColorUtils.color_white)),
-              alignment: Alignment.center,
-            )
+
           ],
         ),
 
