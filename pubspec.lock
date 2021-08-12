@@ -102,6 +102,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0"
+  r_calendar:
+    dependency: "direct main"
+    description:
+      name: r_calendar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.11"
   sky_engine:
     dependency: transitive
     description: flutter

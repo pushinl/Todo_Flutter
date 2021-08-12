@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_flutter/NoteMainPage.dart';
+import 'package:todo_flutter/TodoPage.dart';
 
 class Tabs extends StatefulWidget{
   Tabs({Key key}) : super(key: key);
@@ -70,7 +71,7 @@ class _TabsState extends State<Tabs> with SingleTickerProviderStateMixin{
       body: TabBarView(
         controller: this._tabController,
         children: [
-          Text('待办'),
+          TodoPage(),
           Text('团队'),
           NoteMainPage(),
           Text('个人'),
