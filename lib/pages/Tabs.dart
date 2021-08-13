@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo_flutter/NoteMainPage.dart';
-import 'package:todo_flutter/TodoPage.dart';
+import 'package:todo_flutter/pages/notepage/NoteMainPage.dart';
+import 'package:todo_flutter/pages/todopage/TodoPage.dart';
 
 class Tabs extends StatefulWidget{
   Tabs({Key key}) : super(key: key);

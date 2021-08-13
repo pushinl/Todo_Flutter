@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'Routes.dart';
-import 'Tabs.dart';
+import 'pages/Routes.dart';
+import 'pages/Tabs.dart';
 
 void main() {
   runApp(MyApp());

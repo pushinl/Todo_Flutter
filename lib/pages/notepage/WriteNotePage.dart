@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:todo_flutter/Color.dart';
-import 'package:todo_flutter/Constants.dart';
+import 'package:todo_flutter/pages/Color.dart';
+import 'package:todo_flutter/pages/Constants.dart';
 import 'package:todo_flutter/pages/notepage/sqlite/SqliteHelper.dart';
 
 import '../../bean/note_bean_entity.dart';

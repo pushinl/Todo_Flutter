@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:todo_flutter/Color.dart';
-import 'package:todo_flutter/sqlite/SqliteHelper.dart';
+import 'package:todo_flutter/pages/Color.dart';
+import 'package:todo_flutter/pages/notepage/sqlite/SqliteHelper.dart';
 import 'package:toast/toast.dart';
-import 'package:todo_flutter/TodoPage1.dart';
-import 'Constants.dart';
-import 'bean/note_bean_entity.dart';
+import 'package:todo_flutter/pages/todopage/TodoPage1.dart';
+import '../Constants.dart';
+import '../../bean/note_bean_entity.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 
 class TodoPage extends StatefulWidget {
