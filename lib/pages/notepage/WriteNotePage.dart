@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_flutter/Color.dart';
 import 'package:todo_flutter/Constants.dart';
-import 'package:todo_flutter/sqlite/SqliteHelper.dart';
+import 'package:todo_flutter/pages/notepage/sqlite/SqliteHelper.dart';
 
-import 'bean/note_bean_entity.dart';
+import '../../bean/note_bean_entity.dart';
 import 'package:toast/toast.dart';
 
 class WriteNotePage extends StatefulWidget {
@@ -59,13 +59,14 @@ class _WriteNotePageState extends State<WriteNotePage> {
             actions: [
               IconButton(
                   onPressed: () {
-                    if (arguments != null) {
+                    if (arguments != null ) {
                       updateNote();
                     } else {
                       addNote();
                     }
                   },
-                  icon: Image.asset("assets/images/icon_ok.png"))
+                  icon: Image.asset('assets/images/icon_ok.png')
+              )
             ],
           ),
           body: Container(
@@ -124,6 +125,10 @@ class _WriteNotePageState extends State<WriteNotePage> {
     NoteBeanEntity noteBeanEntity = new NoteBeanEntity();
     noteBeanEntity.title = title.text;
     noteBeanEntity.content = content.text;
+    if (noteBeanEntity.title=='' || noteBeanEntity.content=='') {
+      Toast.show("标题或内容不能为空", context, gravity: Toast.CENTER);
+      await sqliteHelper.close();
+    }
     noteBeanEntity.noteCode = DateTime.now().toString();
     noteBeanEntity.addTime =
         DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
@@ -143,6 +148,10 @@ class _WriteNotePageState extends State<WriteNotePage> {
     await sqliteHelper.open();
     arguments.content = content.text;
     arguments.title = title.text;
+    if (arguments.title=='' || arguments.content=='') {
+      Toast.show("标题或内容不能为空", context, gravity: Toast.CENTER);
+      await sqliteHelper.close();
+    }
     arguments.updateTime =
         DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
     await sqliteHelper.update(arguments).then((value) {
