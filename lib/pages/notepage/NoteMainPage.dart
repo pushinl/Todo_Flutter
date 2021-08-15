@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_flutter/pages/Color.dart';
-import 'package:todo_flutter/pages/notepage/sqlite/SqliteHelper.dart';
+import 'package:todo_flutter/pages/notepage/sqlite/NoteSqliteHelper.dart';
 import 'package:toast/toast.dart';
 
 import '../Constants.dart';
@@ -25,7 +25,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
 
 
   var keyWord; //关键字
-  SqliteHelper sqliteHelper;
+  NoteSqliteHelper sqliteHelper;
   List<NoteBeanEntity> noteList = <NoteBeanEntity>[];
   var selectType = 1; //1 按编辑日期 2 按创建日期 3 按标题
   static GlobalKey<ScaffoldState> _globalKey = GlobalKey();
@@ -39,7 +39,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
     //   length: _tabValues.length,
     //   vsync: ScrollableState(),
     // );
-    sqliteHelper = new SqliteHelper();
+    sqliteHelper = new NoteSqliteHelper();
     getAllNote();
   }
 
@@ -192,6 +192,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
               getAllNote();
             },
             key: Key(e.noteId.toString()),
+            background: Container(color: Colors.red),
             child: InkWell(
               onTap: () {
                 goToWriteNote(context, e);
@@ -236,6 +237,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
           noteList.remove(e);
         },
         key: Key(e.noteId.toString()),
+        background: Container(color: Colors.red),
         child: ListTile(
           minVerticalPadding: 0,
           onTap: () {

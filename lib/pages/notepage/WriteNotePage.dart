@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_flutter/pages/Color.dart';
 import 'package:todo_flutter/pages/Constants.dart';
-import 'package:todo_flutter/pages/notepage/sqlite/SqliteHelper.dart';
+import 'package:todo_flutter/pages/notepage/sqlite/NoteSqliteHelper.dart';
 
 import '../../bean/note_bean_entity.dart';
 import 'package:toast/toast.dart';
@@ -19,7 +19,7 @@ class WriteNotePage extends StatefulWidget {
 
 class _WriteNotePageState extends State<WriteNotePage> {
   NoteBeanEntity arguments;
-  SqliteHelper sqliteHelper;
+  NoteSqliteHelper noteSqliteHelper;
   TextEditingController title;
 
   TextEditingController content;
@@ -30,7 +30,7 @@ class _WriteNotePageState extends State<WriteNotePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    sqliteHelper = new SqliteHelper();
+    noteSqliteHelper = new NoteSqliteHelper();
     if (arguments != null) {
       title = new TextEditingController(text: arguments.title);
       content = new TextEditingController(text: arguments.content);
@@ -121,40 +121,40 @@ class _WriteNotePageState extends State<WriteNotePage> {
   }
 
   void addNote() async {
-    await sqliteHelper.open();
+    await noteSqliteHelper.open();
     NoteBeanEntity noteBeanEntity = new NoteBeanEntity();
     noteBeanEntity.title = title.text;
     noteBeanEntity.content = content.text;
     if (noteBeanEntity.title=='' || noteBeanEntity.content=='') {
       Toast.show("标题或内容不能为空", context, gravity: Toast.CENTER);
-      await sqliteHelper.close();
+      await noteSqliteHelper.close();
     }
     noteBeanEntity.noteCode = DateTime.now().toString();
     noteBeanEntity.addTime =
         DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
     noteBeanEntity.updateTime =
         DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
-    await sqliteHelper.insert(noteBeanEntity).then((value) {
+    await noteSqliteHelper.insert(noteBeanEntity).then((value) {
       print(value.noteId);
       if (value.noteId > 0) {
         Toast.show("新增成功", context, gravity: Toast.CENTER);
         exit(context);
       }
     });
-    await sqliteHelper.close();
+    await noteSqliteHelper.close();
   }
 
   void updateNote() async {
-    await sqliteHelper.open();
+    await noteSqliteHelper.open();
     arguments.content = content.text;
     arguments.title = title.text;
     if (arguments.title=='' || arguments.content=='') {
       Toast.show("标题或内容不能为空", context, gravity: Toast.CENTER);
-      await sqliteHelper.close();
+      await noteSqliteHelper.close();
     }
     arguments.updateTime =
         DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
-    await sqliteHelper.update(arguments).then((value) {
+    await noteSqliteHelper.update(arguments).then((value) {
       if (value > 0) {
         Toast.show("修改成功", context, gravity: Toast.CENTER);
         exit(context);

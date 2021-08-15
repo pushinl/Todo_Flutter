@@ -20,6 +20,9 @@ version: 1.0.0+1
 environment:
   sdk: ">=2.7.0 <3.0.0"
 
+flutter-json:
+  enable:true
+
 dependencies:
   flutter:
     sdk: flutter

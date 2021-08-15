@@ -11,14 +11,14 @@ final String columnUpdateTime = "update_time";
 final String columnNoteCode = "note_code";
 
 ///因为增删改查都是异步的原因，所以在执行操作前先确认db是否未空，否则会报错
-class SqliteHelper {
-  Database db;
+class NoteSqliteHelper {
+  Database noteDb;
   Batch batch;
 
   Future open() async {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, 'note.db');
-    db = await openDatabase(path, version: 1,
+    noteDb = await openDatabase(path, version: 1,
         onCreate: (Database db, int version) async {
       await db.execute(
           "create table IF NOT EXISTS $tableNote($columnId INTEGER PRIMARY KEY AUTOINCREMENT ,$columnTitle varchar(20)" +
@@ -28,12 +28,12 @@ class SqliteHelper {
 
   Future<NoteBeanEntity> insert(NoteBeanEntity noteBeanEntity) async {
     Map map = noteBeanEntity.toJson();
-    noteBeanEntity.noteId = await db.insert(tableNote, map);
+    noteBeanEntity.noteId = await noteDb.insert(tableNote, map);
     return noteBeanEntity;
   }
 
   Future<NoteBeanEntity> getNote(int id) async {
-    List<Map> maps = await db.query(tableNote,
+    List<Map> maps = await noteDb.query(tableNote,
         columns: [
           columnId,
           columnTitle,
@@ -58,14 +58,13 @@ class SqliteHelper {
     List<Map> maps;
     switch (type) {
       case 2:
-        maps = await db.query(tableNote, orderBy: "$columnUpdateTime DESC");
-
+        maps = await noteDb.query(tableNote, orderBy: "$columnUpdateTime DESC");
         break;
       case 1:
-        maps = await db.query(tableNote, orderBy: "$columnAddTime DESC");
+        maps = await noteDb.query(tableNote, orderBy: "$columnAddTime DESC");
         break;
       case 3:
-        maps = await db.query(tableNote, orderBy: "$columnTitle ASC");
+        maps = await noteDb.query(tableNote, orderBy: "$columnTitle ASC");
         break;
     }
     maps.map((e) {
@@ -81,15 +80,15 @@ class SqliteHelper {
     List<Map> maps;
     switch (type) {
       case 2:
-        maps = await db.query(tableNote,
+        maps = await noteDb.query(tableNote,
             where: where, orderBy: "$columnUpdateTime desc");
         break;
       case 1:
-        maps = await db.query(tableNote,
+        maps = await noteDb.query(tableNote,
             where: where, orderBy: "$columnAddTime desc");
         break;
       case 3:
-        maps = await db.query(tableNote,
+        maps = await noteDb.query(tableNote,
             where: where, orderBy: "$columnTitle asc");
         break;
     }
@@ -100,25 +99,25 @@ class SqliteHelper {
   }
 
   Future<int> delete(int id) async {
-    return await db.delete(tableNote, where: '$columnId = ?', whereArgs: [id]);
+    return await noteDb.delete(tableNote, where: '$columnId = ?', whereArgs: [id]);
   }
 
   Future<int> deleteAll() async {
-    return await db.delete(tableNote);
+    return await noteDb.delete(tableNote);
   }
 
   Future<int> update(NoteBeanEntity note) async {
-    return await db.update(tableNote, note.toJson(),
+    return await noteDb.update(tableNote, note.toJson(),
         where: '$columnId = ?', whereArgs: [note.noteId]);
   }
 
   Future batchOperate() async {
-    batch = db.batch();
+    batch = noteDb.batch();
     batch.delete(tableNote, where: "$columnTitle=?", whereArgs: ["0"]);
     batch.update(tableNote, {"$columnTitle": 'flutter'},
         where: '$columnTitle = ?', whereArgs: ["3"]);
     List list = await batch.commit();
   }
 
-  Future close() async => db.close();
+  Future close() async => noteDb.close();
 }

@@ -8,8 +8,8 @@ import 'package:todo_flutter/pages/notepage/WriteNotePage.dart';
 
 //配置路由，以后所有的跳转的页面都可以再这里完成
 final routes = {
-  '/note': (context) => NoteMainPage(), //配置根目录
-  '/writeNote': (context,{arguments}) => WriteNotePage(arguments: arguments,),
+  '/note': (context) => NoteMainPage(),
+  '/writeNote': (context, {arguments}) => WriteNotePage(arguments: arguments,),
   '/Calender':(context) =>CalenderPage(),
 
 };

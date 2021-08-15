@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_flutter/pages/Color.dart';
-import 'package:todo_flutter/pages/notepage/sqlite/SqliteHelper.dart';
+import 'package:todo_flutter/pages/notepage/sqlite/NoteSqliteHelper.dart';
 import 'package:toast/toast.dart';
 import 'package:todo_flutter/pages/todopage/TodoPage1.dart';
 import '../Constants.dart';
@@ -25,14 +25,14 @@ class _TodoPageState extends State<TodoPage> with SingleTickerProviderStateMixin
 
   TabController _tabController;
   var keyWord; //关键字
-  SqliteHelper sqliteHelper;
+  NoteSqliteHelper sqliteHelper;
 
 
   @override
   void initState() {
     super.initState();
     _tabController = new TabController(length: 3, vsync: this);
-    sqliteHelper = new SqliteHelper();
+    sqliteHelper = new NoteSqliteHelper();
   }
 
 

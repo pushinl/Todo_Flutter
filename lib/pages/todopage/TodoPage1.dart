@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:todo_flutter/bean/todo_bean_entity.dart';
 import 'package:todo_flutter/pages/Color.dart';
-import 'package:todo_flutter/pages/notepage/sqlite/SqliteHelper.dart';
+import 'package:todo_flutter/pages/todopage/sqlite/TodoSqliteHelper.dart';
 import 'package:toast/toast.dart';
 import 'dart:async';
 import '../Constants.dart';
-import '../../bean/note_bean_entity.dart';
+import '../../bean/todo_bean_entity.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:r_calendar/r_calendar.dart';
 import 'package:todo_flutter/Calender.dart';
@@ -19,13 +20,12 @@ class Todo1Page extends StatefulWidget {
 }
 
 class _Todo1PageState extends State<Todo1Page> {
-//侧滑条
-  NoteBeanEntity arguments;
-  TabController _tabController;
-  TextEditingController title;
+
+  TodoBeanEntity arguments;
+  TextEditingController todoContent;
   var keyWord; //关键字
-  SqliteHelper sqliteHelper;
-  List<NoteBeanEntity> noteList = <NoteBeanEntity>[];
+  TodoSqliteHelper todoSqliteHelper;
+  List<TodoBeanEntity> todoList = <TodoBeanEntity>[];
   var selectType = 1;
   static GlobalKey<ScaffoldState> _globalKey = GlobalKey();
   bool isListView = true;
@@ -33,42 +33,20 @@ class _Todo1PageState extends State<Todo1Page> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    title=new TextEditingController();
-    sqliteHelper = new SqliteHelper();
-    getAllNote();
+    todoContent=new TextEditingController();
+    todoSqliteHelper = new TodoSqliteHelper();
+    getAllTodo();
     controller = RCalendarController.multiple(selectedDates: [
       DateTime(2019, 12, 1),
       DateTime(2019, 12, 2),
       DateTime(2019, 12, 3),
     ]);
   }
-  // void _pushAddTodoScreen() async {
-  //   // 将此页面推入任务栈
-  //   var result = await Navigator.of(context).push<String>(
-  //     // MaterialPageRoute 会自动为屏幕条目设置动画
-  //     // 并添加后退按钮以关闭它
-  //       new MaterialPageRoute(builder: (context) {
-  //         return new Scaffold(
-  //             appBar: new AppBar(title: new Text('Add a new task')),
-  //             body: new TextField(
-  //               autofocus: true,
-  //               onSubmitted: (val) {
-  //
-  //                 Navigator.pop(context, val); // Close the add todo screen
-  //               },
-  //               decoration: new InputDecoration(
-  //                   hintText: 'Enter something to do...',
-  //                   contentPadding: const EdgeInsets.all(16.0)),
-  //             ));
-  //       }));
-  //
-  // }
 
 
   void _removeTodoItem(int index) {
-    setState(() =>noteList.removeAt(index));
+    setState(() =>todoList.removeAt(index));
   }
 
 
@@ -77,7 +55,7 @@ class _Todo1PageState extends State<Todo1Page> {
         context: context,
         builder: (BuildContext context) {
           return new AlertDialog(
-              title: new Text('Mark "${noteList[index].title}" as done?'),
+              title: new Text('Mark "${todoList[index].content}" as done?'),
               actions: <Widget>[
                 new FlatButton(
                     child: new Text(
@@ -121,16 +99,26 @@ class _Todo1PageState extends State<Todo1Page> {
                 Row(
                   children: [
                     // TODO:ICON
-                    IconButton(icon: Icon(Icons.alarm), onPressed: (){}),
+                    IconButton(
+                      icon: Icon(Icons.alarm),
+                      onPressed: (){
+
+                      }),
                     IconButton(icon: Icon(Icons.lens), onPressed: (){}),
                     IconButton(icon: Icon(Icons.dashboard), onPressed: (){}),
+                    IconButton(
+                      icon: Icon(Icons.add),
+                      onPressed: (){
+                        addTodo();
+                        getAllTodo();
+                      })
                   ],
                 ),
                 TextField(
                   style: TextStyle(fontSize: 15),
                   cursorColor: ColorUtils.color_black,
-                  controller: title,
-                  decoration: buildInputDecoration("请输入标题"),
+                  controller: todoContent,
+                  decoration: buildInputDecoration("想做点什么？"),
                 ),
                 SizedBox(
                   height: 20,
@@ -194,7 +182,7 @@ class _Todo1PageState extends State<Todo1Page> {
                             onChanged: (value) {
                               setState(() {
                                 keyWord = value;
-                                getAllNote();
+                                getAllTodo();
                               });
                             },
                             decoration: InputDecoration(
@@ -214,7 +202,7 @@ class _Todo1PageState extends State<Todo1Page> {
                                     BorderRadius.all(Radius.circular(10))),
                                 hintText: "输入搜索的内容",
                                 hintStyle: TextStyle(
-                                    color: ColorUtils.color_grey_dd)))),
+                                    color: ColorUtils.color_grey_666)))),
                     Image.asset(
                       "assets/images/search_search.png",
                       width: 25,
@@ -247,7 +235,7 @@ class _Todo1PageState extends State<Todo1Page> {
                       ),
                     );
                   },
-                  itemCount: noteList.length,
+                  itemCount: todoList.length,
                   itemBuilder: getItemBuilder,
                 )
                     : Padding(
@@ -261,19 +249,9 @@ class _Todo1PageState extends State<Todo1Page> {
                         crossAxisSpacing: 10, //水平元素的间距
                         mainAxisSpacing: 10, //垂直距离的间距
                       ),
-                      itemCount: noteList.length,
+                      itemCount: todoList.length,
                       itemBuilder: getItemBuilder),
                 )),
-            Container(
-              color: ColorUtils.color_grey_999,
-              height: 40,
-              child: Text("${noteList.length}个待办",
-                  style:
-                  TextStyle(fontSize: 10, color: ColorUtils.color_white)),
-              alignment: Alignment.center,
-            ),
-
-
           ],
         ),
       ),
@@ -283,89 +261,51 @@ class _Todo1PageState extends State<Todo1Page> {
   }
 
   Widget getItemBuilder(context, index) {
-    var e = noteList[index];
-    var targetTime = selectType == 1 ? e.addTime : e.updateTime;
-    var time1 = DateFormat("yyyy-MM-dd").format(DateTime.parse(targetTime));
-    var time2 = DateFormat("yyyy-MM-dd").format(DateTime.now());
-    var time3 = DateFormat("HH:mm").format(DateTime.parse(targetTime));
-    var time4 =
-    DateFormat("yyyy-MM-dd HH:mm").format(DateTime.parse(targetTime));
-    return isListView
-        ? getDismissible(context, e, time1, time2, time3, time4)
-        : Dismissible(
-        onDismissed: (_) {
-          deleteById(e.noteId);
-          getAllNote();
-        },
-        key: Key(e.noteId.toString()),
-        child: InkWell(
-          onTap: () {
-            goToWriteNote(context, e);
-          },
-          child: Container(
-            height: 100,
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                border: Border.all(color: ColorUtils.color_black),
-                borderRadius: BorderRadius.circular(10)),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("${e.title}",
-                    style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: ColorUtils.color_grey_666)),
-                Text("${e.content}",
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: ColorUtils.color_grey_666)),
-                Text(
-                  "${time1 == time2 ? time3 : time4}",
-                  style: TextStyle(
-                      fontSize: 10, color: ColorUtils.color_black),
-                )
-              ],
-            ),
-          ),
-        ));
-  }
-
-  Dismissible getDismissible(context, NoteBeanEntity e, String time1,
-      String time2, String time3, String time4) {
+    var e = todoList[index];
     return Dismissible(
-        onDismissed: (_) {
-          deleteById(e.noteId);
-          noteList.remove(e);
+      onDismissed: (_) {
+        deleteById(e.todoId);
+        getAllTodo();
+      },
+
+      key: Key(e.todoId.toString()),
+      background: Container(color: Colors.red),
+      child: InkWell(
+        onTap: (){
+          //TODO: goToWriteTodo(context, e);
         },
-        key: Key(e.noteId.toString()),
-        child: ListTile(
-          minVerticalPadding: 0,
-          onTap: () {
-            goToWriteNote(context, e);
-          },
-          title: Text("${e.title}",
-              style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: ColorUtils.color_grey_666)),
-          subtitle: getListViewPadding(time1, time2, time3, time4, e),
-        ));
+        child: Container(
+          height: 100,
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.amber),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Row(
+            children: [
+              Checkbox(), //TODO:Logic
+            Column(
+              children: [
+                Text("${e.content}",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black
+                  )),
+                //TODO:Other params
+              ],
+            )
+            ],
+          ),
+        )
+      ),
+    );
   }
 
-  void goToWriteNote(context, NoteBeanEntity e) {
-    Navigator.pushNamed(context, "/writeNote", arguments: e).then((value) {
-      if (value == Constants.REFRESH) {
-        getAllNote();
-      }
-    });
-  }
+
 
   Padding getListViewPadding(String time1, String time2, String time3,
-      String time4, NoteBeanEntity e) {
+      String time4, TodoBeanEntity e) {
     return Padding(
       padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Flex(
@@ -389,35 +329,52 @@ class _Todo1PageState extends State<Todo1Page> {
     );
   }
 
-  void getAllNote() async {
-    await sqliteHelper.open();
-    List<NoteBeanEntity> list;
+  void addTodo() async {
+    await todoSqliteHelper.open();
+    TodoBeanEntity todoBeanEntity = new TodoBeanEntity();
+    todoBeanEntity.content = todoContent.text;
+    if(todoBeanEntity.content == ''){
+      Toast.show("待办不能为空", context, gravity: Toast.CENTER);
+      await todoSqliteHelper.close();
+    }
+    //TODO: Other Params are waited to commit
+
+    await todoSqliteHelper.insert(todoBeanEntity).then((value) {
+      if(value.todoId > 0){
+        Toast.show("新增待办成功", context, gravity: Toast.CENTER);
+        exit(context);
+      }
+    });
+    await todoSqliteHelper.close();
+  }
+
+  void exit(BuildContext context) {
+    Navigator.of(context).pop(Constants.REFRESH);
+  }
+
+  void getAllTodo() async {
+    await todoSqliteHelper.open();
+    List<TodoBeanEntity> list;
     if (keyWord != null)
-      list = await sqliteHelper.searchNote(keyWord, selectType);
+      list = await todoSqliteHelper.searchTodo(keyWord, selectType);
     else
-      list = await sqliteHelper.getAllNote(selectType);
+      list = await todoSqliteHelper.getAllTodo(selectType);
     setState(() {
-      noteList.clear();
-      noteList.addAll(list);
+      todoList.clear();
+      todoList.addAll(list);
     });
   }
 
-  void deleteAll() async {
-    await sqliteHelper.open();
-    await sqliteHelper.deleteAll();
-    getAllNote();
-  }
-
   void deleteById(int id) async {
-    await sqliteHelper.open();
-    await sqliteHelper.delete(id).then((value) {
+    await todoSqliteHelper.open();
+    await todoSqliteHelper.delete(id).then((value) {
       if (value > 0) Toast.show("删除成功", context);
     });
   }
 
   showPicker(BuildContext context) {
     Picker picker = new Picker(
-        adapter: PickerDataAdapter<String>(pickerdata: ["按照dd排序", "按照优先级排序"]),
+        adapter: PickerDataAdapter<String>(pickerdata: ["按照ddl排序", "按照优先级排序"]),
         changeToFirst: true,
         textAlign: TextAlign.left,
         columnPadding: const EdgeInsets.all(8.0),
@@ -429,7 +386,7 @@ class _Todo1PageState extends State<Todo1Page> {
           setState(() {
             selectType = value[0] + 1;
           });
-          getAllNote();
+          getAllTodo();
         });
     picker.showModal(/*_globalKey.currentState*/ context);
   }
