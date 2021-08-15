@@ -1,4 +1,7 @@
+
+
 import 'package:flutter/material.dart';
+import 'package:todo_flutter/Calender.dart';
 import 'package:todo_flutter/pages/notepage/NoteMainPage.dart';
 import 'package:todo_flutter/pages/notepage/WriteNotePage.dart';
 
@@ -7,6 +10,7 @@ import 'package:todo_flutter/pages/notepage/WriteNotePage.dart';
 final routes = {
   '/note': (context) => NoteMainPage(), //配置根目录
   '/writeNote': (context,{arguments}) => WriteNotePage(arguments: arguments,),
+  '/Calender':(context) =>CalenderPage(),
 
 };
 
