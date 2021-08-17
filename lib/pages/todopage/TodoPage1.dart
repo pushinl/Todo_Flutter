@@ -271,14 +271,14 @@ class _Todo1PageState extends State<Todo1Page> {
       key: Key(e.todoId.toString()),
       background: Container(color: Colors.red),
       child: InkWell(
-        onTap: (){
+            onTap: (){
           //TODO: goToWriteTodo(context, e);
-        },
-        child: Container(
-          height: 100,
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.amber),
+      },
+          child: Container(
+            height: 100,
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.amber),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Row(
@@ -333,6 +333,8 @@ class _Todo1PageState extends State<Todo1Page> {
     await todoSqliteHelper.open();
     TodoBeanEntity todoBeanEntity = new TodoBeanEntity();
     todoBeanEntity.content = todoContent.text;
+    todoBeanEntity.itemStatus = 0;
+    todoBeanEntity.itemImportance = 1;
     if(todoBeanEntity.content == ''){
       Toast.show("待办不能为空", context, gravity: Toast.CENTER);
       await todoSqliteHelper.close();

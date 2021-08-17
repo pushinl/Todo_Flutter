@@ -22,7 +22,7 @@ class TodoSqliteHelper {
         onCreate: (Database db, int version) async {
           await db.execute(
               "create table IF NOT EXISTS $tableTodo($columnId INTEGER PRIMARY KEY AUTOINCREMENT " +
-                  ",$columnContent TEXT,$columnDateTime DATETIME,$columnStatus TEXT,$columnType TEXT)");
+                  ",$columnContent TEXT,$columnDateTime DATETIME,$columnStatus TEXT,$columnType TEXT, $columnImportance TEXT, $columnLabels TEXT)");
         });
   }
 

@@ -78,7 +78,7 @@ class _WriteNotePageState extends State<WriteNotePage> {
               child: ListView(
                 children: [
                   TextField(
-                    style: TextStyle(fontSize: 15),
+                    style: TextStyle(fontSize: 30),
                     cursorColor: ColorUtils.color_black,
                     controller: title,
                     decoration: buildInputDecoration("请输入标题"),
@@ -110,13 +110,14 @@ class _WriteNotePageState extends State<WriteNotePage> {
 
   InputDecoration buildInputDecoration(text) {
     return InputDecoration(
-        enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: ColorUtils.color_grey_dd),
-            borderRadius: BorderRadius.all(Radius.circular(10))),
-        focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: ColorUtils.color_grey_dd),
-            borderRadius: BorderRadius.all(Radius.circular(10))),
+        // enabledBorder: OutlineInputBorder(
+        //     borderSide: BorderSide(color: ColorUtils.color_grey_dd),
+        //     borderRadius: BorderRadius.all(Radius.circular(10))),
+        // focusedBorder: OutlineInputBorder(
+        //     borderSide: BorderSide(color: ColorUtils.color_grey_dd),
+        //     borderRadius: BorderRadius.all(Radius.circular(10))),
         hintText: text,
+        border: InputBorder.none,
         hintStyle: TextStyle(color: ColorUtils.color_grey_dd));
   }
 
