@@ -32,13 +32,17 @@ class _TabsState extends State<Tabs> with SingleTickerProviderStateMixin{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'ToDo',
-          style: TextStyle(
-              color: Colors.black
-          ),
+        leading: IconButton(
+          icon: Icon(Icons.more),
+          onPressed: (){},
         ),
-        backgroundColor: Colors.white,
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context,'/Calender').then((value) => null);
+              },
+              icon: Icon(Icons.calendar_today)),
+        ],
       ),
 
       bottomNavigationBar: Material(

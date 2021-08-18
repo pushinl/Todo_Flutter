@@ -1,4 +1,3 @@
-import 'package:flutter_picker/flutter_picker.dart';
 import 'package:todo_flutter/bean/todo_bean_entity.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -14,6 +13,7 @@ final String columnImportance = "item_importance";
 
 class TodoSqliteHelper {
   Database todoDb;
+  Batch batch;
 
   Future open() async {
     var databasesPath = await getDatabasesPath();
@@ -21,8 +21,15 @@ class TodoSqliteHelper {
     todoDb = await openDatabase(path, version: 1,
         onCreate: (Database db, int version) async {
           await db.execute(
-              "create table IF NOT EXISTS $tableTodo($columnId INTEGER PRIMARY KEY AUTOINCREMENT " +
-                  ",$columnContent TEXT,$columnDateTime DATETIME,$columnStatus TEXT,$columnType TEXT, $columnImportance TEXT, $columnLabels TEXT)");
+              "create table IF NOT EXISTS $tableTodo("
+                  "$columnId INTEGER PRIMARY KEY AUTOINCREMENT,"
+                  "$columnContent TEXT,"
+                  "$columnDateTime DATETIME,"
+                  "$columnStatus INTEGER,"
+                  "$columnType INTEGER, "
+                  "$columnImportance INTEGER, "
+                  "$columnLabels TEXT)"
+          );
         });
   }
 
@@ -56,11 +63,11 @@ Future<List<TodoBeanEntity>> getAllTodo(int type) async {
     List<TodoBeanEntity> list = [];
     List<Map> maps;
     switch (type) {
-      case 2:
-        maps = await todoDb.query(tableTodo, orderBy: "$columnDateTime DESC");
-        break;
       case 1:
         maps = await todoDb.query(tableTodo, orderBy: "$columnImportance DESC");
+        break;
+      case 2:
+        maps = await todoDb.query(tableTodo, orderBy: "$columnDateTime DESC");
         break;
       case 3:
         maps = await todoDb.query(tableTodo, orderBy: "$columnContent ASC");
@@ -87,7 +94,8 @@ Future<List<TodoBeanEntity>> getAllTodo(int type) async {
             where: where, orderBy: "$columnImportance desc");
         break;
       case 3:
-        maps = await todoDb.query(tableTodo, orderBy: "$columnContent ASC");
+        maps = await todoDb.query(tableTodo,
+            where: where, orderBy: "$columnContent ASC");
         break;
     }
     maps.map((e) {
@@ -103,6 +111,14 @@ Future<List<TodoBeanEntity>> getAllTodo(int type) async {
   Future<int> update(TodoBeanEntity todo) async {
     return await todoDb.update(tableTodo, todo.toJson(),
         where: '$columnId = ?', whereArgs: [todo.todoId]);
+  }
+
+  Future batchOperate() async {
+    batch = todoDb.batch();
+    batch.delete(tableTodo, where: "$columnContent=?", whereArgs: ["0"]);
+    batch.update(tableTodo, {"$columnContent": 'flutter'},
+        where: '$columnContent = ?', whereArgs: ["3"]);
+    List list = await batch.commit();
   }
 
   Future close() async => todoDb.close();
