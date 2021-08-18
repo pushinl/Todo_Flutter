@@ -28,17 +28,6 @@ class _PersonPageState extends State<PersonPage> {
       appBar: AppBar(
         title: Text("个人"),
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.more),
-          onPressed: (){},
-        ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context,'/Calender').then((value) => null);
-              },
-              icon: Icon(Icons.calendar_today)),
-        ],
       ),
       body: listView,
 
@@ -56,7 +45,8 @@ class _PersonPageState extends State<PersonPage> {
                 children: <Widget>[
                   userAvatar == null
                       ? new Image.asset(
-                    "images/ic_avatar_default.png",
+                    "assets/images/avatar_default.jpg",
+                    height: 60.0,
                     width: 60.0,
                   )
                       : new Container(

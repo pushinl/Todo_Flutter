@@ -63,6 +63,7 @@ flutter:
   - assets/images/icon_down_narrow.png
   - assets/images/icon_menu.png
   - assets/images/icon_write_note.png
+  - assets/images/avatar_default.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
