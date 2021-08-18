@@ -29,23 +29,13 @@ class _NoteMainPageState extends State<NoteMainPage> {
   List<NoteBeanEntity> noteList = <NoteBeanEntity>[];
   var selectType = 1; //1 按编辑日期 2 按创建日期 3 按标题
   static GlobalKey<ScaffoldState> _globalKey = GlobalKey();
-  bool isListView = true;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    // _controller = TabController(
-    //   length: _tabValues.length,
-    //   vsync: ScrollableState(),
-    // );
     sqliteHelper = new NoteSqliteHelper();
     getAllNote();
   }
-
-
-  //点击导航项是要显示的页面
-
 
   @override
   Widget build(BuildContext context) {
@@ -65,20 +55,6 @@ class _NoteMainPageState extends State<NoteMainPage> {
               },
               icon: Icon(Icons.add)),
         ],
-      // bottom: TabBar(
-      //   tabs: _tabValues.map((f){
-      //     return Text(f);
-      //   } ).toList(),
-      //   controller: _controller,
-      //   indicatorColor: Colors.black,
-      //   indicatorSize: TabBarIndicatorSize.tab,
-      //   isScrollable: true,
-      //     labelColor: Colors.red,
-      //     unselectedLabelColor: Colors.black,
-      //     indicatorWeight: 5.0,
-      //     labelStyle: TextStyle(height: 2),
-      //
-      // ),
       ),
       body:
 
@@ -121,7 +97,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
                                         color: ColorUtils.color_grey_dd),
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10))),
-                                hintText: "输入搜索的内容",
+                                hintText: "Search...",
                                 hintStyle: TextStyle(
                                     color: ColorUtils.color_grey_666)))),
                     Image.asset  (
@@ -133,39 +109,60 @@ class _NoteMainPageState extends State<NoteMainPage> {
                 ),
               ),
             ),
+            Container(
+              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+              height: 40,
+              child: Flex(
+                direction: Axis.horizontal,
+                children: [
+                  Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          showPicker(context);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              selectType == 1
+                                  ? "按创建时间排序"
+                                  : "按更新时间排序",
+                              textAlign: TextAlign.end,
+                              style: TextStyle(color: ColorUtils.color_godden_dark),
+                            ),
+                            Image.asset("assets/images/icon_down_narrow.png",
+                                width: 20, height: 20)
+                          ],
+                        ),
+                      ))
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: Divider(
+                color: ColorUtils.color_grey_dd,
+                height: 1,
+              ),
+            ),
             Expanded(
-                child: isListView
-                    ? ListView.separated(
-                        shrinkWrap: true,
-                        //加上这个就不会因为高度报错了
-                        scrollDirection: Axis.vertical,
-                        separatorBuilder: (context, index) {
-                          return Padding(
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  //加上这个就不会因为高度报错了
+                  scrollDirection: Axis.vertical,
+                  separatorBuilder: (context, index) {
+                    return Padding(
                             padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                             child: Divider(
                               color: ColorUtils.color_grey_dd,
                               height: 1,
                             ),
                           );
-                        },
-                        itemCount: noteList.length,
-                        itemBuilder: getItemBuilder,
-                      )
-                    : Padding(
-                        padding: EdgeInsets.all(10),
-                        child: GridView.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-
-                              ///三列
-                              crossAxisSpacing: 10, //水平元素的间距
-                              mainAxisSpacing: 10, //垂直距离的间距
-                            ),
-                            itemCount: noteList.length,
-                            itemBuilder: getItemBuilder),
-                      )),
-
+                          },
+                  itemCount: noteList.length,
+                  itemBuilder: getItemBuilder,
+                )
+            ),
           ],
         ),
 
@@ -184,49 +181,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
     var time3 = DateFormat("HH:mm").format(DateTime.parse(targetTime));
     var time4 =
         DateFormat("yyyy-MM-dd HH:mm").format(DateTime.parse(targetTime));
-    return isListView
-        ? getDismissible(context, e, time1, time2, time3, time4)
-        : Dismissible(
-            onDismissed: (_) {
-              deleteById(e.noteId);
-              getAllNote();
-            },
-            key: Key(e.noteId.toString()),
-            background: Container(color: Colors.red),
-            child: InkWell(
-              onTap: () {
-                goToWriteNote(context, e);
-              },
-              child: Container(
-                height: 100,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    border: Border.all(color: ColorUtils.color_black),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("${e.title}",
-                        style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: ColorUtils.color_grey_666)),
-                    Text("${e.content}",
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: ColorUtils.color_grey_666)),
-                    Text(
-                      "${time1 == time2 ? time3 : time4}",
-                      style: TextStyle(
-                          fontSize: 10, color: ColorUtils.color_black),
-                    )
-                  ],
-                ),
-              ),
-            ));
+    return getDismissible(context, e, time1, time2, time3, time4);
   }
 
   Dismissible getDismissible(context, NoteBeanEntity e, String time1,
@@ -245,7 +200,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
           },
           title: Text("${e.title}",
               style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: ColorUtils.color_grey_666)),
           subtitle: getListViewPadding(time1, time2, time3, time4, e),
@@ -298,11 +253,11 @@ class _NoteMainPageState extends State<NoteMainPage> {
     });
   }
 
-  void deleteAll() async {
-    await sqliteHelper.open();
-    await sqliteHelper.deleteAll();
-    getAllNote();
-  }
+  // void deleteAll() async {
+  //   await sqliteHelper.open();
+  //   await sqliteHelper.deleteAll();
+  //   getAllNote();
+  // }
 
   void deleteById(int id) async {
     await sqliteHelper.open();
@@ -314,7 +269,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
   showPicker(BuildContext context) {
     Picker picker = new Picker(
         adapter: PickerDataAdapter<String>(
-            pickerdata: ["按照dd排序", "按照优先级排序"]),
+            pickerdata: ["按照创建时间排序", "按照更新时间排序"]),
         changeToFirst: true,
         textAlign: TextAlign.left,
         columnPadding: const EdgeInsets.all(8.0),

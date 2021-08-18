@@ -28,7 +28,6 @@ class _WriteNotePageState extends State<WriteNotePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     noteSqliteHelper = new NoteSqliteHelper();
     if (arguments != null) {
@@ -59,10 +58,14 @@ class _WriteNotePageState extends State<WriteNotePage> {
             actions: [
               IconButton(
                   onPressed: () {
-                    if (arguments != null ) {
-                      updateNote();
-                    } else {
-                      addNote();
+                    if (title.text=='' || content.text=='') {
+                      Toast.show("标题或内容不能为空", context, gravity: Toast.CENTER);
+                    }else {
+                      if (arguments != null ) {
+                        updateNote();
+                      } else {
+                        addNote();
+                      }
                     }
                   },
                   icon: Image.asset('assets/images/icon_ok.png')
@@ -82,9 +85,6 @@ class _WriteNotePageState extends State<WriteNotePage> {
                     cursorColor: ColorUtils.color_black,
                     controller: title,
                     decoration: buildInputDecoration("请输入标题"),
-                  ),
-                  SizedBox(
-                    height: 20,
                   ),
                   TextField(
                     style: TextStyle(fontSize: 15),
@@ -126,10 +126,6 @@ class _WriteNotePageState extends State<WriteNotePage> {
     NoteBeanEntity noteBeanEntity = new NoteBeanEntity();
     noteBeanEntity.title = title.text;
     noteBeanEntity.content = content.text;
-    if (noteBeanEntity.title=='' || noteBeanEntity.content=='') {
-      Toast.show("标题或内容不能为空", context, gravity: Toast.CENTER);
-      await noteSqliteHelper.close();
-    }
     noteBeanEntity.noteCode = DateTime.now().toString();
     noteBeanEntity.addTime =
         DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
@@ -149,10 +145,6 @@ class _WriteNotePageState extends State<WriteNotePage> {
     await noteSqliteHelper.open();
     arguments.content = content.text;
     arguments.title = title.text;
-    if (arguments.title=='' || arguments.content=='') {
-      Toast.show("标题或内容不能为空", context, gravity: Toast.CENTER);
-      await noteSqliteHelper.close();
-    }
     arguments.updateTime =
         DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
     await noteSqliteHelper.update(arguments).then((value) {
