@@ -5,7 +5,8 @@ class TodoBeanEntity with JsonConvert<TodoBeanEntity> {
 	@JSONField(name: "todo_id")
 	int todoId;
 	String content;
-	List<String> datatime;
+	@JSONField(name: "item_datetime")
+	String itemDatetime;
 	@JSONField(name: "item_importance")
 	int itemImportance;
 	@JSONField(name: "item_type_ddl_or_repeat")
@@ -15,5 +16,5 @@ class TodoBeanEntity with JsonConvert<TodoBeanEntity> {
 	@JSONField(name: "item_status")
 	int itemStatus;
 	@JSONField(name: "item_labels")
-	List<String> itemLabels;
+	int itemLabels;
 }

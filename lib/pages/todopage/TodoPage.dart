@@ -43,6 +43,7 @@ class _TodoPageState extends State<TodoPage> {
     //   DateTime(2019, 12, 2),
     //   DateTime(2019, 12, 3),
     // ]);
+    getAllTodo();
   }
 
 
@@ -54,73 +55,6 @@ class _TodoPageState extends State<TodoPage> {
 
   void addTodo(){
     showModalBottomSheet(
-        context: context,
-        builder: (context) {
-          var date = DateTime.now();
-          return Container(
-              height: 300,
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-
-                  TextField(
-                    style: TextStyle(fontSize: 15),
-                    cursorColor: ColorUtils.color_black,
-                    controller: todoContentController,
-                    decoration: buildInputDecoration("想做点什么？"),
-                  )
-                ]
-              )
-          );
-        }
-    );
-  }
-
-  void _removeTodoItem(int index) {
-    setState(() => todoList.removeAt(index));
-  }
-
-  void _promptRemoveTodoItem(int index) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return new AlertDialog(
-              title: new Text('Mark "${todoList[index].content}" as done?'),
-              actions: <Widget>[
-                new FlatButton(
-                    child: new Text(
-                      '取消',
-                      style: new TextStyle(color: Colors.black),
-                    ),
-                    onPressed: () => Navigator.of(context).pop()),
-                new FlatButton(
-                    child: new Text(
-                      '确定',
-                      style: new TextStyle(color: Colors.black),
-                    ),
-                    onPressed: () {
-                      _removeTodoItem(index);
-                      Navigator.of(context).pop();
-                    })
-              ]);
-        });
-  }
-
-  InputDecoration buildInputDecoration(text) {
-    return InputDecoration(
-        enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: ColorUtils.color_grey_dd),
-            borderRadius: BorderRadius.all(Radius.circular(10))),
-        focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: ColorUtils.color_grey_dd),
-            borderRadius: BorderRadius.all(Radius.circular(10))),
-        hintText: text,
-        hintStyle: TextStyle(color: ColorUtils.color_grey_dd));
-  }
-
-  Future _openModalBottomSheet() async {
-    final option = await showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
           return Container(
@@ -139,7 +73,7 @@ class _TodoPageState extends State<TodoPage> {
                           if (todoContentController.text == '') {
                             Toast.show("待办不能为空", context, gravity: Toast.CENTER);
                           }else {
-                            addTodo();
+                            addTodoSetSql();
                             getAllTodo();
                           }
                         })
@@ -154,14 +88,52 @@ class _TodoPageState extends State<TodoPage> {
                 SizedBox(
                   height: 20,
                 ),
-
-                //_showDatePicker()
               ],
             ),
           );
         });
+  }
 
-    print(option);
+  // void _removeTodoItem(int index) {
+  //   setState(() => todoList.removeAt(index));
+  // }
+
+  // void _promptRemoveTodoItem(int index) {
+  //   showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return AlertDialog(
+  //             title: new Text('Mark "${todoList[index].content}" as done?'),
+  //             actions: <Widget>[
+  //               TextButton(
+  //                   child: new Text(
+  //                     '取消',
+  //                     style: new TextStyle(color: Colors.black),
+  //                   ),
+  //                   onPressed: () => Navigator.of(context).pop()),
+  //               TextButton(
+  //                   child: new Text(
+  //                     '确定',
+  //                     style: new TextStyle(color: Colors.black),
+  //                   ),
+  //                   onPressed: () {
+  //                     _removeTodoItem(index);
+  //                     Navigator.of(context).pop();
+  //                   })
+  //             ]);
+  //       });
+  // }
+
+  InputDecoration buildInputDecoration(text) {
+    return InputDecoration(
+        enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: ColorUtils.color_grey_dd),
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: ColorUtils.color_grey_dd),
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        hintText: text,
+        hintStyle: TextStyle(color: ColorUtils.color_grey_dd));
   }
 
   @override
@@ -286,11 +258,11 @@ class _TodoPageState extends State<TodoPage> {
         child: ListTile(
           minVerticalPadding: 0,
           onTap: () {
-            // TODO: goToWriteNote(context, e);
+            // TODO: goToWriteTodo(context, e);
           },
           title: Text("${e.content}",
               style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: ColorUtils.color_grey_666)),
           // subtitle: getListViewPadding(time1, time2, time3, time4, e),
@@ -322,13 +294,16 @@ class _TodoPageState extends State<TodoPage> {
   //     ),
   //   );
   // }
-
   void addTodoSetSql() async {
     await todoSqliteHelper.open();
     TodoBeanEntity todoBeanEntity = new TodoBeanEntity();
     todoBeanEntity.content = todoContentController.text;
     todoBeanEntity.itemStatus = 0;
     todoBeanEntity.itemImportance = 1;
+    todoBeanEntity.itemDatetime = DateTime.now().toString();
+    todoBeanEntity.itemLabels = 1;
+    todoBeanEntity.itemTypeDdlOrRepeat = 1;
+    todoBeanEntity.itemTypePersonOrTeam = 2;
     //TODO: Other Params are waited to commit
 
     await todoSqliteHelper.insert(todoBeanEntity).then((value) {

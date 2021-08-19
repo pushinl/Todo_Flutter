@@ -231,10 +231,18 @@ class _NoteMainPageState extends State<NoteMainPage> {
             width: 20,
           ),
           Expanded(
-              child: Text("${e.content}",
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      fontSize: 15, color: ColorUtils.color_grey_999)))
+              child: Container(
+                height: 20,
+                child: Text("${e.content}",
+                    overflow: TextOverflow.ellipsis,
+                    // maxLines: 1,
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: ColorUtils.color_grey_999
+                    )
+                ),
+              )
+          )
         ],
       ),
     );

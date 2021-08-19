@@ -4,12 +4,13 @@ import 'package:sqflite/sqflite.dart';
 
 final String tableTodo = 'todo';
 final String columnId = 'todo_id';
-final String columnContent = "content";
-final String columnDateTime = "date_time";
-final String columnStatus = "item_status";
-final String columnType = "item_type";
-final String columnLabels = "item_labels";
-final String columnImportance = "item_importance";
+final String columnContent = 'content';
+final String columnDateTime = 'item_datetime';
+final String columnStatus = 'item_status';
+final String columnTypeDdlOrRepeat = 'item_type_ddl_or_repeat';
+final String columnTypePersonOrTeam = "item_type_person_or_team";
+final String columnLabels = 'item_labels';
+final String columnImportance = 'item_importance';
 
 class TodoSqliteHelper {
   Database todoDb;
@@ -18,17 +19,19 @@ class TodoSqliteHelper {
   Future open() async {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, 'todo.db');
-    todoDb = await openDatabase(path, version: 1,
+    todoDb = await openDatabase(
+        path, version: 1,
         onCreate: (Database db, int version) async {
           await db.execute(
-              "create table IF NOT EXISTS $tableTodo("
-                  "$columnId INTEGER PRIMARY KEY AUTOINCREMENT,"
-                  "$columnContent TEXT,"
-                  "$columnDateTime DATETIME,"
-                  "$columnStatus INTEGER,"
-                  "$columnType INTEGER, "
-                  "$columnImportance INTEGER, "
-                  "$columnLabels TEXT)"
+              'CREATE TABLE IF NOT EXISTS $tableTodo('
+                  '$columnId INTEGER PRIMARY KEY AUTOINCREMENT,'
+                  '$columnContent TEXT,'
+                  '$columnDateTime TEXT,'
+                  '$columnStatus INTEGER,'
+                  '$columnTypeDdlOrRepeat INTEGER,'
+                  '$columnTypePersonOrTeam INTEGER,'
+                  '$columnImportance INTEGER,'
+                  '$columnLabels TEXT)'
           );
         });
   }
@@ -45,12 +48,13 @@ class TodoSqliteHelper {
           columnId,
           columnContent,
           columnDateTime,
-          columnType,
+          columnTypeDdlOrRepeat,
+          columnTypePersonOrTeam,
           columnStatus,
           columnLabels,
           columnImportance
         ],
-        where: "$columnId=?",
+        where: '$columnId=?',
         whereArgs: [id]);
     if (maps.length > 0) {
       return TodoBeanEntity().fromJson(maps.first);
@@ -64,13 +68,13 @@ Future<List<TodoBeanEntity>> getAllTodo(int type) async {
     List<Map> maps;
     switch (type) {
       case 1:
-        maps = await todoDb.query(tableTodo, orderBy: "$columnImportance DESC");
+        maps = await todoDb.query(tableTodo, orderBy: '${columnImportance} DESC');
         break;
       case 2:
-        maps = await todoDb.query(tableTodo, orderBy: "$columnDateTime DESC");
+        maps = await todoDb.query(tableTodo, orderBy: '${columnDateTime} DESC');
         break;
       case 3:
-        maps = await todoDb.query(tableTodo, orderBy: "$columnContent ASC");
+        maps = await todoDb.query(tableTodo, orderBy: '$columnContent ASC');
         break;
     }
     maps.map((e) {
@@ -87,15 +91,15 @@ Future<List<TodoBeanEntity>> getAllTodo(int type) async {
     switch (type) {
       case 2:
         maps = await todoDb.query(tableTodo,
-            where: where, orderBy: "$columnDateTime desc");
+            where: where, orderBy: '$columnDateTime desc');
         break;
       case 1:
         maps = await todoDb.query(tableTodo,
-            where: where, orderBy: "$columnImportance desc");
+            where: where, orderBy: '$columnImportance desc');
         break;
       case 3:
         maps = await todoDb.query(tableTodo,
-            where: where, orderBy: "$columnContent ASC");
+            where: where, orderBy: '$columnContent ASC');
         break;
     }
     maps.map((e) {
@@ -115,9 +119,9 @@ Future<List<TodoBeanEntity>> getAllTodo(int type) async {
 
   Future batchOperate() async {
     batch = todoDb.batch();
-    batch.delete(tableTodo, where: "$columnContent=?", whereArgs: ["0"]);
-    batch.update(tableTodo, {"$columnContent": 'flutter'},
-        where: '$columnContent = ?', whereArgs: ["3"]);
+    batch.delete(tableTodo, where: '$columnContent=?', whereArgs: ['0']);
+    batch.update(tableTodo, {'$columnContent': 'flutter'},
+        where: '$columnContent = ?', whereArgs: ['3']);
     List list = await batch.commit();
   }
 

@@ -81,13 +81,13 @@ class _WriteNotePageState extends State<WriteNotePage> {
               child: ListView(
                 children: [
                   TextField(
-                    style: TextStyle(fontSize: 35),
+                    style: TextStyle(fontSize: 40),
                     cursorColor: ColorUtils.color_black,
                     controller: title,
                     decoration: buildInputDecoration("请输入标题"),
                   ),
                   TextField(
-                    style: TextStyle(fontSize: 15),
+                    style: TextStyle(fontSize: 25),
                     cursorColor: ColorUtils.color_black,
                     controller: content,
                     minLines: 6,

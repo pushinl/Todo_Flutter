@@ -9,8 +9,8 @@ todoBeanEntityFromJson(TodoBeanEntity data, Map<String, dynamic> json) {
 	if (json['content'] != null) {
 		data.content = json['content'].toString();
 	}
-	if (json['datatime'] != null) {
-		data.datatime = (json['datatime'] as List).map((v) => v.toString()).toList().cast<String>();
+	if (json['item_datetime'] != null) {
+		data.itemDatetime = json['item_datetime'].toString();
 	}
 	if (json['item_importance'] != null) {
 		data.itemImportance = json['item_importance'] is String
@@ -33,7 +33,9 @@ todoBeanEntityFromJson(TodoBeanEntity data, Map<String, dynamic> json) {
 				: json['item_status'].toInt();
 	}
 	if (json['item_labels'] != null) {
-		data.itemLabels = (json['item_labels'] as List).map((v) => v.toString()).toList().cast<String>();
+		data.itemLabels = json['item_labels'] is String
+				? int.tryParse(json['item_labels'])
+				: json['item_labels'].toInt();
 	}
 	return data;
 }
@@ -42,7 +44,7 @@ Map<String, dynamic> todoBeanEntityToJson(TodoBeanEntity entity) {
 	final Map<String, dynamic> data = new Map<String, dynamic>();
 	data['todo_id'] = entity.todoId;
 	data['content'] = entity.content;
-	data['datatime'] = entity.datatime;
+	data['item_datetime'] = entity.itemDatetime;
 	data['item_importance'] = entity.itemImportance;
 	data['item_type_ddl_or_repeat'] = entity.itemTypeDdlOrRepeat;
 	data['item_type_person_or_team'] = entity.itemTypePersonOrTeam;
