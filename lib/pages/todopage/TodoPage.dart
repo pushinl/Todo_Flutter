@@ -33,24 +33,13 @@ class _TodoPageState extends State<TodoPage> {
   void initState() {
     super.initState();
     todoSqliteHelper = new TodoSqliteHelper();
-    if (arguments != null) {
-      todoContentController = new TextEditingController(text: arguments.content);
-    } else {
-      todoContentController = new TextEditingController();
-    }
+    todoContentController = new TextEditingController();
     // controller = RCalendarController.multiple(selectedDates: [
     //   DateTime(2019, 12, 1),
     //   DateTime(2019, 12, 2),
     //   DateTime(2019, 12, 3),
     // ]);
     getAllTodo();
-  }
-
-
-  @override
-  void dispose() {
-    super.dispose();
-    todoContentController.dispose();
   }
 
   void addTodo(){
@@ -64,11 +53,21 @@ class _TodoPageState extends State<TodoPage> {
                 Row(
                   children: [
                     // TODO:ICON
-                    IconButton(icon: Icon(Icons.alarm), onPressed: () {}),
-                    IconButton(icon: Icon(Icons.lens), onPressed: () {}),
-                    IconButton(icon: Icon(Icons.dashboard), onPressed: () {
+                    IconButton(//设置时间与重复
+                        icon: Icon(Icons.alarm),
+                        onPressed: () {
 
-                    }),
+                        }),
+                    IconButton(//设置
+                        icon: Icon(Icons.lens),
+                        onPressed: () {
+
+                        }),
+                    IconButton(
+                        icon: Icon(Icons.dashboard),
+                        onPressed: () {
+
+                        }),
                     IconButton(
                         icon: Icon(Icons.add),
                         onPressed: () {
@@ -264,7 +263,7 @@ class _TodoPageState extends State<TodoPage> {
         },
         key: Key(e.todoId.toString()),
         background: Container(color: Colors.red),
-        child: ListTile(
+        child: ListTile( //TODO: 修改一下样子
           minVerticalPadding: 0,
           onTap: () {
             // TODO: goToWriteTodo(context, e);
@@ -340,6 +339,7 @@ class _TodoPageState extends State<TodoPage> {
       todoList.clear();
       todoList.addAll(list);
     });
+    todoContentController.text = '';//TODO : 暂时把清空controller的放在这里了。。
   }
 
   void deleteById(int id) async {

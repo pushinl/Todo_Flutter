@@ -11,7 +11,7 @@ final routes = {
   '/note': (context) => NoteMainPage(),
   '/writeNote': (context, {arguments}) => WriteNotePage(arguments: arguments,),
   '/Calender':(context) =>CalenderPage(),
-  '/WriteTodo':(context,{e})=>WriteTodoPage(arguments: e,),
+  '/writeTodo':(context,{e})=>WriteTodoPage(arguments: e,),
 
 };
 

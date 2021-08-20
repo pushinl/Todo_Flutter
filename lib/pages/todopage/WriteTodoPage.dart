@@ -46,7 +46,7 @@ class _WriteTodoPageState extends State<WriteTodoPage> {
     return WillPopScope(
         child: Scaffold(
             appBar: AppBar(
-              title: Text(arguments == null ? "ss" : "cc"),
+              title: Text ("待办"),
               leading: IconButton(
                 iconSize: 36,
                 onPressed: () {
@@ -63,11 +63,7 @@ class _WriteTodoPageState extends State<WriteTodoPage> {
                       if (content.text == '') {
                         Toast.show("标题或内容不能为空", context, gravity: Toast.CENTER);
                       } else {
-                        if (arguments != null) {
                           updateNote();
-                        } else {
-                          addNote();
-                        }
                       }
                     },
                     icon: Image.asset('assets/images/icon_ok.png'))
@@ -99,26 +95,6 @@ class _WriteTodoPageState extends State<WriteTodoPage> {
         hintText: text,
         border: InputBorder.none,
         hintStyle: TextStyle(color: ColorUtils.color_godden_dark));
-  }
-
-  void addNote() async {
-    await todoSqliteHelper.open();
-    TodoBeanEntity todoBeanEntity = new TodoBeanEntity();
-
-    todoBeanEntity.content = content.text;
-
-    todoBeanEntity.itemDatetime =
-        DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
-
-    DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
-    await todoSqliteHelper.insert(todoBeanEntity).then((value) {
-      print(value.todoId);
-      if (value.todoId > 0) {
-        Toast.show("新增成功", context, gravity: Toast.CENTER);
-        exit(context);
-      }
-    });
-    await todoSqliteHelper.close();
   }
 
   void updateNote() async {
