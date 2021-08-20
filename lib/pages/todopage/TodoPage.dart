@@ -66,7 +66,9 @@ class _TodoPageState extends State<TodoPage> {
                     // TODO:ICON
                     IconButton(icon: Icon(Icons.alarm), onPressed: () {}),
                     IconButton(icon: Icon(Icons.lens), onPressed: () {}),
-                    IconButton(icon: Icon(Icons.dashboard), onPressed: () {}),
+                    IconButton(icon: Icon(Icons.dashboard), onPressed: () {
+
+                    }),
                     IconButton(
                         icon: Icon(Icons.add),
                         onPressed: () {
@@ -124,6 +126,13 @@ class _TodoPageState extends State<TodoPage> {
   //       });
   // }
 
+  void gotoWriteTodo(context,TodoBeanEntity e){
+    Navigator.pushNamed(context, '/writeTodo',arguments: e).then((value){
+      if (value == Constants.REFRESH) {
+        getAllTodo();
+      }
+    });
+  }
   InputDecoration buildInputDecoration(text) {
     return InputDecoration(
         enabledBorder: OutlineInputBorder(
@@ -259,6 +268,7 @@ class _TodoPageState extends State<TodoPage> {
           minVerticalPadding: 0,
           onTap: () {
             // TODO: goToWriteTodo(context, e);
+            gotoWriteTodo(context, e);
           },
           title: Text("${e.content}",
               style: TextStyle(
