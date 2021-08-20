@@ -12,6 +12,8 @@ import 'package:flutter_picker/flutter_picker.dart';
 import 'package:r_calendar/r_calendar.dart';
 import 'package:todo_flutter/Calender.dart';
 
+import 'WriteTodoPage.dart';
+
 class TodoPage extends StatefulWidget {
   const TodoPage({Key key}) : super(key: key);
 
@@ -125,8 +127,12 @@ class _TodoPageState extends State<TodoPage> {
   //       });
   // }
 
-  void gotoWriteTodo(context,TodoBeanEntity e){
-    Navigator.pushNamed(context, '/writeTodo',arguments: e).then((value){
+  void gotoWriteTodo(context, TodoBeanEntity e){
+    Navigator.push(context, MaterialPageRoute(
+        builder: (BuildContext context){
+          return WriteTodoPage(arguments: e);
+        }
+    )).then((value) {
       if (value == Constants.REFRESH) {
         getAllTodo();
       }

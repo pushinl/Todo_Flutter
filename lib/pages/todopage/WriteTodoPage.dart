@@ -46,7 +46,7 @@ class _WriteTodoPageState extends State<WriteTodoPage> {
     return WillPopScope(
         child: Scaffold(
             appBar: AppBar(
-              title: Text ("待办"),
+              title: Text("待办"),
               leading: IconButton(
                 iconSize: 36,
                 onPressed: () {
@@ -63,7 +63,7 @@ class _WriteTodoPageState extends State<WriteTodoPage> {
                       if (content.text == '') {
                         Toast.show("标题或内容不能为空", context, gravity: Toast.CENTER);
                       } else {
-                          updateNote();
+                        updateNote();
                       }
                     },
                     icon: Image.asset('assets/images/icon_ok.png'))
@@ -77,13 +77,18 @@ class _WriteTodoPageState extends State<WriteTodoPage> {
                   padding: EdgeInsets.all(20),
                   child: ListView(children: [
                     TextField(
-                      style: TextStyle(fontSize: 40),
+                      style: TextStyle(fontSize: 20),
                       cursorColor: ColorUtils.color_black,
                       controller: content,
                       decoration: buildInputDecoration("请输入daiban"),
                     ),
                   ]),
-                ))));
+                )
+            )
+        ),onWillPop: () {
+          exit(context);
+        });
+
   }
 
   void exit(BuildContext context) {
@@ -109,5 +114,6 @@ class _WriteTodoPageState extends State<WriteTodoPage> {
         exit(context);
       }
     });
+    await todoSqliteHelper.close();
   }
 }
