@@ -68,13 +68,13 @@ Future<List<TodoBeanEntity>> getAllTodo(int type) async {
     List<Map> maps;
     switch (type) {
       case 1:
-        maps = await todoDb.query(tableTodo, orderBy: '${columnImportance} DESC');
+        maps = await todoDb.query(tableTodo, orderBy: '$columnStatus ASC, $columnImportance DESC');
         break;
       case 2:
-        maps = await todoDb.query(tableTodo, orderBy: '${columnDateTime} DESC');
+        maps = await todoDb.query(tableTodo, orderBy: '$columnStatus ASC, $columnDateTime DESC');
         break;
       case 3:
-        maps = await todoDb.query(tableTodo, orderBy: '$columnContent ASC');
+        maps = await todoDb.query(tableTodo, orderBy: '$columnStatus ASC, $columnContent ASC');
         break;
     }
     maps.map((e) {
@@ -91,15 +91,15 @@ Future<List<TodoBeanEntity>> getAllTodo(int type) async {
     switch (type) {
       case 2:
         maps = await todoDb.query(tableTodo,
-            where: where, orderBy: '$columnDateTime desc');
+            where: where, orderBy: '$columnStatus ASC, $columnDateTime desc');
         break;
       case 1:
         maps = await todoDb.query(tableTodo,
-            where: where, orderBy: '$columnImportance desc');
+            where: where, orderBy: '$columnStatus ASC, $columnImportance desc');
         break;
       case 3:
         maps = await todoDb.query(tableTodo,
-            where: where, orderBy: '$columnContent ASC');
+            where: where, orderBy: '$columnStatus ASC, $columnContent ASC');
         break;
     }
     maps.map((e) {

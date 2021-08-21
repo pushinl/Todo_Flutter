@@ -128,7 +128,7 @@ class _TodoPageState extends State<TodoPage> {
   // }
 
   void gotoWriteTodo(context, TodoBeanEntity e){
-    Navigator.push(context, MaterialPageRoute(
+  Navigator.push(context, MaterialPageRoute(
         builder: (BuildContext context){
           return WriteTodoPage(arguments: e);
         }
@@ -262,7 +262,7 @@ class _TodoPageState extends State<TodoPage> {
   }
 
   Dismissible getDismissible(context, TodoBeanEntity e) {
-    return Dismissible(
+    return e.itemStatus==0 ? Dismissible(
         onDismissed: (_) {
           deleteById(e.todoId);
           todoList.remove(e);
@@ -272,7 +272,6 @@ class _TodoPageState extends State<TodoPage> {
         child: ListTile( //TODO: 修改一下样子
           minVerticalPadding: 0,
           onTap: () {
-            // TODO: goToWriteTodo(context, e);
             gotoWriteTodo(context, e);
           },
           title: Text("${e.content}",
@@ -281,7 +280,29 @@ class _TodoPageState extends State<TodoPage> {
                   fontWeight: FontWeight.bold,
                   color: ColorUtils.color_grey_666)),
           // subtitle: getListViewPadding(time1, time2, time3, time4, e),
-        ));
+        ),
+    ) : Dismissible(
+      onDismissed: (_) {
+        deleteById(e.todoId);
+        todoList.remove(e);
+      },
+      key: Key(e.todoId.toString()),
+      background: Container(color: Colors.red),
+      child: ListTile(
+        minVerticalPadding: 0,
+        onTap: () {
+          gotoWriteTodo(context, e);
+        },
+        title: Text("${e.content}",
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                decoration: TextDecoration.lineThrough,
+                color: Colors.black)),
+        // subtitle: getListViewPadding(time1, time2, time3, time4, e),
+      ),
+    );
+
   }
 
   // TODO: subtitle
@@ -313,7 +334,7 @@ class _TodoPageState extends State<TodoPage> {
     await todoSqliteHelper.open();
     TodoBeanEntity todoBeanEntity = new TodoBeanEntity();
     todoBeanEntity.content = todoContentController.text;
-    todoBeanEntity.itemStatus = 0;
+    todoBeanEntity.itemStatus = 1;
     todoBeanEntity.itemImportance = 1;
     todoBeanEntity.itemDatetime = DateTime.now().toString();
     todoBeanEntity.itemLabels = 1;

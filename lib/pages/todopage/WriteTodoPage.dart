@@ -33,11 +33,7 @@ class _WriteTodoPageState extends State<WriteTodoPage> {
     // TODO: implement initState
     super.initState();
     todoSqliteHelper = new TodoSqliteHelper();
-    if (arguments != null) {
-      content = new TextEditingController(text: arguments.content);
-    } else {
-      content = new TextEditingController();
-    }
+    content = new TextEditingController(text: arguments.content);
   }
 
   @override
@@ -105,9 +101,6 @@ class _WriteTodoPageState extends State<WriteTodoPage> {
   void updateNote() async {
     await todoSqliteHelper.open();
     arguments.content = content.text;
-
-    arguments.itemDatetime =
-        DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
     await todoSqliteHelper.update(arguments).then((value) {
       if (value > 0) {
         Toast.show("修改成功", context, gravity: Toast.CENTER);
