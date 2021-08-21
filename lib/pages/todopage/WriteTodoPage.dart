@@ -46,7 +46,7 @@ class _WriteTodoPageState extends State<WriteTodoPage> {
     return WillPopScope(
         child: Scaffold(
             appBar: AppBar(
-              title: Text("待办"),
+              title: Text("修改待办"),
               leading: IconButton(
                 iconSize: 36,
                 onPressed: () {
@@ -80,7 +80,7 @@ class _WriteTodoPageState extends State<WriteTodoPage> {
                       style: TextStyle(fontSize: 20),
                       cursorColor: ColorUtils.color_black,
                       controller: content,
-                      decoration: buildInputDecoration("请输入daiban"),
+                      decoration: buildInputDecoration("请输入代办"),
                     ),
                   ]),
                 )

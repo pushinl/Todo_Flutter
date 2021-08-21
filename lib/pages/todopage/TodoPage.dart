@@ -44,7 +44,7 @@ class _TodoPageState extends State<TodoPage> {
     getAllTodo();
   }
 
-  void addTodo(){
+  void addTodo() {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
@@ -55,27 +55,28 @@ class _TodoPageState extends State<TodoPage> {
                 Row(
                   children: [
                     // TODO:ICON
-                    IconButton(//设置时间与重复
+                    IconButton(
+                        //设置时间与重复
                         icon: Icon(Icons.alarm),
-                        onPressed: () {
-
-                        }),
-                    IconButton(//设置
+                        onPressed: () {}),
+                    IconButton(
+                        //设置
                         icon: Icon(Icons.lens),
                         onPressed: () {
-
+                          Dialog1();
                         }),
                     IconButton(
                         icon: Icon(Icons.dashboard),
                         onPressed: () {
-
+                          Dialog();
                         }),
                     IconButton(
                         icon: Icon(Icons.add),
                         onPressed: () {
                           if (todoContentController.text == '') {
-                            Toast.show("待办不能为空", context, gravity: Toast.CENTER);
-                          }else {
+                            Toast.show("待办不能为空", context,
+                                gravity: Toast.CENTER);
+                          } else {
                             addTodoSetSql();
                             getAllTodo();
                           }
@@ -97,47 +98,16 @@ class _TodoPageState extends State<TodoPage> {
         });
   }
 
-  // void _removeTodoItem(int index) {
-  //   setState(() => todoList.removeAt(index));
-  // }
-
-  // void _promptRemoveTodoItem(int index) {
-  //   showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return AlertDialog(
-  //             title: new Text('Mark "${todoList[index].content}" as done?'),
-  //             actions: <Widget>[
-  //               TextButton(
-  //                   child: new Text(
-  //                     '取消',
-  //                     style: new TextStyle(color: Colors.black),
-  //                   ),
-  //                   onPressed: () => Navigator.of(context).pop()),
-  //               TextButton(
-  //                   child: new Text(
-  //                     '确定',
-  //                     style: new TextStyle(color: Colors.black),
-  //                   ),
-  //                   onPressed: () {
-  //                     _removeTodoItem(index);
-  //                     Navigator.of(context).pop();
-  //                   })
-  //             ]);
-  //       });
-  // }
-
-  void gotoWriteTodo(context, TodoBeanEntity e){
-    Navigator.push(context, MaterialPageRoute(
-        builder: (BuildContext context){
-          return WriteTodoPage(arguments: e);
-        }
-    )).then((value) {
+  void gotoWriteTodo(context, TodoBeanEntity e) {
+    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+      return WriteTodoPage(arguments: e);
+    })).then((value) {
       if (value == Constants.REFRESH) {
         getAllTodo();
       }
     });
   }
+
   InputDecoration buildInputDecoration(text) {
     return InputDecoration(
         enabledBorder: OutlineInputBorder(
@@ -233,23 +203,25 @@ class _TodoPageState extends State<TodoPage> {
               ),
             ),
             Expanded(
+
                 child: ListView.separated(
-                  shrinkWrap: true,
-                  //加上这个就不会因为高度报错了
-                  scrollDirection: Axis.vertical,
-                  separatorBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      child: Divider(
-                        color: ColorUtils.color_grey_dd,
-                        height: 1,
-                      ),
-                    );
-                    },
-                  itemCount: todoList.length,
-                  itemBuilder: getItemBuilder,
-                )
-            ),
+
+              shrinkWrap: true,
+              //加上这个就不会因为高度报错了
+              scrollDirection: Axis.vertical,
+              separatorBuilder: (context, index) {
+
+                return Padding(
+                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                  child: Divider(
+                    color: Colors.black,
+                    height: 1,
+                  ),
+                );
+              },
+              itemCount: todoList.length,
+              itemBuilder: getItemBuilder,
+            )),
           ],
         ),
       ),
@@ -269,7 +241,8 @@ class _TodoPageState extends State<TodoPage> {
         },
         key: Key(e.todoId.toString()),
         background: Container(color: Colors.red),
-        child: ListTile( //TODO: 修改一下样子
+        child: ListTile(
+          //TODO: 修改一下样子
           minVerticalPadding: 0,
           onTap: () {
             // TODO: goToWriteTodo(context, e);
@@ -283,32 +256,114 @@ class _TodoPageState extends State<TodoPage> {
           // subtitle: getListViewPadding(time1, time2, time3, time4, e),
         ));
   }
+  AlertDialog Dialog1(){
+    showDialog(context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context){
+      return AlertDialog(
+        content: new SingleChildScrollView(
+          child: new ListBody(
+            children: <Widget>[
+              RaisedButton.icon(icon: Icon(Icons.stacked_bar_chart),
+                label: Text('学习'),
+                textColor: Colors.black,
+                color: Colors.white,
+                onPressed: (){
+                todoSqliteHelper.open();
+                TodoBeanEntity todoBeanEntity = new TodoBeanEntity();
+                todoBeanEntity.itemStatus=0;
 
-  // TODO: subtitle
-  //  Padding getListViewPadding(String time1, String time2, String time3,
-  //     String time4, TodoBeanEntity e) {
-  //   return Padding(
-  //     padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-  //     child: Flex(
-  //       direction: Axis.horizontal,
-  //       crossAxisAlignment: CrossAxisAlignment.center,
-  //       children: [
-  //         Text(
-  //           "${time1 == time2 ? time3 : time4}",
-  //           style: TextStyle(fontSize: 15, color: ColorUtils.color_grey_666),
-  //         ),
-  //         SizedBox(
-  //           width: 20,
-  //         ),
-  //         Expanded(
-  //             child: Text("${e.content}",
-  //                 overflow: TextOverflow.ellipsis,
-  //                 style: TextStyle(
-  //                     fontSize: 15, color: ColorUtils.color_grey_999)))
-  //       ],
-  //     ),
-  //   );
-  // }
+                },
+
+              ),
+              RaisedButton.icon(icon: Icon(Icons.stacked_bar_chart),
+                label: Text('生活'),
+                textColor: Colors.black,
+                color: Colors.white,
+                onPressed: (){
+                  todoSqliteHelper.open();
+                  TodoBeanEntity todoBeanEntity = new TodoBeanEntity();
+                  todoBeanEntity.itemStatus=1;
+
+                },
+
+              ),
+              RaisedButton.icon(icon: Icon(Icons.stacked_bar_chart),
+                label: Text('工作'),
+                textColor: Colors.black,
+                color: Colors.white,
+                onPressed: (){
+                  todoSqliteHelper.open();
+                  TodoBeanEntity todoBeanEntity = new TodoBeanEntity();
+                  todoBeanEntity.itemStatus=2;
+
+                },
+
+              ),
+              RaisedButton.icon(icon: Icon(Icons.stacked_bar_chart),
+                label: Text('娱乐'),
+                textColor: Colors.black,
+                color: Colors.white,
+                onPressed: (){
+                  todoSqliteHelper.open();
+                  TodoBeanEntity todoBeanEntity = new TodoBeanEntity();
+                  todoBeanEntity.itemStatus=3;
+
+                },
+
+              ),
+            ],
+          ),
+
+        )
+      );
+    });
+  }
+
+
+  AlertDialog Dialog() {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: new SingleChildScrollView(
+              child: new ListBody(
+                children: <Widget>[
+                  RaisedButton(
+                    onPressed: () {
+
+                    },
+                    child: Text('重要且紧急'),
+                    color: Colors.white,
+                    textColor: Colors.black,
+                  ),
+                  RaisedButton(
+                    onPressed: () {},
+                    child: Text('不重要且紧急'),
+                    color: Colors.white,
+                    textColor: Colors.black,
+
+                  ),
+                  RaisedButton(
+                    onPressed: () {},
+                    child: Text('重要且不紧急'),
+                    color: Colors.white,
+                    textColor: Colors.black,
+                  ),
+                  RaisedButton(
+                    onPressed: () {},
+                    child: Text('不重要且不紧急'),
+                    color: Colors.white,
+                    textColor: Colors.black,
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
   void addTodoSetSql() async {
     await todoSqliteHelper.open();
     TodoBeanEntity todoBeanEntity = new TodoBeanEntity();
@@ -345,7 +400,7 @@ class _TodoPageState extends State<TodoPage> {
       todoList.clear();
       todoList.addAll(list);
     });
-    todoContentController.text = '';//TODO : 暂时把清空controller的放在这里了。。
+    todoContentController.text = ''; //TODO : 暂时把清空controller的放在这里了。。
   }
 
   void deleteById(int id) async {
