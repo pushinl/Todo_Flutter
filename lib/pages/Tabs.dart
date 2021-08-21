@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_flutter/pages/notepage/NoteMainPage.dart';
 import 'package:todo_flutter/pages/todopage/TodoPage.dart';
 import 'package:todo_flutter/pages/personpage/PersonPage.dart';
-
+import 'package:todo_flutter/pages/teampage/TeamPage.dart';
 class Tabs extends StatefulWidget{
   Tabs({Key key}) : super(key: key);
 
@@ -77,7 +77,7 @@ class _TabsState extends State<Tabs> with SingleTickerProviderStateMixin{
         controller: this._tabController,
         children: [
           TodoPage(),
-          Text('团队'),
+          TeamPage(),
           NoteMainPage(),
           PersonPage(),
         ],
