@@ -27,6 +27,11 @@ class _TeamPageState extends State<TeamPage> with SingleTickerProviderStateMixin
 
   }
 
+  void dispose() {
+    this.mController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -47,6 +52,7 @@ class _TeamPageState extends State<TeamPage> with SingleTickerProviderStateMixin
                     indicatorSize: TabBarIndicatorSize.label,
                     // 指示器的权重，即线条高度
                     indicatorWeight: 4.0,
+                    controller: this.mController,
                     tabs: <Widget>[
                       Tab(
                         text: "            我加入的               ",

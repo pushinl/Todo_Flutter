@@ -280,7 +280,7 @@ class _TodoPageState extends State<TodoPage> {
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: ColorUtils.color_grey_666)),
+                  color: Colors.black)),
           // subtitle: getListViewPadding(time1, time2, time3, time4, e),
         ),
     ) : Dismissible(
@@ -300,7 +300,7 @@ class _TodoPageState extends State<TodoPage> {
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 decoration: TextDecoration.lineThrough,
-                color: Colors.black)),
+                color: Colors.black38)),
         // subtitle: getListViewPadding(time1, time2, time3, time4, e),
       ),
     );
