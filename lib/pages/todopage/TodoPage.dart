@@ -55,20 +55,20 @@ class _TodoPageState extends State<TodoPage> {
                 Row(
                   children: [
                     // TODO:ICON
-                    IconButton(//设置时间与重复
+                    IconButton(
+                        //设置时间与重复
                         icon: Icon(Icons.alarm),
-                        onPressed: () {
-
-                        }),
-                    IconButton(//设置
+                        onPressed: () {}),
+                    IconButton(
+                        //设置
                         icon: Icon(Icons.lens),
                         onPressed: () {
-
+                          Dialog1();
                         }),
                     IconButton(
                         icon: Icon(Icons.dashboard),
                         onPressed: () {
-
+                          Dialog();
                         }),
                     IconButton(
                         icon: Icon(Icons.add),
@@ -269,9 +269,11 @@ class _TodoPageState extends State<TodoPage> {
         },
         key: Key(e.todoId.toString()),
         background: Container(color: Colors.red),
-        child: ListTile( //TODO: 修改一下样子
+        child: ListTile(
+          //TODO: 修改一下样子
           minVerticalPadding: 0,
           onTap: () {
+            // TODO: goToWriteTodo(context, e);
             gotoWriteTodo(context, e);
           },
           title: Text("${e.content}",
@@ -304,32 +306,114 @@ class _TodoPageState extends State<TodoPage> {
     );
 
   }
+  AlertDialog Dialog1(){
+    showDialog(context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context){
+      return AlertDialog(
+        content: new SingleChildScrollView(
+          child: new ListBody(
+            children: <Widget>[
+              RaisedButton.icon(icon: Icon(Icons.stacked_bar_chart),
+                label: Text('学习'),
+                textColor: Colors.black,
+                color: Colors.white,
+                onPressed: (){
+                todoSqliteHelper.open();
+                TodoBeanEntity todoBeanEntity = new TodoBeanEntity();
+                todoBeanEntity.itemStatus=0;
 
-  // TODO: subtitle
-  //  Padding getListViewPadding(String time1, String time2, String time3,
-  //     String time4, TodoBeanEntity e) {
-  //   return Padding(
-  //     padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-  //     child: Flex(
-  //       direction: Axis.horizontal,
-  //       crossAxisAlignment: CrossAxisAlignment.center,
-  //       children: [
-  //         Text(
-  //           "${time1 == time2 ? time3 : time4}",
-  //           style: TextStyle(fontSize: 15, color: ColorUtils.color_grey_666),
-  //         ),
-  //         SizedBox(
-  //           width: 20,
-  //         ),
-  //         Expanded(
-  //             child: Text("${e.content}",
-  //                 overflow: TextOverflow.ellipsis,
-  //                 style: TextStyle(
-  //                     fontSize: 15, color: ColorUtils.color_grey_999)))
-  //       ],
-  //     ),
-  //   );
-  // }
+                },
+
+              ),
+              RaisedButton.icon(icon: Icon(Icons.stacked_bar_chart),
+                label: Text('生活'),
+                textColor: Colors.black,
+                color: Colors.white,
+                onPressed: (){
+                  todoSqliteHelper.open();
+                  TodoBeanEntity todoBeanEntity = new TodoBeanEntity();
+                  todoBeanEntity.itemStatus=1;
+
+                },
+
+              ),
+              RaisedButton.icon(icon: Icon(Icons.stacked_bar_chart),
+                label: Text('工作'),
+                textColor: Colors.black,
+                color: Colors.white,
+                onPressed: (){
+                  todoSqliteHelper.open();
+                  TodoBeanEntity todoBeanEntity = new TodoBeanEntity();
+                  todoBeanEntity.itemStatus=2;
+
+                },
+
+              ),
+              RaisedButton.icon(icon: Icon(Icons.stacked_bar_chart),
+                label: Text('娱乐'),
+                textColor: Colors.black,
+                color: Colors.white,
+                onPressed: (){
+                  todoSqliteHelper.open();
+                  TodoBeanEntity todoBeanEntity = new TodoBeanEntity();
+                  todoBeanEntity.itemStatus=3;
+
+                },
+
+              ),
+            ],
+          ),
+
+        )
+      );
+    });
+  }
+
+
+  AlertDialog Dialog() {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: new SingleChildScrollView(
+              child: new ListBody(
+                children: <Widget>[
+                  RaisedButton(
+                    onPressed: () {
+
+                    },
+                    child: Text('重要且紧急'),
+                    color: Colors.white,
+                    textColor: Colors.black,
+                  ),
+                  RaisedButton(
+                    onPressed: () {},
+                    child: Text('不重要且紧急'),
+                    color: Colors.white,
+                    textColor: Colors.black,
+
+                  ),
+                  RaisedButton(
+                    onPressed: () {},
+                    child: Text('重要且不紧急'),
+                    color: Colors.white,
+                    textColor: Colors.black,
+                  ),
+                  RaisedButton(
+                    onPressed: () {},
+                    child: Text('不重要且不紧急'),
+                    color: Colors.white,
+                    textColor: Colors.black,
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
   void addTodoSetSql() async {
     await todoSqliteHelper.open();
     TodoBeanEntity todoBeanEntity = new TodoBeanEntity();
