@@ -60,15 +60,15 @@ class _TodoPageState extends State<TodoPage> {
                         icon: Icon(Icons.alarm),
                         onPressed: () {}),
                     IconButton(
-                        //设置
+                        //设置类别
                         icon: Icon(Icons.lens),
                         onPressed: () {
-                          Dialog1();
+                          sortDialog();
                         }),
                     IconButton(
                         icon: Icon(Icons.dashboard),
                         onPressed: () {
-                          Dialog();
+                          importanceDialog();
                         }),
                     IconButton(
                         icon: Icon(Icons.add),
@@ -127,7 +127,7 @@ class _TodoPageState extends State<TodoPage> {
   //       });
   // }
 
-  void gotoWriteTodo(context, TodoBeanEntity e){
+  void gotoWriteTodo(context, TodoBeanEntity e){ // TODO：可以参考这里写页面跳转
   Navigator.push(context, MaterialPageRoute(
         builder: (BuildContext context){
           return WriteTodoPage(arguments: e);
@@ -269,20 +269,32 @@ class _TodoPageState extends State<TodoPage> {
         },
         key: Key(e.todoId.toString()),
         background: Container(color: Colors.red),
-        child: ListTile(
-          //TODO: 修改一下样子
-          minVerticalPadding: 0,
-          onTap: () {
-            // TODO: goToWriteTodo(context, e);
-            gotoWriteTodo(context, e);
-          },
-          title: Text("${e.content}",
-              style: TextStyle(
+        child:
+          Row(
+            children: [
+              InkWell(
+                onTap: (){
+                e.itemStatus = 1;
+                setTodoStatus();
+                getAllTodo();
+              },
+              child: Image(image: AssetImage("assets/images/icon_menu.png"), width: 20, height: 20,),
+            ),
+              ElevatedButton(
+                // minVerticalPadding: 0,
+                onPressed: () {
+                // TODO: goToWriteTodo(context, e);
+                gotoWriteTodo(context, e);
+                },
+                child: Text("${e.content}", style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black)),
-          // subtitle: getListViewPadding(time1, time2, time3, time4, e),
-        ),
+                  color: Colors.black
+                )),
+              // subtitle: getListViewPadding(time1, time2, time3, time4, e),
+            ),
+          ],
+        )
     ) : Dismissible(
       onDismissed: (_) {
         deleteById(e.todoId);
@@ -290,23 +302,36 @@ class _TodoPageState extends State<TodoPage> {
       },
       key: Key(e.todoId.toString()),
       background: Container(color: Colors.red),
-      child: ListTile(
-        minVerticalPadding: 0,
-        onTap: () {
-          gotoWriteTodo(context, e);
-        },
-        title: Text("${e.content}",
-            style: TextStyle(
+      child: Row(
+
+        children: [
+          InkWell(
+            onTap: (){
+              e.itemStatus = 0;
+              setTodoStatus();
+              getAllTodo();
+            },
+            child: Image(image: AssetImage("assets/images/icon_ok.png"), width: 10, height: 10,),
+          ),
+          ElevatedButton(
+            // minVerticalPadding: 0,
+            onPressed: () {
+              // TODO: goToWriteTodo(context, e);
+              gotoWriteTodo(context, e);
+            },
+            child: Text("${e.content}",style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 decoration: TextDecoration.lineThrough,
                 color: Colors.black38)),
-        // subtitle: getListViewPadding(time1, time2, time3, time4, e),
-      ),
+            // subtitle: getListViewPadding(time1, time2, time3, time4, e),
+          )
+        ],
+      )
     );
 
   }
-  AlertDialog Dialog1(){
+  AlertDialog sortDialog(){
     showDialog(context: context,
         barrierDismissible: true,
         builder: (BuildContext context){
@@ -319,10 +344,8 @@ class _TodoPageState extends State<TodoPage> {
                 textColor: Colors.black,
                 color: Colors.white,
                 onPressed: (){
-                todoSqliteHelper.open();
-                TodoBeanEntity todoBeanEntity = new TodoBeanEntity();
-                todoBeanEntity.itemStatus=0;
-
+                  arguments.itemLabels = 1;
+                  exit(context);
                 },
 
               ),
@@ -331,10 +354,8 @@ class _TodoPageState extends State<TodoPage> {
                 textColor: Colors.black,
                 color: Colors.white,
                 onPressed: (){
-                  todoSqliteHelper.open();
-                  TodoBeanEntity todoBeanEntity = new TodoBeanEntity();
-                  todoBeanEntity.itemStatus=1;
-
+                  arguments.itemLabels = 2;
+                  exit(context);
                 },
 
               ),
@@ -343,10 +364,8 @@ class _TodoPageState extends State<TodoPage> {
                 textColor: Colors.black,
                 color: Colors.white,
                 onPressed: (){
-                  todoSqliteHelper.open();
-                  TodoBeanEntity todoBeanEntity = new TodoBeanEntity();
-                  todoBeanEntity.itemStatus=2;
-
+                  arguments.itemLabels = 3;
+                  exit(context);
                 },
 
               ),
@@ -355,10 +374,8 @@ class _TodoPageState extends State<TodoPage> {
                 textColor: Colors.black,
                 color: Colors.white,
                 onPressed: (){
-                  todoSqliteHelper.open();
-                  TodoBeanEntity todoBeanEntity = new TodoBeanEntity();
-                  todoBeanEntity.itemStatus=3;
-
+                  arguments.itemLabels = 4;
+                  exit(context);
                 },
 
               ),
@@ -371,7 +388,7 @@ class _TodoPageState extends State<TodoPage> {
   }
 
 
-  AlertDialog Dialog() {
+  AlertDialog importanceDialog() {
     showDialog(
         context: context,
         barrierDismissible: true,
@@ -382,27 +399,37 @@ class _TodoPageState extends State<TodoPage> {
                 children: <Widget>[
                   RaisedButton(
                     onPressed: () {
-
+                      arguments.itemImportance = 1;
+                      exit(context);
                     },
                     child: Text('重要且紧急'),
                     color: Colors.white,
                     textColor: Colors.black,
                   ),
                   RaisedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      arguments.itemImportance = 2;
+                      exit(context);
+                    },
                     child: Text('不重要且紧急'),
                     color: Colors.white,
                     textColor: Colors.black,
 
                   ),
                   RaisedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      arguments.itemImportance = 3;
+                      exit(context);
+                    },
                     child: Text('重要且不紧急'),
                     color: Colors.white,
                     textColor: Colors.black,
                   ),
                   RaisedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      arguments.itemImportance = 4;
+                      exit(context);
+                    },
                     child: Text('不重要且不紧急'),
                     color: Colors.white,
                     textColor: Colors.black,
@@ -418,7 +445,7 @@ class _TodoPageState extends State<TodoPage> {
     await todoSqliteHelper.open();
     TodoBeanEntity todoBeanEntity = new TodoBeanEntity();
     todoBeanEntity.content = todoContentController.text;
-    todoBeanEntity.itemStatus = 1;
+    todoBeanEntity.itemStatus = 0;
     todoBeanEntity.itemImportance = 1;
     todoBeanEntity.itemDatetime = DateTime.now().toString();
     todoBeanEntity.itemLabels = 1;
@@ -451,13 +478,21 @@ class _TodoPageState extends State<TodoPage> {
       todoList.addAll(list);
     });
     todoContentController.text = '';//TODO : 暂时把清空controller的放在这里了。。
+    await todoSqliteHelper.close();
   }
 
-  void deleteById(int id) async {
-    await todoSqliteHelper.open();
-    await todoSqliteHelper.delete(id).then((value) {
-      if (value > 0) Toast.show("删除成功", context);
-    });
+   void deleteById(int id) async {
+      await todoSqliteHelper.open();
+      await todoSqliteHelper.delete(id).then((value) {
+        if (value > 0) Toast.show("删除成功", context);
+      });
+      await todoSqliteHelper.close();
+  }
+
+  void setTodoStatus() async {
+      await todoSqliteHelper.open();
+      await todoSqliteHelper.update(arguments).then((value) => Toast.show("已完成一项待办", context));
+      await todoSqliteHelper.close();
   }
 
   showPicker(BuildContext context) {

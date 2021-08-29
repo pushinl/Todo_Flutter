@@ -30,7 +30,6 @@ class _WriteTodoPageState extends State<WriteTodoPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     todoSqliteHelper = new TodoSqliteHelper();
     content = new TextEditingController(text: arguments.content);
@@ -38,7 +37,6 @@ class _WriteTodoPageState extends State<WriteTodoPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return WillPopScope(
         child: Scaffold(
             appBar: AppBar(
