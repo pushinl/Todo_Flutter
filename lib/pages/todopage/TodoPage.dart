@@ -30,6 +30,7 @@ class _TodoPageState extends State<TodoPage> {
   var selectType = 1;
   static GlobalKey<ScaffoldState> _globalKey = GlobalKey();
   RCalendarController todoDateController;
+  List<String> typeList = ["学习", "睡觉", "吃饭", "游戏"];
 
   @override
   void initState() {
@@ -271,30 +272,37 @@ class _TodoPageState extends State<TodoPage> {
         background: Container(color: Colors.red),
         child:
           Row(
+
             children: [
               InkWell(
                 onTap: (){
-                e.itemStatus = 1;
-                setTodoStatus();
-                getAllTodo();
-              },
-              child: Image(image: AssetImage("assets/images/icon_menu.png"), width: 20, height: 20,),
-            ),
+                  arguments = e;
+                  arguments.itemStatus = 1;
+                  setTodoStatus();
+                  getAllTodo();
+                },
+                child: Image(image: AssetImage("assets/images/icon_menu.png"), width: 20, height: 20,),
+              ),
               ElevatedButton(
                 // minVerticalPadding: 0,
                 onPressed: () {
-                // TODO: goToWriteTodo(context, e);
-                gotoWriteTodo(context, e);
+                  // TODO: goToWriteTodo(context, e);
+                  gotoWriteTodo(context, e);
                 },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  )
+                ),
                 child: Text("${e.content}", style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.black
                 )),
               // subtitle: getListViewPadding(time1, time2, time3, time4, e),
-            ),
-          ],
-        )
+              ),
+            ],
+          )
     ) : Dismissible(
       onDismissed: (_) {
         deleteById(e.todoId);
@@ -307,11 +315,12 @@ class _TodoPageState extends State<TodoPage> {
         children: [
           InkWell(
             onTap: (){
-              e.itemStatus = 0;
+              arguments = e;
+              arguments.itemStatus = 0;
               setTodoStatus();
               getAllTodo();
             },
-            child: Image(image: AssetImage("assets/images/icon_ok.png"), width: 10, height: 10,),
+            child: Image(image: AssetImage("assets/images/icon_ok.png"), width: 20, height: 20,),
           ),
           ElevatedButton(
             // minVerticalPadding: 0,
@@ -339,40 +348,32 @@ class _TodoPageState extends State<TodoPage> {
         content: new SingleChildScrollView(
           child: new ListBody(
             children: <Widget>[
-              RaisedButton.icon(icon: Icon(Icons.stacked_bar_chart),
+              ElevatedButton.icon(icon: Icon(Icons.stacked_bar_chart),
                 label: Text('学习'),
-                textColor: Colors.black,
-                color: Colors.white,
                 onPressed: (){
                   arguments.itemLabels = 1;
                   exit(context);
                 },
 
               ),
-              RaisedButton.icon(icon: Icon(Icons.stacked_bar_chart),
+              ElevatedButton.icon(icon: Icon(Icons.stacked_bar_chart),
                 label: Text('生活'),
-                textColor: Colors.black,
-                color: Colors.white,
                 onPressed: (){
                   arguments.itemLabels = 2;
                   exit(context);
                 },
 
               ),
-              RaisedButton.icon(icon: Icon(Icons.stacked_bar_chart),
+              ElevatedButton.icon(icon: Icon(Icons.stacked_bar_chart),
                 label: Text('工作'),
-                textColor: Colors.black,
-                color: Colors.white,
                 onPressed: (){
                   arguments.itemLabels = 3;
                   exit(context);
                 },
 
               ),
-              RaisedButton.icon(icon: Icon(Icons.stacked_bar_chart),
+              ElevatedButton.icon(icon: Icon(Icons.stacked_bar_chart),
                 label: Text('娱乐'),
-                textColor: Colors.black,
-                color: Colors.white,
                 onPressed: (){
                   arguments.itemLabels = 4;
                   exit(context);
@@ -397,42 +398,34 @@ class _TodoPageState extends State<TodoPage> {
             content: new SingleChildScrollView(
               child: new ListBody(
                 children: <Widget>[
-                  RaisedButton(
+                  ElevatedButton(
                     onPressed: () {
                       arguments.itemImportance = 1;
                       exit(context);
                     },
                     child: Text('重要且紧急'),
-                    color: Colors.white,
-                    textColor: Colors.black,
                   ),
-                  RaisedButton(
+                  ElevatedButton(
                     onPressed: () {
                       arguments.itemImportance = 2;
                       exit(context);
                     },
                     child: Text('不重要且紧急'),
-                    color: Colors.white,
-                    textColor: Colors.black,
 
                   ),
-                  RaisedButton(
+                  ElevatedButton(
                     onPressed: () {
                       arguments.itemImportance = 3;
                       exit(context);
                     },
                     child: Text('重要且不紧急'),
-                    color: Colors.white,
-                    textColor: Colors.black,
                   ),
-                  RaisedButton(
+                  ElevatedButton(
                     onPressed: () {
                       arguments.itemImportance = 4;
                       exit(context);
                     },
                     child: Text('不重要且不紧急'),
-                    color: Colors.white,
-                    textColor: Colors.black,
                   ),
                 ],
               ),
