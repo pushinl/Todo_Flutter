@@ -62,19 +62,19 @@ class TodoSqliteHelper {
     return null;
   }
 
-  /// @param type 1 按重要程度 2 按ddl
+  /// @param type 2 按重要程度 1 按ddl
 Future<List<TodoBeanEntity>> getAllTodo(int type) async {
     List<TodoBeanEntity> list = [];
     List<Map> maps;
     switch (type) {
-      case 1:
-        maps = await todoDb.query(tableTodo, orderBy: '$columnStatus ASC, $columnImportance DESC');
-        break;
       case 2:
-        maps = await todoDb.query(tableTodo, orderBy: '$columnStatus ASC, $columnDateTime DESC');
+        maps = await todoDb.query(tableTodo, orderBy: '$columnStatus ASC, $columnImportance DESC, $columnDateTime ASC');
+        break;
+      case 1:
+        maps = await todoDb.query(tableTodo, orderBy: '$columnStatus ASC, $columnDateTime ASC, $columnImportance DESC');
         break;
       case 3:
-        maps = await todoDb.query(tableTodo, orderBy: '$columnStatus ASC, $columnContent ASC');
+        maps = await todoDb.query(tableTodo, orderBy: '$columnStatus ASC, $columnDateTime ASC, $columnContent ASC');
         break;
     }
     maps.map((e) {

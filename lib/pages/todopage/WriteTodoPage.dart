@@ -69,13 +69,20 @@ class _WriteTodoPageState extends State<WriteTodoPage> {
                 decoration: BoxDecoration(color: ColorUtils.color_white),
                 child: Padding(
                   padding: EdgeInsets.all(20),
-                  child: ListView(children: [
+                  child: Column(children: [
                     TextField(
                       style: TextStyle(fontSize: 20),
                       cursorColor: ColorUtils.color_black,
                       controller: content,
                       decoration: buildInputDecoration("请输入代办"),
                     ),
+                    ElevatedButton(
+                        onPressed: (){
+                        },
+                        child: Text(
+                          "${arguments.itemDatetime}"
+                        )
+                    )
                   ]),
                 )
             )

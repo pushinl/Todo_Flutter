@@ -10,7 +10,6 @@ import '../Constants.dart';
 import '../../bean/todo_bean_entity.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:r_calendar/r_calendar.dart';
-import 'package:todo_flutter/Calender.dart';
 
 import 'WriteTodoPage.dart';
 
@@ -30,13 +29,14 @@ class _TodoPageState extends State<TodoPage> {
   var selectType = 1;
   static GlobalKey<ScaffoldState> _globalKey = GlobalKey();
   RCalendarController todoDateController;
-  List<String> typeList = ["学习", "睡觉", "吃饭", "游戏"];
+  static List<String> labelList = ["学习", "睡觉", "吃饭", "游戏"];
 
   @override
   void initState() {
     super.initState();
     todoSqliteHelper = new TodoSqliteHelper();
     todoContentController = new TextEditingController();
+    arguments = new TodoBeanEntity();
     // controller = RCalendarController.multiple(selectedDates: [
     //   DateTime(2019, 12, 1),
     //   DateTime(2019, 12, 2),
@@ -45,100 +45,101 @@ class _TodoPageState extends State<TodoPage> {
     getAllTodo();
   }
 
-  void addTodo(){
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return Container(
-            height: 200.0,
-            child: Column(
-              children: <Widget>[
-                Row(
-                  children: [
-                    // TODO:ICON
-                    IconButton(
+  void addTodo() {
+    var result, label, importance;
+    showModalBottomSheet(context: context, builder: (BuildContext context) {
+      return StatefulBuilder(
+          builder: (context1, bottomState) {
+            return Container(
+              height: 200.0,
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    children: [
+                      // TODO:ICON
+                      IconButton(
                         //设置时间与重复
-                        icon: Icon(Icons.alarm),
-                        onPressed: () {}),
-                    IconButton(
+                          icon: Icon(Icons.alarm),
+                          onPressed: () async {
+                            result = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2021),
+                                lastDate: DateTime(2030),
+                                builder: (context, child) {
+                                  return Theme(
+                                    data: ThemeData.dark(),
+                                    child: child,
+                                  );
+                                }
+                            );
+                            print('$result');
+                            if(result.toString() != null) print("qwq");
+                            arguments.itemDatetime = result.toString();
+                            bottomState(() {
+                            });
+                          }),
+                      IconButton(
                         //设置类别
-                        icon: Icon(Icons.lens),
-                        onPressed: () {
-                          sortDialog();
-                        }),
-                    IconButton(
-                        icon: Icon(Icons.dashboard),
-                        onPressed: () {
-                          importanceDialog();
-                        }),
-                    IconButton(
-                        icon: Icon(Icons.add),
-                        onPressed: () {
-                          if (todoContentController.text == '') {
-                            Toast.show("待办不能为空", context, gravity: Toast.CENTER);
-                          }else {
-                            addTodoSetSql();
-                            getAllTodo();
-                          }
-                        })
-                  ],
-                ),
-                TextField(
-                  style: TextStyle(fontSize: 15),
-                  cursorColor: ColorUtils.color_black,
-                  controller: todoContentController,
-                  decoration: buildInputDecoration("想做点什么？"),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-              ],
-            ),
-          );
-        });
+                          icon: Icon(Icons.lens),
+                          onPressed: () {
+                            sortDialog();
+                          }),
+                      IconButton(
+                          icon: Icon(Icons.dashboard),
+                          onPressed: () {
+                            importanceDialog();
+                          }),
+                      IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: () {
+                            if (todoContentController.text == '') {
+                              Toast.show("待办不能为空", context,
+                                  gravity: Toast.CENTER);
+                            } else {
+                              addTodoSetSql();
+                              getAllTodo();
+                            }
+                          })
+                    ],
+                  ),
+                  Container(
+                    height: 15,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(result == null ? " ":"$result"),
+                      ],
+                    ),
+                  ),
+                  TextField(
+                    style: TextStyle(fontSize: 15),
+                    cursorColor: ColorUtils.color_black,
+                    controller: todoContentController,
+                    decoration: buildInputDecoration("想做点什么？"),
+                  ),
+                  SizedBox(
+                    height: 20,
+                    child: ElevatedButton(),
+                  ),
+                ],
+              ),
+            );
+          });
+    });
   }
 
-  // void _removeTodoItem(int index) {
-  //   setState(() => todoList.removeAt(index));
-  // }
-
-  // void _promptRemoveTodoItem(int index) {
-  //   showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return AlertDialog(
-  //             title: new Text('Mark "${todoList[index].content}" as done?'),
-  //             actions: <Widget>[
-  //               TextButton(
-  //                   child: new Text(
-  //                     '取消',
-  //                     style: new TextStyle(color: Colors.black),
-  //                   ),
-  //                   onPressed: () => Navigator.of(context).pop()),
-  //               TextButton(
-  //                   child: new Text(
-  //                     '确定',
-  //                     style: new TextStyle(color: Colors.black),
-  //                   ),
-  //                   onPressed: () {
-  //                     _removeTodoItem(index);
-  //                     Navigator.of(context).pop();
-  //                   })
-  //             ]);
-  //       });
-  // }
-
-  void gotoWriteTodo(context, TodoBeanEntity e){ // TODO：可以参考这里写页面跳转
-  Navigator.push(context, MaterialPageRoute(
-        builder: (BuildContext context){
-          return WriteTodoPage(arguments: e);
-        }
-    )).then((value) {
+  void gotoWriteTodo(context, TodoBeanEntity e) {
+    // TODO：可以参考这里写页面跳转
+    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+      return WriteTodoPage(arguments: e);
+    })).then((value) {
       if (value == Constants.REFRESH) {
         getAllTodo();
       }
     });
   }
+
   InputDecoration buildInputDecoration(text) {
     return InputDecoration(
         enabledBorder: OutlineInputBorder(
@@ -167,7 +168,7 @@ class _TodoPageState extends State<TodoPage> {
           children: [
             Container(
               padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-              height: 40,
+              height: 30,
               child: Flex(
                 direction: Axis.horizontal,
                 children: [
@@ -180,7 +181,7 @@ class _TodoPageState extends State<TodoPage> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(10),
               child: Container(
                 padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                 decoration: BoxDecoration(
@@ -230,27 +231,25 @@ class _TodoPageState extends State<TodoPage> {
               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
               child: Divider(
                 color: ColorUtils.color_grey_dd,
-                height: 1,
+                height: 2,
               ),
             ),
             Expanded(
                 child: ListView.separated(
-                  shrinkWrap: true,
-                  //加上这个就不会因为高度报错了
-                  scrollDirection: Axis.vertical,
-                  separatorBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      child: Divider(
-                        color: ColorUtils.color_grey_dd,
-                        height: 1,
-                      ),
-                    );
-                    },
-                  itemCount: todoList.length,
-                  itemBuilder: getItemBuilder,
-                )
-            ),
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              separatorBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                  child: Divider(
+                    color: ColorUtils.color_grey_dd,
+                    height: 30,
+                  ),
+                );
+              },
+              itemCount: todoList.length,
+              itemBuilder: getItemBuilder,
+            )),
           ],
         ),
       ),
@@ -259,135 +258,201 @@ class _TodoPageState extends State<TodoPage> {
 
   Widget getItemBuilder(context, index) {
     var e = todoList[index];
-    return getDismissible(context, e);
+    var targetTime = e.itemDatetime;
+    var time = DateFormat("MM月dd日 HH:MM").format(DateTime.parse(targetTime));
+    var label = labelList[e.itemLabels];
+    return getDismissible(context, e, time, label);
   }
 
-  Dismissible getDismissible(context, TodoBeanEntity e) {
-    return e.itemStatus==0 ? Dismissible(
-        onDismissed: (_) {
-          deleteById(e.todoId);
-          todoList.remove(e);
-        },
-        key: Key(e.todoId.toString()),
-        background: Container(color: Colors.red),
-        child:
-          Row(
-
-            children: [
-              InkWell(
-                onTap: (){
-                  arguments = e;
-                  arguments.itemStatus = 1;
-                  setTodoStatus();
-                  getAllTodo();
-                },
-                child: Image(image: AssetImage("assets/images/icon_menu.png"), width: 20, height: 20,),
-              ),
-              ElevatedButton(
-                // minVerticalPadding: 0,
-                onPressed: () {
-                  // TODO: goToWriteTodo(context, e);
-                  gotoWriteTodo(context, e);
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  )
+  Dismissible getDismissible(
+      context, TodoBeanEntity e, String time, String label) {
+    return e.itemStatus == 0
+        ? Dismissible(
+            onDismissed: (_) {
+              deleteById(e.todoId);
+              todoList.remove(e);
+            },
+            key: Key(e.todoId.toString()),
+            background: Container(color: Colors.red),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 10,
                 ),
-                child: Text("${e.content}", style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black
-                )),
-              // subtitle: getListViewPadding(time1, time2, time3, time4, e),
-              ),
-            ],
-          )
-    ) : Dismissible(
-      onDismissed: (_) {
-        deleteById(e.todoId);
-        todoList.remove(e);
-      },
-      key: Key(e.todoId.toString()),
-      background: Container(color: Colors.red),
-      child: Row(
-
-        children: [
-          InkWell(
-            onTap: (){
-              arguments = e;
-              arguments.itemStatus = 0;
-              setTodoStatus();
-              getAllTodo();
+                InkWell(
+                  onTap: () {
+                    arguments = e;
+                    arguments.itemStatus = 1;
+                    setTodoStatus();
+                    getAllTodo();
+                  },
+                  child: Image(
+                    image: AssetImage("assets/images/icon_menu.png"),
+                    width: 25,
+                    height: 25,
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                ElevatedButton(
+                  // minVerticalPadding: 0,
+                  onPressed: () {
+                    // TODO: goToWriteTodo(context, e);
+                    gotoWriteTodo(context, e);
+                  },
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  )),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("${e.content}",
+                            style: TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black)),
+                        Row(
+                          children: [
+                            Text(label,
+                                style: TextStyle(
+                                    fontSize: 15, color: randomColor())),
+                            SizedBox(
+                              width: 20,
+                              height: 15,
+                            ),
+                            Text(time,
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.normal,
+                                    color: DateTime.now().compareTo(
+                                                DateTime.parse(
+                                                    e.itemDatetime)) <
+                                            0
+                                        ? Colors.black
+                                        : Colors.red)),
+                          ],
+                        )
+                      ]),
+                ),
+              ],
+            ))
+        : Dismissible(
+            onDismissed: (_) {
+              deleteById(e.todoId);
+              todoList.remove(e);
             },
-            child: Image(image: AssetImage("assets/images/icon_ok.png"), width: 20, height: 20,),
-          ),
-          ElevatedButton(
-            // minVerticalPadding: 0,
-            onPressed: () {
-              // TODO: goToWriteTodo(context, e);
-              gotoWriteTodo(context, e);
-            },
-            child: Text("${e.content}",style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                decoration: TextDecoration.lineThrough,
-                color: Colors.black38)),
-            // subtitle: getListViewPadding(time1, time2, time3, time4, e),
-          )
-        ],
-      )
-    );
-
+            key: Key(e.todoId.toString()),
+            background: Container(color: Colors.red),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 10,
+                ),
+                InkWell(
+                  onTap: () {
+                    arguments = e;
+                    arguments.itemStatus = 0;
+                    setTodoStatus();
+                    getAllTodo();
+                  },
+                  child: Image(
+                    image: AssetImage("assets/images/icon_ok.png"),
+                    width: 20,
+                    height: 20,
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                ElevatedButton(
+                  // minVerticalPadding: 0,
+                  onPressed: () {
+                    // TODO: goToWriteTodo(context, e);
+                    gotoWriteTodo(context, e);
+                  },
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  )),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("${e.content}",
+                            style: TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.lineThrough,
+                                color: Colors.black38)),
+                        Row(
+                          children: [
+                            Text(label,
+                                style: TextStyle(
+                                    fontSize: 15, color: Colors.black38)),
+                            SizedBox(
+                              width: 20,
+                              height: 15,
+                            ),
+                            Text(time,
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.black38)),
+                          ],
+                        )
+                      ]),
+                )
+              ],
+            ));
   }
-  AlertDialog sortDialog(){
-    showDialog(context: context,
+
+  AlertDialog sortDialog() {
+    showDialog(
+        context: context,
         barrierDismissible: true,
-        builder: (BuildContext context){
-      return AlertDialog(
-        content: new SingleChildScrollView(
-          child: new ListBody(
-            children: <Widget>[
-              ElevatedButton.icon(icon: Icon(Icons.stacked_bar_chart),
-                label: Text('学习'),
-                onPressed: (){
-                  arguments.itemLabels = 1;
-                  exit(context);
-                },
-
-              ),
-              ElevatedButton.icon(icon: Icon(Icons.stacked_bar_chart),
-                label: Text('生活'),
-                onPressed: (){
-                  arguments.itemLabels = 2;
-                  exit(context);
-                },
-
-              ),
-              ElevatedButton.icon(icon: Icon(Icons.stacked_bar_chart),
-                label: Text('工作'),
-                onPressed: (){
-                  arguments.itemLabels = 3;
-                  exit(context);
-                },
-
-              ),
-              ElevatedButton.icon(icon: Icon(Icons.stacked_bar_chart),
-                label: Text('娱乐'),
-                onPressed: (){
-                  arguments.itemLabels = 4;
-                  exit(context);
-                },
-
-              ),
-            ],
-          ),
-
-        )
-      );
-    });
+        builder: (BuildContext context) {
+          return AlertDialog(
+              content: new SingleChildScrollView(
+            child: new ListBody(
+              children: <Widget>[
+                ElevatedButton.icon(
+                  icon: Icon(Icons.stacked_bar_chart),
+                  label: Text('学习'),
+                  onPressed: () {
+                    arguments.itemLabels = 1;
+                    exit(context);
+                  },
+                ),
+                ElevatedButton.icon(
+                  icon: Icon(Icons.stacked_bar_chart),
+                  label: Text('生活'),
+                  onPressed: () {
+                    arguments.itemLabels = 2;
+                    exit(context);
+                  },
+                ),
+                ElevatedButton.icon(
+                  icon: Icon(Icons.stacked_bar_chart),
+                  label: Text('工作'),
+                  onPressed: () {
+                    arguments.itemLabels = 3;
+                    exit(context);
+                  },
+                ),
+                ElevatedButton.icon(
+                  icon: Icon(Icons.stacked_bar_chart),
+                  label: Text('娱乐'),
+                  onPressed: () {
+                    arguments.itemLabels = 4;
+                    exit(context);
+                  },
+                ),
+              ],
+            ),
+          ));
+        });
   }
-
 
   AlertDialog importanceDialog() {
     showDialog(
@@ -400,30 +465,25 @@ class _TodoPageState extends State<TodoPage> {
                 children: <Widget>[
                   ElevatedButton(
                     onPressed: () {
-                      arguments.itemImportance = 1;
-                      exit(context);
+                      Navigator.pop(context, 4);
                     },
                     child: Text('重要且紧急'),
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      arguments.itemImportance = 2;
-                      exit(context);
+                      Navigator.pop(context, 3);
                     },
                     child: Text('不重要且紧急'),
-
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      arguments.itemImportance = 3;
-                      exit(context);
+                      Navigator.pop(context, 2);
                     },
                     child: Text('重要且不紧急'),
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      arguments.itemImportance = 4;
-                      exit(context);
+                      Navigator.pop(context, 1);
                     },
                     child: Text('不重要且不紧急'),
                   ),
@@ -439,8 +499,8 @@ class _TodoPageState extends State<TodoPage> {
     TodoBeanEntity todoBeanEntity = new TodoBeanEntity();
     todoBeanEntity.content = todoContentController.text;
     todoBeanEntity.itemStatus = 0;
-    todoBeanEntity.itemImportance = 1;
-    todoBeanEntity.itemDatetime = DateTime.now().toString();
+    todoBeanEntity.itemImportance = 3;
+    todoBeanEntity.itemDatetime = arguments.itemDatetime;
     todoBeanEntity.itemLabels = 1;
     todoBeanEntity.itemTypeDdlOrRepeat = 1;
     todoBeanEntity.itemTypePersonOrTeam = 2;
@@ -470,22 +530,22 @@ class _TodoPageState extends State<TodoPage> {
       todoList.clear();
       todoList.addAll(list);
     });
-    todoContentController.text = '';//TODO : 暂时把清空controller的放在这里了。。
+    todoContentController.text = ''; //TODO : 暂时把清空controller的放在这里了。。
     await todoSqliteHelper.close();
   }
 
-   void deleteById(int id) async {
-      await todoSqliteHelper.open();
-      await todoSqliteHelper.delete(id).then((value) {
-        if (value > 0) Toast.show("删除成功", context);
-      });
-      await todoSqliteHelper.close();
+  void deleteById(int id) async {
+    await todoSqliteHelper.open();
+    await todoSqliteHelper.delete(id).then((value) {
+      if (value > 0) Toast.show("删除成功", context);
+    });
+    await todoSqliteHelper.close();
   }
 
   void setTodoStatus() async {
-      await todoSqliteHelper.open();
-      await todoSqliteHelper.update(arguments).then((value) => Toast.show("已完成一项待办", context));
-      await todoSqliteHelper.close();
+    await todoSqliteHelper.open();
+    await todoSqliteHelper.update(arguments);
+    await todoSqliteHelper.close();
   }
 
   showPicker(BuildContext context) {
