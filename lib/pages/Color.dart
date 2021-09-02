@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
+
 class ColorUtils{
   static const  Color color_grey_dd = Color(0xffdddddd);
   static const  Color color_grey_999 = Color(0xff999999);
@@ -7,4 +9,8 @@ class ColorUtils{
   static const  Color color_white = Color(0xffffffff);
   static const  Color color_godden_dark = Color(0xffb68d45);
   static const  Color color_orange_main = Color(0xffFF791B);
+}
+
+Color randomColor() {
+  return Color.fromARGB(255, Random().nextInt(256)+0, Random().nextInt(256)+0, Random().nextInt(256)+0);
 }
