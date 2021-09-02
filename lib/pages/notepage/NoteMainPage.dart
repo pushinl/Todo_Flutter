@@ -18,7 +18,6 @@ class NoteMainPage extends StatefulWidget {
 }
 
 
-
 class _NoteMainPageState extends State<NoteMainPage> {
 
   TabController _controller;
@@ -37,27 +36,24 @@ class _NoteMainPageState extends State<NoteMainPage> {
     getAllNote();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _globalKey,
-      appBar: AppBar(
-        title: Text("备忘录"),
-        centerTitle: true,
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, "/writeNote").then((value) {
-                  if (value == Constants.REFRESH) {
-                    getAllNote();
-                  }
-                });
-              },
-              icon: Icon(Icons.add)),
-        ],
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: new FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, "/writeNote").then((value) {
+            if (value == Constants.REFRESH) {
+              getAllNote();
+            }
+          });
+        },
+        tooltip: '添加备忘录',
+        child: new Icon(Icons.add),
       ),
+      key: _globalKey,
       body:
-
       Container(
         decoration: BoxDecoration(color: ColorUtils.color_white),
         child: Column(
@@ -86,21 +82,21 @@ class _NoteMainPageState extends State<NoteMainPage> {
                                 filled: true,
                                 fillColor: ColorUtils.color_grey_dd,
                                 contentPadding:
-                                    EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                EdgeInsets.fromLTRB(10, 0, 10, 0),
                                 enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: ColorUtils.color_grey_dd),
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(10))),
+                                    BorderRadius.all(Radius.circular(10))),
                                 focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: ColorUtils.color_grey_dd),
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(10))),
+                                    BorderRadius.all(Radius.circular(10))),
                                 hintText: "Search...",
                                 hintStyle: TextStyle(
                                     color: ColorUtils.color_grey_666)))),
-                    Image.asset  (
+                    Image.asset(
                       'assets/images/search_search.png',
                       width: 25,
                       height: 25,
@@ -128,7 +124,8 @@ class _NoteMainPageState extends State<NoteMainPage> {
                                   ? "按创建时间排序"
                                   : "按更新时间排序",
                               textAlign: TextAlign.end,
-                              style: TextStyle(color: ColorUtils.color_godden_dark),
+                              style: TextStyle(
+                                  color: ColorUtils.color_godden_dark),
                             ),
                             Image.asset("assets/images/icon_down_narrow.png",
                                 width: 20, height: 20)
@@ -152,13 +149,13 @@ class _NoteMainPageState extends State<NoteMainPage> {
                   scrollDirection: Axis.vertical,
                   separatorBuilder: (context, index) {
                     return Padding(
-                            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                            child: Divider(
-                              color: ColorUtils.color_grey_dd,
-                              height: 1,
-                            ),
-                          );
-                          },
+                      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                      child: Divider(
+                        color: ColorUtils.color_grey_dd,
+                        height: 1,
+                      ),
+                    );
+                  },
                   itemCount: noteList.length,
                   itemBuilder: getItemBuilder,
                 )
@@ -167,7 +164,6 @@ class _NoteMainPageState extends State<NoteMainPage> {
         ),
 
       ),
-
 
 
     );
@@ -180,7 +176,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
     var time2 = DateFormat("yyyy-MM-dd").format(DateTime.now());
     var time3 = DateFormat("HH:mm").format(DateTime.parse(targetTime));
     var time4 =
-        DateFormat("yyyy-MM-dd HH:mm").format(DateTime.parse(targetTime));
+    DateFormat("yyyy-MM-dd HH:mm").format(DateTime.parse(targetTime));
     return getDismissible(context, e, time1, time2, time3, time4);
   }
 
