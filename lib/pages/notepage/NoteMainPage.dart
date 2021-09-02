@@ -59,7 +59,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(10),
               child: Container(
                 padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                 decoration: BoxDecoration(

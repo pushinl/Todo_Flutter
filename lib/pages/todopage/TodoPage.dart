@@ -74,7 +74,6 @@ class _TodoPageState extends State<TodoPage> {
                                 }
                             );
                             print('$result');
-                            if(result.toString() != null) print("qwq");
                             arguments.itemDatetime = result.toString();
                             bottomState(() {
                             });
@@ -120,7 +119,6 @@ class _TodoPageState extends State<TodoPage> {
                   ),
                   SizedBox(
                     height: 20,
-                    child: ElevatedButton(),
                   ),
                 ],
               ),
@@ -166,20 +164,6 @@ class _TodoPageState extends State<TodoPage> {
         decoration: BoxDecoration(color: ColorUtils.color_white),
         child: Column(
           children: [
-            Container(
-              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-              height: 30,
-              child: Flex(
-                direction: Axis.horizontal,
-                children: [
-                  InkWell(
-                      onTap: () {
-                        showPicker(context);
-                      },
-                      child: Icon(Icons.assignment)),
-                ],
-              ),
-            ),
             Padding(
               padding: EdgeInsets.all(10),
               child: Container(
@@ -215,7 +199,7 @@ class _TodoPageState extends State<TodoPage> {
                                         color: ColorUtils.color_grey_dd),
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10))),
-                                hintText: "输入搜索的内容",
+                                hintText: "Search...",
                                 hintStyle: TextStyle(
                                     color: ColorUtils.color_grey_666)))),
                     Image.asset(
@@ -227,11 +211,41 @@ class _TodoPageState extends State<TodoPage> {
                 ),
               ),
             ),
+            Container(
+              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+              height: 40,
+              child: Flex(
+                direction: Axis.horizontal,
+                children: [
+                  Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          showPicker(context);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              selectType == 1
+                                  ? "按DDL排序"
+                                  : "按重要程度排序",
+                              textAlign: TextAlign.end,
+                              style: TextStyle(
+                                  color: ColorUtils.color_godden_dark),
+                            ),
+                            Image.asset("assets/images/icon_down_narrow.png",
+                                width: 20, height: 20)
+                          ],
+                        ),
+                      ))
+                ],
+              ),
+            ),
             Padding(
               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
               child: Divider(
                 color: ColorUtils.color_grey_dd,
-                height: 2,
+                height: 1,
               ),
             ),
             Expanded(
@@ -243,7 +257,7 @@ class _TodoPageState extends State<TodoPage> {
                   padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                   child: Divider(
                     color: ColorUtils.color_grey_dd,
-                    height: 30,
+                    height: 15,
                   ),
                 );
               },
@@ -271,6 +285,7 @@ class _TodoPageState extends State<TodoPage> {
             onDismissed: (_) {
               deleteById(e.todoId);
               todoList.remove(e);
+              getAllTodo();
             },
             key: Key(e.todoId.toString()),
             background: Container(color: Colors.red),
@@ -303,7 +318,7 @@ class _TodoPageState extends State<TodoPage> {
                   },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(10),
                   )),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -359,8 +374,8 @@ class _TodoPageState extends State<TodoPage> {
                   },
                   child: Image(
                     image: AssetImage("assets/images/icon_ok.png"),
-                    width: 20,
-                    height: 20,
+                    width: 25,
+                    height: 25,
                   ),
                 ),
                 SizedBox(
@@ -374,7 +389,7 @@ class _TodoPageState extends State<TodoPage> {
                   },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(10),
                   )),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -500,7 +515,7 @@ class _TodoPageState extends State<TodoPage> {
     todoBeanEntity.content = todoContentController.text;
     todoBeanEntity.itemStatus = 0;
     todoBeanEntity.itemImportance = 3;
-    todoBeanEntity.itemDatetime = arguments.itemDatetime;
+    todoBeanEntity.itemDatetime = arguments.itemDatetime == null ? DateTime.now() : arguments.itemDatetime;
     todoBeanEntity.itemLabels = 1;
     todoBeanEntity.itemTypeDdlOrRepeat = 1;
     todoBeanEntity.itemTypePersonOrTeam = 2;
