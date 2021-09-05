@@ -41,21 +41,26 @@ class _NoteMainPageState extends State<NoteMainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: new FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, "/writeNote").then((value) {
-            if (value == Constants.REFRESH) {
-              getAllNote();
-            }
-          });
-        },
-        tooltip: '添加备忘录',
-        child: new Icon(Icons.add),
+      floatingActionButton: Container(
+          width: 60,
+          height: 60,
+          child: FloatingActionButton(
+            onPressed: () {
+              Navigator.pushNamed(context, "/writeNote").then((value) {
+                if (value == Constants.REFRESH) {
+                  getAllNote();
+                }
+              });
+            },
+            backgroundColor: ColorUtils.color_blue_main,
+            tooltip: '添加备忘录',
+            child: new Icon(Icons.add, color: Colors.white,),
+          )
       ),
       key: _globalKey,
       body:
       Container(
-        decoration: BoxDecoration(color: ColorUtils.color_white),
+        decoration: BoxDecoration(color: ColorUtils.color_background_main),
         child: Column(
           children: [
             Padding(
@@ -97,7 +102,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
                                 hintStyle: TextStyle(
                                     color: ColorUtils.color_grey_666)))),
                     Image.asset(
-                      'assets/images/search_search.png',
+                      'assets/search_icon.png',
                       width: 25,
                       height: 25,
                     )
@@ -121,8 +126,8 @@ class _NoteMainPageState extends State<NoteMainPage> {
                           children: [
                             Text(
                               selectType == 1
-                                  ? "按创建时间排序"
-                                  : "按更新时间排序",
+                                  ? "按更新时间排序"
+                                  : "按创建时间排序",
                               textAlign: TextAlign.end,
                               style: TextStyle(
                                   color: ColorUtils.color_godden_dark),
@@ -171,7 +176,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
 
   Widget getItemBuilder(context, index) {
     var e = noteList[index];
-    var targetTime = selectType == 1 ? e.addTime : e.updateTime;
+    var targetTime = selectType == 2 ? e.addTime : e.updateTime;
     var time1 = DateFormat("yyyy-MM-dd").format(DateTime.parse(targetTime));
     var time2 = DateFormat("yyyy-MM-dd").format(DateTime.now());
     var time3 = DateFormat("HH:mm").format(DateTime.parse(targetTime));
@@ -186,19 +191,22 @@ class _NoteMainPageState extends State<NoteMainPage> {
         onDismissed: (_) {
           deleteById(e.noteId);
           noteList.remove(e);
+          getAllNote();
         },
         key: Key(e.noteId.toString()),
-        background: Container(color: Colors.red),
+        background: Container(color: ColorUtils.color_delete),
         child: ListTile(
+          tileColor: Colors.white,
           minVerticalPadding: 0,
           onTap: () {
             goToWriteNote(context, e);
           },
           title: Text("${e.title}",
+              maxLines: 1,
               style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: ColorUtils.color_grey_666)),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: ColorUtils.color_grey_666)),
           subtitle: getListViewPadding(time1, time2, time3, time4, e),
         ));
   }
@@ -273,7 +281,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
   showPicker(BuildContext context) {
     Picker picker = new Picker(
         adapter: PickerDataAdapter<String>(
-            pickerdata: ["按照创建时间排序", "按照更新时间排序"]),
+            pickerdata: ["按照更新时间排序", "按照创建时间排序"]),
         changeToFirst: true,
         textAlign: TextAlign.left,
         columnPadding: const EdgeInsets.all(8.0),

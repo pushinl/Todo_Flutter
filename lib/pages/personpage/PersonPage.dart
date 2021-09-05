@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:todo_flutter/pages/Color.dart';
 
 class PersonPage extends StatefulWidget {
   const PersonPage({Key key}) : super(key: key);
@@ -25,10 +26,7 @@ class _PersonPageState extends State<PersonPage> {
     );
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("个人"),
-        centerTitle: true,
-      ),
+      backgroundColor: ColorUtils.color_background_main,
       body: listView,
 
     );
@@ -38,7 +36,7 @@ class _PersonPageState extends State<PersonPage> {
     if (i == 0) {
       var userHeader = new Container(
           height: userHeaderHeight,
-          color: Colors.white,
+          color: ColorUtils.color_background_main,
           child: new Center(
               child: new Column(
                 mainAxisAlignment: MainAxisAlignment.center,

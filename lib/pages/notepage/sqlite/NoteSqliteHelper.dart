@@ -50,17 +50,17 @@ class NoteSqliteHelper {
     return null;
   }
 
-  /**
-   * @param type 1 按编辑日期 2 按创建日期 3 按标题
+  /*
+   * type 1 按编辑日期 2 按创建日期 3 按标题
    */
   Future<List<NoteBeanEntity>> getAllNote(int type) async {
     List<NoteBeanEntity> list = [];
     List<Map> maps;
     switch (type) {
-      case 2:
+      case 1:
         maps = await noteDb.query(tableNote, orderBy: "$columnUpdateTime DESC");
         break;
-      case 1:
+      case 2:
         maps = await noteDb.query(tableNote, orderBy: "$columnAddTime DESC");
         break;
       case 3:
@@ -79,11 +79,11 @@ class NoteSqliteHelper {
         "$columnTitle like '%$keyWord%' or $columnContent like '%$keyWord%'";
     List<Map> maps;
     switch (type) {
-      case 2:
+      case 1:
         maps = await noteDb.query(tableNote,
             where: where, orderBy: "$columnUpdateTime desc");
         break;
-      case 1:
+      case 2:
         maps = await noteDb.query(tableNote,
             where: where, orderBy: "$columnAddTime desc");
         break;
