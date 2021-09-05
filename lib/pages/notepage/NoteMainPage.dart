@@ -66,17 +66,22 @@ class _NoteMainPageState extends State<NoteMainPage> {
             Padding(
               padding: EdgeInsets.all(10),
               child: Container(
-                padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
                 decoration: BoxDecoration(
                     color: ColorUtils.color_grey_dd,
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                    borderRadius: BorderRadius.all(Radius.circular(40))),
                 child: Row(
                   children: [
+                    Image.asset(
+                      "assets/search_icon.png",
+                      width: 20,
+                      height: 20,
+                    ),
                     Expanded(
                         child: TextField(
                             style: TextStyle(fontSize: 15),
                             autofocus: false,
-                            cursorColor: ColorUtils.color_black,
+                            cursorColor: ColorUtils.color_text,
                             onChanged: (value) {
                               setState(() {
                                 keyWord = value;
@@ -92,20 +97,15 @@ class _NoteMainPageState extends State<NoteMainPage> {
                                     borderSide: BorderSide(
                                         color: ColorUtils.color_grey_dd),
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
+                                    BorderRadius.all(Radius.circular(40))),
                                 focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: ColorUtils.color_grey_dd),
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
+                                    BorderRadius.all(Radius.circular(40))),
                                 hintText: "Search...",
                                 hintStyle: TextStyle(
                                     color: ColorUtils.color_grey_666)))),
-                    Image.asset(
-                      'assets/search_icon.png',
-                      width: 25,
-                      height: 25,
-                    )
                   ],
                 ),
               ),
@@ -205,8 +205,8 @@ class _NoteMainPageState extends State<NoteMainPage> {
               maxLines: 1,
               style: TextStyle(
                 fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: ColorUtils.color_grey_666)),
+                fontWeight: FontWeight.normal,
+                color: ColorUtils.color_text)),
           subtitle: getListViewPadding(time1, time2, time3, time4, e),
         ));
   }

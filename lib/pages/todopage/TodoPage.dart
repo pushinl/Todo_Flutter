@@ -29,7 +29,7 @@ class _TodoPageState extends State<TodoPage> {
   var selectType = 1;
   static GlobalKey<ScaffoldState> _globalKey = GlobalKey();
   RCalendarController todoDateController;
-  static List<String> labelList = ['', '学习', '生活', '工作', '娱乐'];
+  static List<String> labelList = ['其他', '学习', '生活', '工作', '娱乐'];
 
   @override
   void initState() {
@@ -123,7 +123,7 @@ class _TodoPageState extends State<TodoPage> {
                   ),
                   TextField(
                     style: TextStyle(fontSize: 15),
-                    cursorColor: ColorUtils.color_black,
+                    cursorColor: ColorUtils.color_text,
                     controller: todoContentController,
                     decoration: buildInputDecoration("想做点什么？"),
                   ),
@@ -182,15 +182,12 @@ class _TodoPageState extends State<TodoPage> {
             Padding(
               padding: EdgeInsets.all(10),
               child: Container(
-                padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
                 decoration: BoxDecoration(
                     color: ColorUtils.color_grey_dd,
                     borderRadius: BorderRadius.all(Radius.circular(40))),
                 child: Row(
                   children: [
-                    SizedBox(
-                      width: 20,
-                    ),
                     Image.asset(
                       "assets/search_icon.png",
                       width: 20,
@@ -200,7 +197,7 @@ class _TodoPageState extends State<TodoPage> {
                         child: TextField(
                             style: TextStyle(fontSize: 15),
                             autofocus: false,
-                            cursorColor: ColorUtils.color_black,
+                            cursorColor: ColorUtils.color_text,
                             onChanged: (value) {
                               setState(() {
                                 keyWord = value;
@@ -246,7 +243,7 @@ class _TodoPageState extends State<TodoPage> {
                             Text(
                               selectType == 1
                                   ? "按DDL排序"
-                                  : "按重要程度排序",
+                                  : "按优先级排序",
                               textAlign: TextAlign.end,
                               style: TextStyle(
                                   color: ColorUtils.color_godden_dark),
@@ -291,7 +288,7 @@ class _TodoPageState extends State<TodoPage> {
   Widget getItemBuilder(context, index) {
     var e = todoList[index];
     var targetTime = e.itemDatetime;
-    var time = DateFormat("MM月dd日 HH:MM").format(DateTime.parse(targetTime));
+    var time = DateFormat("MM月dd日").format(DateTime.parse(targetTime));//TODO：TIMEPICKER
     var label = labelList[e.itemLabels];
     int labelType = e.itemLabels;
     return getDismissible(context, e, time, label, labelType);
@@ -311,7 +308,7 @@ class _TodoPageState extends State<TodoPage> {
             child: Row(
               children: [
                 SizedBox(
-                  width: 10,
+                  width: 20,
                 ),
                 ElevatedButton(
                   // minVerticalPadding: 0,
@@ -324,6 +321,7 @@ class _TodoPageState extends State<TodoPage> {
                         borderRadius: BorderRadius.circular(10),
                       )),
                   child: Container(
+                    height: 70,
                     child: Row(
                       children: [
                         InkWell(
@@ -342,12 +340,14 @@ class _TodoPageState extends State<TodoPage> {
                         SizedBox(width: 20,),
                         Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text("${e.content}",
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.normal,
-                                      color: Colors.black)),
+                                      color: ColorUtils.color_text)),
+                              SizedBox(height: 5,),
                               Row(
                                 children: [
                                   Text(label,
@@ -365,7 +365,7 @@ class _TodoPageState extends State<TodoPage> {
                                               DateTime.parse(
                                                   e.itemDatetime)) <
                                               0
-                                              ? Colors.black
+                                              ? ColorUtils.color_text
                                               : Colors.red)),
                                 ],
                               )
@@ -387,7 +387,7 @@ class _TodoPageState extends State<TodoPage> {
             child: Row(
               children: [
                 SizedBox(
-                  width: 10,
+                  width: 20,
                 ),
                 ElevatedButton(
                   // minVerticalPadding: 0,
@@ -400,7 +400,7 @@ class _TodoPageState extends State<TodoPage> {
                     borderRadius: BorderRadius.circular(10),
                   )),
                   child: Container(
-
+                    height: 70,
                     child: Row(
                       children: [
                         InkWell(
@@ -419,6 +419,7 @@ class _TodoPageState extends State<TodoPage> {
                         SizedBox(width: 20,),
                         Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text("${e.content}",
                                   style: TextStyle(
@@ -426,6 +427,7 @@ class _TodoPageState extends State<TodoPage> {
                                       fontWeight: FontWeight.normal,
                                       decoration: TextDecoration.lineThrough,
                                       color: Colors.black38)),
+                              SizedBox(height: 5,),
                               Row(
                                 children: [
                                   Text(label,
