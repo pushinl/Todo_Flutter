@@ -10,7 +10,7 @@ import 'package:todo_flutter/pages/todopage/WriteTodoPage.dart';
 final routes = {
   '/note': (context) => NoteMainPage(),
   '/writeNote': (context, {arguments}) => WriteNotePage(arguments: arguments,),
-  '/Calender':(context) =>CalenderPage(),
+  '/Calendar':(context) =>CalenderPage(),
   '/writeTodo':(context,{e})=>WriteTodoPage(arguments: e,),
 
 };

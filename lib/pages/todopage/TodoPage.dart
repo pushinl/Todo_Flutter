@@ -29,7 +29,7 @@ class _TodoPageState extends State<TodoPage> {
   var selectType = 1;
   static GlobalKey<ScaffoldState> _globalKey = GlobalKey();
   RCalendarController todoDateController;
-  static List<String> labelList = ["学习", "睡觉", "吃饭", "游戏"];
+  static List<String> labelList = ['', '学习', '生活', '工作', '娱乐'];
 
   @override
   void initState() {
@@ -93,8 +93,10 @@ class _TodoPageState extends State<TodoPage> {
                           icon: Icon(Icons.add),
                           onPressed: () {
                             if (todoContentController.text == '') {
-                              Toast.show("待办不能为空", context,
+                              Toast.show("待办不能为空！", context,
                                   gravity: Toast.CENTER);
+                            } else if (arguments.itemDatetime == null){
+                              Toast.show("请选择待办时间！", context);
                             } else {
                               addTodoSetSql();
                               getAllTodo();
@@ -103,11 +105,19 @@ class _TodoPageState extends State<TodoPage> {
                     ],
                   ),
                   Container(
-                    height: 15,
+                    height: 25,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(result == null ? " ":"$result"),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Text(
+                          result == null ? " ":DateFormat("MM月dd日").format(result),
+                          style: TextStyle(
+                            fontSize: 15
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -154,14 +164,19 @@ class _TodoPageState extends State<TodoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: new FloatingActionButton(
-        onPressed: addTodo,
-        tooltip: '添加待办',
-        child: new Icon(Icons.add),
+      floatingActionButton: Container(
+        width: 60,
+        height: 60,
+        child: FloatingActionButton(
+          onPressed: addTodo,
+          backgroundColor: ColorUtils.color_blue_main,
+          tooltip: '添加待办',
+          child: new Icon(Icons.add, color: Colors.white,),
+        )
       ),
       key: _globalKey,
       body: Container(
-        decoration: BoxDecoration(color: ColorUtils.color_white),
+        decoration: BoxDecoration(color: ColorUtils.color_background_main),
         child: Column(
           children: [
             Padding(
@@ -170,9 +185,17 @@ class _TodoPageState extends State<TodoPage> {
                 padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
                 decoration: BoxDecoration(
                     color: ColorUtils.color_grey_dd,
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                    borderRadius: BorderRadius.all(Radius.circular(40))),
                 child: Row(
                   children: [
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Image.asset(
+                      "assets/search_icon.png",
+                      width: 20,
+                      height: 20,
+                    ),
                     Expanded(
                         child: TextField(
                             style: TextStyle(fontSize: 15),
@@ -193,20 +216,15 @@ class _TodoPageState extends State<TodoPage> {
                                     borderSide: BorderSide(
                                         color: ColorUtils.color_grey_dd),
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(10))),
+                                        BorderRadius.all(Radius.circular(40))),
                                 focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: ColorUtils.color_grey_dd),
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(10))),
+                                        BorderRadius.all(Radius.circular(40))),
                                 hintText: "Search...",
                                 hintStyle: TextStyle(
                                     color: ColorUtils.color_grey_666)))),
-                    Image.asset(
-                      "assets/images/search_search.png",
-                      width: 25,
-                      height: 25,
-                    )
                   ],
                 ),
               ),
@@ -275,11 +293,12 @@ class _TodoPageState extends State<TodoPage> {
     var targetTime = e.itemDatetime;
     var time = DateFormat("MM月dd日 HH:MM").format(DateTime.parse(targetTime));
     var label = labelList[e.itemLabels];
-    return getDismissible(context, e, time, label);
+    int labelType = e.itemLabels;
+    return getDismissible(context, e, time, label, labelType);
   }
 
   Dismissible getDismissible(
-      context, TodoBeanEntity e, String time, String label) {
+      context, TodoBeanEntity e, String time, String label, int labelType) {
     return e.itemStatus == 0
         ? Dismissible(
             onDismissed: (_) {
@@ -288,25 +307,9 @@ class _TodoPageState extends State<TodoPage> {
               getAllTodo();
             },
             key: Key(e.todoId.toString()),
-            background: Container(color: Colors.red),
+            background: Container(color: ColorUtils.color_delete),
             child: Row(
               children: [
-                SizedBox(
-                  width: 10,
-                ),
-                InkWell(
-                  onTap: () {
-                    arguments = e;
-                    arguments.itemStatus = 1;
-                    setTodoStatus();
-                    getAllTodo();
-                  },
-                  child: Image(
-                    image: AssetImage("assets/images/icon_menu.png"),
-                    width: 25,
-                    height: 25,
-                  ),
-                ),
                 SizedBox(
                   width: 10,
                 ),
@@ -318,38 +321,58 @@ class _TodoPageState extends State<TodoPage> {
                   },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  )),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                        borderRadius: BorderRadius.circular(10),
+                      )),
+                  child: Container(
+                    child: Row(
                       children: [
-                        Text("${e.content}",
-                            style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black)),
-                        Row(
-                          children: [
-                            Text(label,
-                                style: TextStyle(
-                                    fontSize: 15, color: randomColor())),
-                            SizedBox(
-                              width: 20,
-                              height: 15,
-                            ),
-                            Text(time,
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.normal,
-                                    color: DateTime.now().compareTo(
-                                                DateTime.parse(
-                                                    e.itemDatetime)) <
-                                            0
-                                        ? Colors.black
-                                        : Colors.red)),
-                          ],
-                        )
-                      ]),
+                        InkWell(
+                          onTap: () {
+                            arguments = e;
+                            arguments.itemStatus = 1;
+                            setTodoStatus();
+                            getAllTodo();
+                          },
+                          child: Image(
+                            image: AssetImage("assets/search_icon.png"),
+                            width: 25,
+                            height: 25,
+                          ),
+                        ),
+                        SizedBox(width: 20,),
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("${e.content}",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.black)),
+                              Row(
+                                children: [
+                                  Text(label,
+                                      style: TextStyle(
+                                          fontSize: 15, color: getColor(labelType))),
+                                  SizedBox(
+                                    width: 20,
+                                    height: 15,
+                                  ),
+                                  Text(time,
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.normal,
+                                          color: DateTime.now().compareTo(
+                                              DateTime.parse(
+                                                  e.itemDatetime)) <
+                                              0
+                                              ? Colors.black
+                                              : Colors.red)),
+                                ],
+                              )
+                            ])
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ))
@@ -357,27 +380,12 @@ class _TodoPageState extends State<TodoPage> {
             onDismissed: (_) {
               deleteById(e.todoId);
               todoList.remove(e);
+              getAllTodo();
             },
             key: Key(e.todoId.toString()),
-            background: Container(color: Colors.red),
+            background: Container(color: ColorUtils.color_delete),
             child: Row(
               children: [
-                SizedBox(
-                  width: 10,
-                ),
-                InkWell(
-                  onTap: () {
-                    arguments = e;
-                    arguments.itemStatus = 0;
-                    setTodoStatus();
-                    getAllTodo();
-                  },
-                  child: Image(
-                    image: AssetImage("assets/images/icon_ok.png"),
-                    width: 25,
-                    height: 25,
-                  ),
-                ),
                 SizedBox(
                   width: 10,
                 ),
@@ -391,32 +399,53 @@ class _TodoPageState extends State<TodoPage> {
                       shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   )),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Container(
+
+                    child: Row(
                       children: [
-                        Text("${e.content}",
-                            style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.lineThrough,
-                                color: Colors.black38)),
-                        Row(
-                          children: [
-                            Text(label,
-                                style: TextStyle(
-                                    fontSize: 15, color: Colors.black38)),
-                            SizedBox(
-                              width: 20,
-                              height: 15,
-                            ),
-                            Text(time,
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.normal,
-                                    color: Colors.black38)),
-                          ],
-                        )
-                      ]),
+                        InkWell(
+                          onTap: () {
+                            arguments = e;
+                            arguments.itemStatus = 0;
+                            setTodoStatus();
+                            getAllTodo();
+                          },
+                          child: Image(
+                            image: AssetImage("assets/ok.png"),
+                            width: 25,
+                            height: 25,
+                          ),
+                        ),
+                        SizedBox(width: 20,),
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("${e.content}",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.normal,
+                                      decoration: TextDecoration.lineThrough,
+                                      color: Colors.black38)),
+                              Row(
+                                children: [
+                                  Text(label,
+                                      style: TextStyle(
+                                          fontSize: 15, color: Colors.black38)),
+                                  SizedBox(
+                                    width: 20,
+                                    height: 15,
+                                  ),
+                                  Text(time,
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.normal,
+                                          color: Colors.black38)),
+                                ],
+                              )
+                            ])
+                      ],
+                    ),
+                  ),
                 )
               ],
             ));
@@ -516,7 +545,7 @@ class _TodoPageState extends State<TodoPage> {
     todoBeanEntity.itemStatus = 0;
     todoBeanEntity.itemImportance = 3;
     todoBeanEntity.itemDatetime = arguments.itemDatetime == null ? DateTime.now() : arguments.itemDatetime;
-    todoBeanEntity.itemLabels = 1;
+    todoBeanEntity.itemLabels = arguments.itemLabels == null ? arguments.itemLabels = 0 : arguments.itemLabels;
     todoBeanEntity.itemTypeDdlOrRepeat = 1;
     todoBeanEntity.itemTypePersonOrTeam = 2;
     //TODO: Other Params are waited to commit

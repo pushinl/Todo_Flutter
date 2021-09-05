@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_flutter/pages/Color.dart';
 import 'package:todo_flutter/pages/notepage/NoteMainPage.dart';
 import 'package:todo_flutter/pages/todopage/TodoPage.dart';
 import 'package:todo_flutter/pages/personpage/PersonPage.dart';
@@ -11,6 +12,7 @@ class Tabs extends StatefulWidget{
 
 class _TabsState extends State<Tabs> with SingleTickerProviderStateMixin{
   var _tabController;
+  var tabImages;
 
 
   @override
@@ -30,44 +32,60 @@ class _TabsState extends State<Tabs> with SingleTickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context) {
+    tabImages = [
+      [
+        getTabImage('assets/todo_default_icon.png'),
+        getTabImage('assets/todo_light_icon.png')
+      ],
+      [
+        getTabImage('assets/team_default_icon.png'),
+        getTabImage('assets/team_light_icon.png')
+      ],
+      [
+        getTabImage('assets/note_default_icon.png'),
+        getTabImage('assets/note_light_icon.png')
+      ],
+      [
+        getTabImage('assets/person_default_icon.png'),
+        getTabImage('assets/person_light_icon.png')
+      ]
+    ];
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: ColorUtils.color_background_main,
         leading: IconButton(
-          icon: Icon(Icons.more),
+          icon: Image.asset('assets/message_icon.png', width: 25.0, height: 25.0),
           onPressed: (){},
         ),
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.pushNamed(context,'/Calender').then((value) => null);
+                Navigator.pushNamed(context,'/Calendar').then((value) => null);
               },
-              icon: Icon(Icons.calendar_today)),
+              icon: Image.asset('assets/calendar_icon.png', width: 25.0, height: 25.0),
+          )
         ],
       ),
 
-      bottomNavigationBar: Material(
-        color: Colors.white,
+      bottomNavigationBar: Container(
+        color: ColorUtils.color_background_main,
+        height: 70,
         child: TabBar(
           controller: this._tabController,
-          indicatorColor: Colors.black,
-          labelColor: Colors.black,
-          unselectedLabelColor: Colors.black38,
+          indicatorColor: Colors.blue,
+          labelColor: Colors.blue,
           tabs: <Tab>[
             Tab(
-              text: '我的待办',
-              icon: Icon(Icons.add_alarm_outlined),
+              icon: getTabIcon(0),
             ),
             Tab(
-              text: '我的团队',
-              icon: Icon(Icons.account_tree_outlined),
+              icon: getTabIcon(1),
             ),
             Tab(
-              text: '备忘录',
-              icon: Icon(Icons.book),
+              icon: getTabIcon(2),
             ),
             Tab(
-              text: '个人中心',
-              icon: Icon(Icons.account_circle),
+              icon: getTabIcon(3),
             )
           ],
         ),
@@ -84,4 +102,21 @@ class _TabsState extends State<Tabs> with SingleTickerProviderStateMixin{
       ),
     );
   }
+
+  /*
+   * 根据选择获得对应的normal或是press的icon
+   */
+  Image getTabIcon(int curIndex) {
+    if (curIndex == _tabController) {
+      return tabImages[curIndex][1];
+    }
+    return tabImages[curIndex][0];
+  }
+  /*
+   * 根据image路径获取图片
+   */
+  Image getTabImage(path) {
+    return Image.asset(path, width: 25.0, height: 25.0);
+  }
+
 }

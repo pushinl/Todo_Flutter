@@ -46,10 +46,7 @@ class _WriteTodoPageState extends State<WriteTodoPage> {
                 onPressed: () {
                   exit(context);
                 },
-                icon: Icon(
-                  Icons.keyboard_arrow_left,
-                  color: ColorUtils.color_black,
-                ),
+                icon: Image.asset('assets/back.png', width: 25, height: 20,),
               ),
               actions: [
                 IconButton(
@@ -60,7 +57,7 @@ class _WriteTodoPageState extends State<WriteTodoPage> {
                         updateNote();
                       }
                     },
-                    icon: Image.asset('assets/images/icon_ok.png'))
+                    icon: Image.asset('assets/ok.png', width: 25, height: 20,))
               ],
             ),
             body: Container(

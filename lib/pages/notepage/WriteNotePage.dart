@@ -44,16 +44,12 @@ class _WriteNotePageState extends State<WriteNotePage> {
     return WillPopScope(
         child: Scaffold(
           appBar: AppBar(
-            title: Text(arguments == null ? "新增" : "编辑"),
             leading: IconButton(
               iconSize: 36,
               onPressed: () {
                 exit(context);
               },
-              icon: Icon(
-                Icons.keyboard_arrow_left,
-                color: ColorUtils.color_black,
-              ),
+              icon: Image.asset('assets/back.png', width: 25, height: 20,),
             ),
             actions: [
               IconButton(
@@ -68,14 +64,14 @@ class _WriteNotePageState extends State<WriteNotePage> {
                       }
                     }
                   },
-                  icon: Image.asset('assets/images/icon_ok.png')
+                  icon: Image.asset('assets/ok.png', width: 25, height: 20,)
               )
             ],
           ),
           body: Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(color: ColorUtils.color_white),
+            decoration: BoxDecoration(color: ColorUtils.color_background_main),
             child: Padding(
               padding: EdgeInsets.all(20),
               child: ListView(
@@ -85,6 +81,13 @@ class _WriteNotePageState extends State<WriteNotePage> {
                     cursorColor: ColorUtils.color_black,
                     controller: title,
                     decoration: buildInputDecoration("请输入标题"),
+                  ),
+                  Text(
+                    arguments == null ? DateFormat("yyyy-MM-dd HH:mm").format(DateTime.now()) : DateFormat("yyyy-MM-dd HH:mm").format(DateTime.parse(arguments.updateTime)),
+                    style: TextStyle(
+                      color: Colors.black38,
+                      fontSize: 15
+                    ),
                   ),
                   TextField(
                     style: TextStyle(fontSize: 25),
