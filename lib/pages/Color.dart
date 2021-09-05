@@ -15,7 +15,7 @@ class ColorUtils{
   static const Color color_text = Color(0xFF2A2A2A);
 }
 
-Color getColor(int type) {
+Color getTypeColor(int type) {
   switch(type){
     case 1 : return Colors.blue;
     case 2 : return Colors.blueGrey;

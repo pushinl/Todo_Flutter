@@ -105,12 +105,13 @@ class _TabsState extends State<Tabs> with SingleTickerProviderStateMixin{
 
   /*
    * 根据选择获得对应的normal或是press的icon
+   * TODO:这里还是有问题
    */
   Image getTabIcon(int curIndex) {
     if (curIndex == _tabController) {
-      return tabImages[curIndex][1];
+      return tabImages[curIndex][0];
     }
-    return tabImages[curIndex][0];
+    return tabImages[curIndex][1];
   }
   /*
    * 根据image路径获取图片

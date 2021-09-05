@@ -10,8 +10,7 @@ import '../Constants.dart';
 import '../../bean/todo_bean_entity.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:r_calendar/r_calendar.dart';
-
-import 'WriteTodoPage.dart';
+import 'dart:ui';
 
 class TodoPage extends StatefulWidget {
   const TodoPage({Key key}) : super(key: key);
@@ -45,11 +44,17 @@ class _TodoPageState extends State<TodoPage> {
     getAllTodo();
   }
 
-  void addTodo() {
-    var result, label, importance;
-    showModalBottomSheet(context: context, builder: (BuildContext context) {
-      return StatefulBuilder(
-          builder: (context1, bottomState) {
+  void addTodo(int option) {//0 : add   1 : update
+    var result;
+    if(option == 1) todoContentController.text = arguments.content;
+    else { //add
+      arguments = new TodoBeanEntity();
+      todoContentController.text = '';
+    }
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context1, bottomState) {
             return Container(
               height: 200.0,
               child: Column(
@@ -58,7 +63,7 @@ class _TodoPageState extends State<TodoPage> {
                     children: [
                       // TODO:ICON
                       IconButton(
-                        //设置时间与重复
+                          //设置时间与重复
                           icon: Icon(Icons.alarm),
                           onPressed: () async {
                             result = await showDatePicker(
@@ -71,23 +76,23 @@ class _TodoPageState extends State<TodoPage> {
                                     data: ThemeData.dark(),
                                     child: child,
                                   );
-                                }
-                            );
-                            print('$result');
-                            arguments.itemDatetime = result.toString();
-                            bottomState(() {
-                            });
+                                });
+                            //print('$result');
+                            if(result != null) arguments.itemDatetime = result.toString();
+                            bottomState(() {});
                           }),
                       IconButton(
-                        //设置类别
+                          //设置类别
                           icon: Icon(Icons.lens),
-                          onPressed: () {
-                            sortDialog();
+                          onPressed: () async {
+                            await importanceDialog();
+                            bottomState(() {});
                           }),
                       IconButton(
                           icon: Icon(Icons.dashboard),
-                          onPressed: () {
-                            importanceDialog();
+                          onPressed: () async {
+                            await sortDialog();
+                            bottomState(() {});
                           }),
                       IconButton(
                           icon: Icon(Icons.add),
@@ -95,10 +100,10 @@ class _TodoPageState extends State<TodoPage> {
                             if (todoContentController.text == '') {
                               Toast.show("待办不能为空！", context,
                                   gravity: Toast.CENTER);
-                            } else if (arguments.itemDatetime == null){
+                            } else if (arguments.itemDatetime == null) {
                               Toast.show("请选择待办时间！", context);
                             } else {
-                              addTodoSetSql();
+                              option == 1 ? updateTodo() : addTodoSetSql();
                               getAllTodo();
                             }
                           })
@@ -107,17 +112,22 @@ class _TodoPageState extends State<TodoPage> {
                   Container(
                     height: 25,
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          width: 20,
-                        ),
+                        SizedBox(width: 20,),
                         Text(
-                          result == null ? " ":DateFormat("MM月dd日").format(result),
-                          style: TextStyle(
-                            fontSize: 15
-                          ),
+                          arguments.itemDatetime == null
+                              ? '请选择日期！'
+                              : DateFormat("MM月dd日").format(DateTime.parse(arguments.itemDatetime)),
+                          style: TextStyle(fontSize: 15, color: Colors.green),
                         ),
+                        SizedBox(width: 20,),
+                        getImportanceText(arguments.itemImportance),
+                        SizedBox(width: 20,),
+                        Text(
+                          arguments.itemLabels == null ? '请选择标签！' : labelList[arguments.itemLabels],
+                          style: TextStyle(fontSize: 15, color: Colors.orangeAccent),
+                        )
                       ],
                     ),
                   ),
@@ -127,26 +137,33 @@ class _TodoPageState extends State<TodoPage> {
                     controller: todoContentController,
                     decoration: buildInputDecoration("想做点什么？"),
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
                 ],
               ),
             );
           });
-    });
+        });
   }
 
-  void gotoWriteTodo(context, TodoBeanEntity e) {
-    // TODO：可以参考这里写页面跳转
-    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-      return WriteTodoPage(arguments: e);
-    })).then((value) {
-      if (value == Constants.REFRESH) {
-        getAllTodo();
-      }
-    });
+  Text getImportanceText(int imp){
+    switch(imp){
+      case 4 : return Text('!!!!', style: TextStyle(color: Colors.red, fontSize: 15, fontWeight: FontWeight.bold),);
+      case 3 : return Text('!!!', style: TextStyle(color: Colors.orange, fontSize: 15, fontWeight: FontWeight.bold),);
+      case 2 : return Text('!!', style: TextStyle(color: Colors.amber, fontSize: 15, fontWeight: FontWeight.bold),);
+      case 1 : return Text('!', style: TextStyle(color: Colors.blueGrey, fontSize: 15, fontWeight: FontWeight.bold),);
+    }
+    return Text('!!!', style: TextStyle(color: Colors.orange, fontSize: 15, fontWeight: FontWeight.bold),);
   }
+
+  // void gotoWriteTodo(context, TodoBeanEntity e) {
+  //   // TODO：可以参考这里写页面跳转
+  //   Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+  //     return WriteTodoPage(arguments: e);
+  //   })).then((value) {
+  //     if (value == Constants.REFRESH) {
+  //       getAllTodo();
+  //     }
+  //   });
+  // }
 
   InputDecoration buildInputDecoration(text) {
     return InputDecoration(
@@ -165,15 +182,19 @@ class _TodoPageState extends State<TodoPage> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: Container(
-        width: 60,
-        height: 60,
-        child: FloatingActionButton(
-          onPressed: addTodo,
-          backgroundColor: ColorUtils.color_blue_main,
-          tooltip: '添加待办',
-          child: new Icon(Icons.add, color: Colors.white,),
-        )
-      ),
+          width: 60,
+          height: 60,
+          child: FloatingActionButton(
+            onPressed: () {
+              addTodo(0);
+            },
+            backgroundColor: ColorUtils.color_blue_main,
+            tooltip: '添加待办',
+            child: new Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+          )),
       key: _globalKey,
       body: Container(
         decoration: BoxDecoration(color: ColorUtils.color_background_main),
@@ -234,25 +255,22 @@ class _TodoPageState extends State<TodoPage> {
                 children: [
                   Expanded(
                       child: InkWell(
-                        onTap: () {
-                          showPicker(context);
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              selectType == 1
-                                  ? "按DDL排序"
-                                  : "按优先级排序",
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: ColorUtils.color_godden_dark),
-                            ),
-                            Image.asset("assets/images/icon_down_narrow.png",
-                                width: 20, height: 20)
-                          ],
+                    onTap: () {
+                      showPicker(context);
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          selectType == 1 ? "按DDL排序" : "按优先级排序",
+                          textAlign: TextAlign.end,
+                          style: TextStyle(color: ColorUtils.color_godden_dark),
                         ),
-                      ))
+                        Image.asset("assets/images/icon_down_narrow.png",
+                            width: 20, height: 20)
+                      ],
+                    ),
+                  ))
                 ],
               ),
             ),
@@ -288,14 +306,16 @@ class _TodoPageState extends State<TodoPage> {
   Widget getItemBuilder(context, index) {
     var e = todoList[index];
     var targetTime = e.itemDatetime;
-    var time = DateFormat("MM月dd日").format(DateTime.parse(targetTime));//TODO：TIMEPICKER
+    var time = DateFormat("MM月dd日")
+        .format(DateTime.parse(targetTime)); //TODO：TIMEPICKER
     var label = labelList[e.itemLabels];
     int labelType = e.itemLabels;
-    return getDismissible(context, e, time, label, labelType);
+    int importance = e.itemImportance;
+    return getDismissible(context, e, time, label, labelType, importance);
   }
 
   Dismissible getDismissible(
-      context, TodoBeanEntity e, String time, String label, int labelType) {
+      context, TodoBeanEntity e, String time, String label, int labelType, int importance) {
     return e.itemStatus == 0
         ? Dismissible(
             onDismissed: (_) {
@@ -310,69 +330,83 @@ class _TodoPageState extends State<TodoPage> {
                 SizedBox(
                   width: 20,
                 ),
-                ElevatedButton(
-                  // minVerticalPadding: 0,
-                  onPressed: () {
-                    // TODO: goToWriteTodo(context, e);
-                    gotoWriteTodo(context, e);
-                  },
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      )),
-                  child: Container(
-                    height: 70,
-                    child: Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            arguments = e;
-                            arguments.itemStatus = 1;
-                            setTodoStatus();
-                            getAllTodo();
-                          },
-                          child: Image(
-                            image: AssetImage("assets/search_icon.png"),
-                            width: 25,
-                            height: 25,
-                          ),
-                        ),
-                        SizedBox(width: 20,),
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("${e.content}",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.normal,
-                                      color: ColorUtils.color_text)),
-                              SizedBox(height: 5,),
-                              Row(
+                Container(
+                    width: 320,
+                    child: ElevatedButton(
+                      // minVerticalPadding: 0,
+                      onPressed: () {
+                        arguments = e;
+                        addTodo(1);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          )),
+                      child: Container(
+                        height: 70,
+                        child: Row(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                arguments = e;
+                                arguments.itemStatus = 1;
+                                setTodoStatus();
+                                getAllTodo();
+                              },
+                              child: Image(
+                                image: AssetImage("assets/search_icon.png"),
+                                width: 25,
+                                height: 25,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(label,
+                                  Text("${e.content}",
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                          fontSize: 15, color: getColor(labelType))),
-                                  SizedBox(
-                                    width: 20,
-                                    height: 15,
-                                  ),
-                                  Text(time,
-                                      style: TextStyle(
-                                          fontSize: 15,
+                                          fontSize: 20,
                                           fontWeight: FontWeight.normal,
-                                          color: DateTime.now().compareTo(
-                                              DateTime.parse(
-                                                  e.itemDatetime)) <
-                                              0
-                                              ? ColorUtils.color_text
-                                              : Colors.red)),
-                                ],
-                              )
-                            ])
-                      ],
-                    ),
-                  ),
+                                          color: ColorUtils.color_text)),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(label,
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: getTypeColor(labelType))),
+                                      SizedBox(
+                                        width: 20,
+                                        height: 15,
+                                      ),
+                                      Text(time,
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.normal,
+                                              color: DateTime.now().compareTo(
+                                                  DateTime.parse(
+                                                      e.itemDatetime)) <
+                                                  0
+                                                  ? ColorUtils.color_text
+                                                  : ColorUtils.color_delete)),
+                                      SizedBox(
+                                        width: 20,
+                                        height: 15,
+                                      ),
+                                      getImportanceText(importance),
+                                    ],
+                                  )
+                                ])
+                          ],
+                        ),
+                      ),
+                    )
                 ),
               ],
             ))
@@ -389,63 +423,70 @@ class _TodoPageState extends State<TodoPage> {
                 SizedBox(
                   width: 20,
                 ),
-                ElevatedButton(
-                  // minVerticalPadding: 0,
-                  onPressed: () {
-                    // TODO: goToWriteTodo(context, e);
-                    gotoWriteTodo(context, e);
-                  },
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  )),
-                  child: Container(
-                    height: 70,
-                    child: Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            arguments = e;
-                            arguments.itemStatus = 0;
-                            setTodoStatus();
-                            getAllTodo();
-                          },
-                          child: Image(
-                            image: AssetImage("assets/ok.png"),
-                            width: 25,
-                            height: 25,
+                Container(
+                  width: 320,
+                  child: ElevatedButton(
+                    // minVerticalPadding: 0,
+                    onPressed: () {
+                      arguments = e;
+                      addTodo(1);
+                    },
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        )),
+                    child: Container(
+                      height: 70,
+                      child: Row(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              arguments = e;
+                              arguments.itemStatus = 0;
+                              setTodoStatus();
+                              getAllTodo();
+                            },
+                            child: Image(
+                              image: AssetImage("assets/ok.png"),
+                              width: 25,
+                              height: 25,
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 20,),
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("${e.content}",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.normal,
-                                      decoration: TextDecoration.lineThrough,
-                                      color: Colors.black38)),
-                              SizedBox(height: 5,),
-                              Row(
-                                children: [
-                                  Text(label,
-                                      style: TextStyle(
-                                          fontSize: 15, color: Colors.black38)),
-                                  SizedBox(
-                                    width: 20,
-                                    height: 15,
-                                  ),
-                                  Text(time,
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.normal,
-                                          color: Colors.black38)),
-                                ],
-                              )
-                            ])
-                      ],
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("${e.content}",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.normal,
+                                        decoration: TextDecoration.lineThrough,
+                                        color: Colors.black38)),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  children: [
+                                    Text(label,
+                                        style: TextStyle(
+                                            fontSize: 15, color: Colors.black38)),
+                                    SizedBox(
+                                      width: 20,
+                                      height: 15,
+                                    ),
+                                    Text(time,
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.black38)),
+                                  ],
+                                )
+                              ])
+                        ],
+                      ),
                     ),
                   ),
                 )
@@ -453,8 +494,8 @@ class _TodoPageState extends State<TodoPage> {
             ));
   }
 
-  AlertDialog sortDialog() {
-    showDialog(
+  Future sortDialog() {
+    return showDialog(
         context: context,
         barrierDismissible: true,
         builder: (BuildContext context) {
@@ -500,8 +541,8 @@ class _TodoPageState extends State<TodoPage> {
         });
   }
 
-  AlertDialog importanceDialog() {
-    showDialog(
+  Future importanceDialog() {
+    return showDialog(
         context: context,
         barrierDismissible: true,
         builder: (BuildContext context) {
@@ -511,27 +552,31 @@ class _TodoPageState extends State<TodoPage> {
                 children: <Widget>[
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context, 4);
+                      arguments.itemImportance = 4;
+                      exit(context);
                     },
-                    child: Text('重要且紧急'),
+                    child: getImportanceText(4),
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context, 3);
+                      arguments.itemImportance = 3;
+                      exit(context);
                     },
-                    child: Text('不重要且紧急'),
+                    child: getImportanceText(3),
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context, 2);
+                      arguments.itemImportance = 2;
+                      exit(context);
                     },
-                    child: Text('重要且不紧急'),
+                    child: getImportanceText(2),
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context, 1);
+                      arguments.itemImportance = 1;
+                      exit(context);
                     },
-                    child: Text('不重要且不紧急'),
+                    child: getImportanceText(1),
                   ),
                 ],
               ),
@@ -545,9 +590,13 @@ class _TodoPageState extends State<TodoPage> {
     TodoBeanEntity todoBeanEntity = new TodoBeanEntity();
     todoBeanEntity.content = todoContentController.text;
     todoBeanEntity.itemStatus = 0;
-    todoBeanEntity.itemImportance = 3;
-    todoBeanEntity.itemDatetime = arguments.itemDatetime == null ? DateTime.now() : arguments.itemDatetime;
-    todoBeanEntity.itemLabels = arguments.itemLabels == null ? arguments.itemLabels = 0 : arguments.itemLabels;
+    todoBeanEntity.itemImportance = arguments.itemImportance == null ? arguments.itemImportance = 3 : arguments.itemImportance;
+    todoBeanEntity.itemDatetime = arguments.itemDatetime == null
+        ? arguments.itemDatetime = DateTime.now().toString()
+        : arguments.itemDatetime;
+    todoBeanEntity.itemLabels = arguments.itemLabels == null
+        ? arguments.itemLabels = 0
+        : arguments.itemLabels;
     todoBeanEntity.itemTypeDdlOrRepeat = 1;
     todoBeanEntity.itemTypePersonOrTeam = 2;
     //TODO: Other Params are waited to commit
@@ -591,6 +640,16 @@ class _TodoPageState extends State<TodoPage> {
   void setTodoStatus() async {
     await todoSqliteHelper.open();
     await todoSqliteHelper.update(arguments);
+    await todoSqliteHelper.close();
+  }
+
+  void updateTodo() async {
+    await todoSqliteHelper.open();
+    arguments.content = todoContentController.text;
+    await todoSqliteHelper.update(arguments).then((value) {
+      Toast.show("更新待办成功", context, gravity: Toast.CENTER);
+      exit(context);
+    });
     await todoSqliteHelper.close();
   }
 

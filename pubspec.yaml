@@ -63,7 +63,7 @@ flutter:
   - assets/images/icon_write_note.png
   - assets/images/avatar_default.jpg
   - assets/person_default_icon.png
-  - assets/person_default_icon.png
+  - assets/person_light_icon.png
   - assets/note_default_icon.png
   - assets/note_light_icon.png
   - assets/team_default_icon.png
