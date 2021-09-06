@@ -42,8 +42,8 @@ class _NoteMainPageState extends State<NoteMainPage> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: Container(
-          width: 60,
-          height: 60,
+          width: 50,
+          height: 50,
           child: FloatingActionButton(
             onPressed: () {
               Navigator.pushNamed(context, "/writeNote").then((value) {
