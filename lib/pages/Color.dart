@@ -14,13 +14,3 @@ class ColorUtils{
   static const Color color_delete = Color(0xFFD9534F);
   static const Color color_text = Color(0xFF2A2A2A);
 }
-
-Color getTypeColor(int type) {
-  switch(type){
-    case 1 : return Colors.blue;
-    case 2 : return Colors.blueGrey;
-    case 3 : return Colors.amber;
-    case 4 : return Colors.green;
-  }
-  return Colors.black;
-}

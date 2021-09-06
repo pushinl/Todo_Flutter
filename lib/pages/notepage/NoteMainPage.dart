@@ -53,6 +53,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
               });
             },
             backgroundColor: ColorUtils.color_blue_main,
+            elevation: 0,
             tooltip: '添加备忘录',
             child: new Icon(Icons.add, color: Colors.white,),
           )
@@ -64,8 +65,9 @@ class _NoteMainPageState extends State<NoteMainPage> {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
               child: Container(
+                height: 30,
                 padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
                 decoration: BoxDecoration(
                     color: ColorUtils.color_grey_dd,
@@ -74,12 +76,12 @@ class _NoteMainPageState extends State<NoteMainPage> {
                   children: [
                     Image.asset(
                       "assets/search_icon.png",
-                      width: 20,
-                      height: 20,
+                      width: 15,
+                      height: 15,
                     ),
                     Expanded(
                         child: TextField(
-                            style: TextStyle(fontSize: 15),
+                            style: TextStyle(fontSize: 14),
                             autofocus: false,
                             cursorColor: ColorUtils.color_text,
                             onChanged: (value) {

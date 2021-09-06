@@ -53,8 +53,9 @@ class _TabsState extends State<Tabs> with SingleTickerProviderStateMixin{
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorUtils.color_background_main,
+        elevation: 0,
         leading: IconButton(
-          icon: Image.asset('assets/message_icon.png', width: 25.0, height: 25.0),
+          icon: Image.asset('assets/message_icon.png', width: 22.0, height: 22.0),
           onPressed: (){},
         ),
         actions: [
@@ -62,7 +63,7 @@ class _TabsState extends State<Tabs> with SingleTickerProviderStateMixin{
               onPressed: () {
                 Navigator.pushNamed(context,'/Calendar').then((value) => null);
               },
-              icon: Image.asset('assets/calendar_icon.png', width: 25.0, height: 25.0),
+              icon: Image.asset('assets/calendar_icon.png', width: 22.0, height: 22.0),
           )
         ],
       ),
@@ -117,7 +118,7 @@ class _TabsState extends State<Tabs> with SingleTickerProviderStateMixin{
    * 根据image路径获取图片
    */
   Image getTabImage(path) {
-    return Image.asset(path, width: 25.0, height: 25.0);
+    return Image.asset(path, width: 27.5, height: 27.5);
   }
 
 }

@@ -57,10 +57,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-  - assets/images/icon_back.png
   - assets/images/icon_down_narrow.png
-  - assets/images/icon_menu.png
-  - assets/images/icon_write_note.png
   - assets/images/avatar_default.jpg
   - assets/person_default_icon.png
   - assets/person_light_icon.png
@@ -75,6 +72,11 @@ flutter:
   - assets/search_icon.png
   - assets/ok.png
   - assets/back.png
+  - assets/circle/Todo_1.png
+  - assets/circle/Todo_2.png
+  - assets/circle/Todo_3.png
+  - assets/circle/Todo_4.png
+  - assets/circle/finished.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
