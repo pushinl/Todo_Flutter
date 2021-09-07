@@ -9,7 +9,7 @@ import 'package:todo_flutter/pages/notepage/WriteNotePage.dart';
 final routes = {
   '/note': (context) => NoteMainPage(),
   '/writeNote': (context, {arguments}) => WriteNotePage(arguments: arguments,),
-  '/Calendar':(context) =>CalenderPage(),
+  '/Calendar':(context) =>CalendarPage(),
 
 };
 

@@ -29,6 +29,7 @@ class _TodoPageState extends State<TodoPage> {
   static GlobalKey<ScaffoldState> _globalKey = GlobalKey();
   RCalendarController todoDateController;
   static List<String> labelList = ['其他', '学习', '生活', '工作', '娱乐'];
+  var width, height;
 
   @override
   void initState() {
@@ -59,56 +60,67 @@ class _TodoPageState extends State<TodoPage> {
               height: 200.0,
               child: Column(
                 children: <Widget>[
-                  Row(
+                  Stack(
                     children: [
-                      // TODO:ICON
-                      IconButton(
-                          //设置时间与重复
-                          icon: Icon(Icons.alarm),
-                          onPressed: () async {
-                            result = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(2021),
-                                lastDate: DateTime(2030),
-                                builder: (context, child) {
-                                  return Theme(
-                                    data: ThemeData.dark(),
-                                    child: child,
-                                  );
-                                });
-                            //print('$result');
-                            if(result != null) arguments.itemDatetime = result.toString();
-                            bottomState(() {});
-                          }),
-                      IconButton(
-                          //设置类别
-                          icon: Icon(Icons.lens),
-                          onPressed: () async {
-                            await importanceDialog();
-                            bottomState(() {});
-                          }),
-                      IconButton(
-                          icon: Icon(Icons.dashboard),
-                          onPressed: () async {
-                            await sortDialog();
-                            bottomState(() {});
-                          }),
-                      IconButton(
-                          icon: Icon(Icons.add),
-                          onPressed: () {
-                            if (todoContentController.text == '') {
-                              Toast.show("待办不能为空！", context,
-                                  gravity: Toast.CENTER);
-                            } else if (arguments.itemDatetime == null) {
-                              Toast.show("请选择待办时间！", context);
-                            } else {
-                              option == 1 ? updateTodo() : addTodoSetSql();
-                              getAllTodo();
-                            }
-                          })
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Row(
+                          children: [
+                            // TODO:ICON
+                            IconButton(
+                              //设置时间与重复
+                                icon: Icon(Icons.alarm),
+                                onPressed: () async {
+                                  result = await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(2021),
+                                      lastDate: DateTime(2030),
+                                      builder: (context, child) {
+                                        return Theme(
+                                          data: ThemeData.dark(),
+                                          child: child,
+                                        );
+                                      });
+                                  //print('$result');
+                                  if(result != null) arguments.itemDatetime = result.toString();
+                                  bottomState(() {});
+                                }),
+                            IconButton(
+                              //设置类别
+                                icon: Icon(Icons.lens),
+                                onPressed: () async {
+                                  await importanceDialog();
+                                  bottomState(() {});
+                                }),
+                            IconButton(
+                                icon: Icon(Icons.dashboard),
+                                onPressed: () async {
+                                  await sortDialog();
+                                  bottomState(() {});
+                                }),
+                          ],
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: IconButton(
+                            icon: Icon(Icons.add),
+                            onPressed: () {
+                              if (todoContentController.text == '') {
+                                Toast.show("待办不能为空！", context,
+                                    gravity: Toast.CENTER);
+                              } else if (arguments.itemDatetime == null) {
+                                Toast.show("请选择待办时间！", context);
+                              } else {
+                                option == 1 ? updateTodo() : addTodoSetSql();
+                                getAllTodo();
+                              }
+                            })
+                      )
                     ],
                   ),
+
                   Container(
                     height: 25,
                     child: Row(
@@ -179,6 +191,9 @@ class _TodoPageState extends State<TodoPage> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    width = size.width;
+    height = size.height;
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: Container(
@@ -335,7 +350,7 @@ class _TodoPageState extends State<TodoPage> {
                   width: 20,
                 ),
                 Container(
-                    width: 320,
+                    width: width-40,
                     child: ElevatedButton(
                       // minVerticalPadding: 0,
                       onPressed: () {
@@ -425,7 +440,7 @@ class _TodoPageState extends State<TodoPage> {
                   width: 20,
                 ),
                 Container(
-                  width: 320,
+                  width: width-40,
                   child: ElevatedButton(
                     // minVerticalPadding: 0,
                     onPressed: () {
@@ -463,11 +478,13 @@ class _TodoPageState extends State<TodoPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text("${e.content}",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.normal,
-                                        decoration: TextDecoration.lineThrough,
-                                        color: Colors.black38)),
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.normal,
+                                    decoration: TextDecoration.lineThrough,
+                                    color: Colors.black38,),
+                                  //overflow: TextOverflow.ellipsis,
+                                ),
                                 SizedBox(
                                   height: 3,
                                 ),
