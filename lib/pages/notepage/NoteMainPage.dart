@@ -55,7 +55,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
             backgroundColor: ColorUtils.color_blue_main,
             elevation: 0,
             tooltip: '添加备忘录',
-            child: new Icon(Icons.add, color: Colors.white,),
+            child: new Icon(Icons.add, color: Colors.white, size: 30,),
           )
       ),
       key: _globalKey,

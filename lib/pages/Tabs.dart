@@ -3,7 +3,7 @@ import 'package:todo_flutter/pages/Color.dart';
 import 'package:todo_flutter/pages/notepage/NoteMainPage.dart';
 import 'package:todo_flutter/pages/todopage/TodoPage.dart';
 import 'package:todo_flutter/pages/personpage/PersonPage.dart';
-import 'package:todo_flutter/pages/teampage/TeamPage.dart';
+import 'package:todo_flutter/pages/calendarpage/CalendarPage.dart';
 class Tabs extends StatefulWidget{
   Tabs({Key key}) : super(key: key);
 
@@ -73,8 +73,8 @@ class _TabsState extends State<Tabs> with SingleTickerProviderStateMixin{
         height: 70,
         child: TabBar(
           controller: this._tabController,
-          indicatorColor: Colors.blue,
-          labelColor: Colors.blue,
+          indicatorColor: ColorUtils.color_blue_main,
+          labelColor: ColorUtils.color_blue_main,
           tabs: <Tab>[
             Tab(
               icon: getTabIcon(0),
@@ -96,7 +96,7 @@ class _TabsState extends State<Tabs> with SingleTickerProviderStateMixin{
         controller: this._tabController,
         children: [
           TodoPage(),
-          TeamPage(),
+          CalendarPage(),
           NoteMainPage(),
           PersonPage(),
         ],

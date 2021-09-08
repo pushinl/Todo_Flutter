@@ -78,6 +78,14 @@ flutter:
   - assets/circle/Todo_3.png
   - assets/circle/Todo_4.png
   - assets/circle/finished.png
+  - assets/images/priority.png
+  - assets/images/priority_un.png
+  - assets/images/time.png
+  - assets/images/time_un.png
+  - assets/images/reok.png
+  - assets/images/type.png
+  - assets/images/type_un.png
+  - assets/more_icon.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
