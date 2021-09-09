@@ -14,14 +14,10 @@ class NoteMainPage extends StatefulWidget {
 
   @override
   _NoteMainPageState createState() => _NoteMainPageState();
-
 }
 
-
 class _NoteMainPageState extends State<NoteMainPage> {
-
-  TabController _controller;
-
+  var width, height;
 
   var keyWord; //关键字
   NoteSqliteHelper sqliteHelper;
@@ -36,9 +32,11 @@ class _NoteMainPageState extends State<NoteMainPage> {
     getAllNote();
   }
 
-
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    width = size.width;
+    height = size.height;
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: Container(
@@ -55,20 +53,22 @@ class _NoteMainPageState extends State<NoteMainPage> {
             backgroundColor: ColorUtils.color_blue_main,
             elevation: 0,
             tooltip: '添加备忘录',
-            child: new Icon(Icons.add, color: Colors.white, size: 30,),
-          )
-      ),
+            child: new Icon(
+              Icons.add,
+              color: Colors.white,
+              size: 30,
+            ),
+          )),
       key: _globalKey,
-      body:
-      Container(
+      body: Container(
         decoration: BoxDecoration(color: ColorUtils.color_background_main),
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+              padding: EdgeInsets.fromLTRB(20, 13, 20, 20),
               child: Container(
                 height: 30,
-                padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
                 decoration: BoxDecoration(
                     color: ColorUtils.color_grey_dd,
                     borderRadius: BorderRadius.all(Radius.circular(40))),
@@ -108,82 +108,53 @@ class _NoteMainPageState extends State<NoteMainPage> {
                                 hintText: "Search...",
                                 hintStyle: TextStyle(
                                     color: ColorUtils.color_grey_666)))),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        icon: Image.asset(
+                          'assets/more_icon.png',
+                          width: 18,
+                          height: 18,
+                        ),
+                        onPressed: () {
+                          showPicker(context);
+                        },
+                      ),
+                    )
                   ],
                 ),
               ),
             ),
-            Container(
-              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-              height: 40,
-              child: Flex(
-                direction: Axis.horizontal,
-                children: [
-                  Expanded(
-                      child: InkWell(
-                        onTap: () {
-                          showPicker(context);
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              selectType == 1
-                                  ? "按更新时间排序"
-                                  : "按创建时间排序",
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: ColorUtils.color_godden_dark),
-                            ),
-                            Image.asset("assets/images/icon_down_narrow.png",
-                                width: 20, height: 20)
-                          ],
-                        ),
-                      ))
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-              child: Divider(
-                color: ColorUtils.color_grey_dd,
-                height: 1,
-              ),
-            ),
             Expanded(
                 child: ListView.separated(
-                  shrinkWrap: true,
-                  //加上这个就不会因为高度报错了
-                  scrollDirection: Axis.vertical,
-                  separatorBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      child: Divider(
-                        color: ColorUtils.color_grey_dd,
-                        height: 1,
-                      ),
-                    );
-                  },
-                  itemCount: noteList.length,
-                  itemBuilder: getItemBuilder,
-                )
-            ),
+              shrinkWrap: true,
+              //加上这个就不会因为高度报错了
+              scrollDirection: Axis.vertical,
+              separatorBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                  child: Divider(
+                    color: ColorUtils.color_grey_dd,
+                    height: 10,
+                  ),
+                );
+              },
+              itemCount: noteList.length,
+              itemBuilder: getItemBuilder,
+            )),
           ],
         ),
-
       ),
-
-
     );
   }
 
   Widget getItemBuilder(context, index) {
     var e = noteList[index];
     var targetTime = selectType == 2 ? e.addTime : e.updateTime;
-    var time1 = DateFormat("yyyy-MM-dd").format(DateTime.parse(targetTime));
-    var time2 = DateFormat("yyyy-MM-dd").format(DateTime.now());
+    var time1 = DateFormat("MM月dd日").format(DateTime.parse(targetTime));
+    var time2 = DateFormat("MM月dd日").format(DateTime.now());
     var time3 = DateFormat("HH:mm").format(DateTime.parse(targetTime));
-    var time4 =
-    DateFormat("yyyy-MM-dd HH:mm").format(DateTime.parse(targetTime));
+    var time4 = DateFormat("MM月dd日 HH:mm").format(DateTime.parse(targetTime));
     return getDismissible(context, e, time1, time2, time3, time4);
   }
 
@@ -197,19 +168,47 @@ class _NoteMainPageState extends State<NoteMainPage> {
         },
         key: Key(e.noteId.toString()),
         background: Container(color: ColorUtils.color_delete),
-        child: ListTile(
-          tileColor: Colors.white,
-          minVerticalPadding: 0,
-          onTap: () {
-            goToWriteNote(context, e);
-          },
-          title: Text("${e.title}",
-              maxLines: 1,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.normal,
-                color: ColorUtils.color_text)),
-          subtitle: getListViewPadding(time1, time2, time3, time4, e),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+          child: ElevatedButton(
+            // minVerticalPadding: 0,
+            onPressed: () {
+              goToWriteNote(context, e);
+            },
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              elevation: 0,
+            ),
+            child: Container(
+              height: 60,
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 10,
+                  ),
+                  SizedBox(
+                    width: width * 0.7,
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(height: 7,),
+                          Text("${e.title}",
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                  color: ColorUtils.color_text)),
+                          getListViewPadding(time1, time2, time3, time4, e),
+                          SizedBox(height: 7,)
+                        ]),
+                  )
+                ],
+              ),
+            ),
+          ),
         ));
   }
 
@@ -224,31 +223,36 @@ class _NoteMainPageState extends State<NoteMainPage> {
   Padding getListViewPadding(String time1, String time2, String time3,
       String time4, NoteBeanEntity e) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+      padding: EdgeInsets.fromLTRB(0, 7, 0, 0),
       child: Flex(
         direction: Axis.horizontal,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             "${time1 == time2 ? time3 : time4}",
-            style: TextStyle(fontSize: 15, color: ColorUtils.color_grey_666),
+            style: TextStyle(
+              fontSize: 12,
+              color: ColorUtils.color_grey_666,
+              fontWeight: FontWeight.normal,
+            ),
           ),
-          SizedBox(
-            width: 20,
+          Text(
+            '  |  ',
+            style: TextStyle(
+              fontSize: 12,
+              color: ColorUtils.color_grey_666,
+              fontWeight: FontWeight.normal,
+            ),
           ),
           Expanded(
-              child: Container(
-                height: 20,
-                child: Text("${e.content}",
-                    overflow: TextOverflow.ellipsis,
-                    // maxLines: 1,
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: ColorUtils.color_grey_999
-                    )
-                ),
-              )
-          )
+              child: Text("${e.content}",
+                  overflow: TextOverflow.ellipsis,
+                  // maxLines: 1,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: ColorUtils.color_grey_666,
+                    fontWeight: FontWeight.normal,
+                  )))
         ],
       ),
     );
@@ -282,8 +286,8 @@ class _NoteMainPageState extends State<NoteMainPage> {
 
   showPicker(BuildContext context) {
     Picker picker = new Picker(
-        adapter: PickerDataAdapter<String>(
-            pickerdata: ["按照更新时间排序", "按照创建时间排序"]),
+        adapter:
+            PickerDataAdapter<String>(pickerdata: ["按照更新时间排序", "按照创建时间排序"]),
         changeToFirst: true,
         textAlign: TextAlign.left,
         columnPadding: const EdgeInsets.all(8.0),

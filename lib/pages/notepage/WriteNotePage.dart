@@ -44,6 +44,8 @@ class _WriteNotePageState extends State<WriteNotePage> {
     return WillPopScope(
         child: Scaffold(
           appBar: AppBar(
+            elevation: 0,
+            backgroundColor: ColorUtils.color_background_main,
             leading: IconButton(
               iconSize: 36,
               onPressed: () {
@@ -73,28 +75,28 @@ class _WriteNotePageState extends State<WriteNotePage> {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(color: ColorUtils.color_background_main),
             child: Padding(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
               child: ListView(
                 children: [
                   TextField(
-                    style: TextStyle(fontSize: 40),
+                    style: TextStyle(fontSize: 26),
                     cursorColor: ColorUtils.color_black,
                     controller: title,
                     decoration: buildInputDecoration("请输入标题"),
                   ),
                   Text(
-                    arguments == null ? DateFormat("yyyy-MM-dd HH:mm").format(DateTime.now()) : DateFormat("yyyy-MM-dd HH:mm").format(DateTime.parse(arguments.updateTime)),
+                    arguments == null ? DateFormat("MM月dd日 HH:mm").format(DateTime.now()) : DateFormat("MM月dd日 HH:mm").format(DateTime.parse(arguments.updateTime)),
                     style: TextStyle(
-                      color: Colors.black38,
-                      fontSize: 15
+                      color: ColorUtils.color_grey_666,
+                      fontSize: 12
                     ),
                   ),
                   TextField(
-                    style: TextStyle(fontSize: 25),
+                    style: TextStyle(fontSize: 15),
                     cursorColor: ColorUtils.color_black,
                     controller: content,
-                    minLines: 6,
-                    maxLines: 20,
+                    minLines: 20,
+                    maxLines: 100,
                     decoration: buildInputDecoration("请输入内容"),
                   )
                 ],

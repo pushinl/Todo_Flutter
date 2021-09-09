@@ -28,7 +28,7 @@ class _TodoPageState extends State<TodoPage> {
   var selectType = 1;
   static GlobalKey<ScaffoldState> _globalKey = GlobalKey();
   RCalendarController todoDateController;
-  static List<String> labelList = ['其他', '学习', '生活', '工作', '娱乐'];
+  static List<String> labelList = ['#其他', '#学习', '#生活', '#工作', '#娱乐'];
   var width, height;
 
   @override
@@ -77,7 +77,7 @@ class _TodoPageState extends State<TodoPage> {
           children: [
             //下面是搜索栏
             Padding(
-              padding: EdgeInsets.fromLTRB(20, 10, 60, 10),
+              padding: EdgeInsets.fromLTRB(20, 13, 20, 20),
               child: Container(
                 height: 30,
                 padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
@@ -120,6 +120,19 @@ class _TodoPageState extends State<TodoPage> {
                                 hintText: "Search...",
                                 hintStyle: TextStyle(
                                     color: ColorUtils.color_grey_666)))),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        icon: Image.asset(
+                          'assets/more_icon.png',
+                          width: 18,
+                          height: 18,
+                        ),
+                        onPressed: () {
+                          showPicker(context);
+                        },
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -134,7 +147,7 @@ class _TodoPageState extends State<TodoPage> {
                     padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                     child: Divider(
                       color: ColorUtils.color_grey_dd,
-                      height: 15,
+                      height: 10,
                     ),
                   );
                 },
@@ -170,90 +183,84 @@ class _TodoPageState extends State<TodoPage> {
             },
             key: Key(e.todoId.toString()),
             background: Container(color: ColorUtils.color_delete),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 20,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: ElevatedButton(
+                // minVerticalPadding: 0,
+                onPressed: () {
+                  arguments = e;
+                  addTodo(1);
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  elevation: 0,
                 ),
-                Container(
-                    width: width - 40,
-                    child: ElevatedButton(
-                      // minVerticalPadding: 0,
-                      onPressed: () {
-                        arguments = e;
-                        addTodo(1);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        elevation: 0,
+                child: Container(
+                  height: 60,
+                  child: Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          arguments = e;
+                          arguments.itemStatus = 1;
+                          setTodoStatus();
+                          getAllTodo();
+                        },
+                        child: getImage(e.itemImportance),
                       ),
-                      child: Container(
-                        height: 60,
-                        child: Row(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                arguments = e;
-                                arguments.itemStatus = 1;
-                                setTodoStatus();
-                                getAllTodo();
-                              },
-                              child: getImage(e.itemImportance),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            SizedBox(
-                              width: width * 0.7,
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("${e.content}",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.normal,
-                                            color: ColorUtils.color_text)),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(label,
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: ColorUtils
-                                                    .color_blue_main)),
-                                        SizedBox(
-                                          width: 20,
-                                          height: 15,
-                                        ),
-                                        Text(time,
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.normal,
-                                                color: DateTime.now().compareTo(
-                                                            DateTime.parse(e
-                                                                .itemDatetime)) <
-                                                        0
-                                                    ? ColorUtils.color_text
-                                                    : ColorUtils.color_delete)),
-                                        SizedBox(
-                                          width: 20,
-                                          height: 15,
-                                        )
-                                      ],
-                                    )
-                                  ]),
-                            )
-                          ],
-                        ),
+                      SizedBox(
+                        width: 10,
                       ),
-                    )),
-              ],
+                      SizedBox(
+                        width: width * 0.7,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("${e.content}",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal,
+                                      color: ColorUtils.color_text)),
+                              SizedBox(
+                                height: 3,
+                              ),
+                              Row(
+                                children: [
+                                  Text(label,
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: ColorUtils
+                                              .color_blue_main)),
+                                  SizedBox(
+                                    width: 20,
+                                    height: 15,
+                                  ),
+                                  Text(time,
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.normal,
+                                          color: DateTime.now().compareTo(
+                                                      DateTime.parse(e
+                                                          .itemDatetime)) <
+                                                  0
+                                              ? ColorUtils.color_date_text
+                                              : ColorUtils.color_delete)),
+                                  SizedBox(
+                                    width: 20,
+                                    height: 15,
+                                  )
+                                ],
+                              )
+                            ]),
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ))
         : Dismissible(
             onDismissed: (_) {
@@ -310,10 +317,10 @@ class _TodoPageState extends State<TodoPage> {
                                   Text(
                                     "${e.content}",
                                     style: TextStyle(
-                                      fontSize: 15,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.normal,
                                       decoration: TextDecoration.lineThrough,
-                                      color: Colors.black38,
+                                      color: ColorUtils.color_delete_text,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -325,7 +332,8 @@ class _TodoPageState extends State<TodoPage> {
                                       Text(label,
                                           style: TextStyle(
                                               fontSize: 12,
-                                              color: Colors.black38)),
+                                              color: ColorUtils
+                                                  .color_delete_text)),
                                       SizedBox(
                                         width: 20,
                                         height: 15,
@@ -334,7 +342,8 @@ class _TodoPageState extends State<TodoPage> {
                                           style: TextStyle(
                                               fontSize: 12,
                                               fontWeight: FontWeight.normal,
-                                              color: Colors.black38)),
+                                              color: ColorUtils
+                                                  .color_delete_text)),
                                     ],
                                   )
                                 ]),
@@ -390,7 +399,7 @@ class _TodoPageState extends State<TodoPage> {
                                       lastDate: DateTime(2030),
                                       builder: (context, child) {
                                         return Theme(
-                                          data: ThemeData.dark(),
+                                          data: ThemeData.fallback(),
                                           child: child,
                                         );
                                       });
@@ -454,10 +463,12 @@ class _TodoPageState extends State<TodoPage> {
                         Container(
                           child: Text(
                             arguments.itemDatetime == null
-                                ? '请选择日期！'
-                                : DateFormat("MM月dd日").format(
+                                ? ' 请选择日期！ '
+                                : DateFormat(" MM月dd日 ").format(
                                     DateTime.parse(arguments.itemDatetime)),
-                            style: TextStyle(fontSize: 15, color: ColorUtils.color_blue_main),
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: ColorUtils.color_blue_main),
                           ),
                           color: ColorUtils.color_background_main,
                         ),
@@ -471,10 +482,11 @@ class _TodoPageState extends State<TodoPage> {
                         Container(
                           child: Text(
                             arguments.itemLabels == null
-                                ? '请选择标签！'
+                                ? ' #其他 '
                                 : labelList[arguments.itemLabels],
                             style: TextStyle(
-                                fontSize: 15, color: ColorUtils.color_blue_main),
+                                fontSize: 15,
+                                color: ColorUtils.color_blue_main),
                           ),
                           color: ColorUtils.color_background_main,
                         )
@@ -487,7 +499,7 @@ class _TodoPageState extends State<TodoPage> {
                         style: TextStyle(fontSize: 15),
                         cursorColor: ColorUtils.color_text,
                         controller: todoContentController,
-                        decoration: buildInputDecoration("想做点什么？"),
+                        decoration: buildInputDecoration(" 想做点什么？ "),
                       )),
                 ],
               ),
@@ -502,23 +514,29 @@ class _TodoPageState extends State<TodoPage> {
         return Text(
           '!!!! 高优先级',
           style: TextStyle(
-              color: Colors.red, fontSize: 15, fontWeight: FontWeight.bold),
+              color: ColorUtils.color_delete,
+              fontSize: 15,
+              fontWeight: FontWeight.bold),
         );
       case 3:
         return Text(
           '!!! 中优先级',
           style: TextStyle(
-              color: Colors.orange, fontSize: 15, fontWeight: FontWeight.bold),
+              color: ColorUtils.color_blue_light,
+              fontSize: 15,
+              fontWeight: FontWeight.bold),
         );
       case 2:
         return Text(
           '!! 低优先级',
           style: TextStyle(
-              color: Colors.amber, fontSize: 15, fontWeight: FontWeight.bold),
+              color: ColorUtils.color_green,
+              fontSize: 15,
+              fontWeight: FontWeight.bold),
         );
       case 1:
         return Text(
-          '! 摆烂优先级',
+          '! 无优先级',
           style: TextStyle(
               color: Colors.blueGrey,
               fontSize: 15,
@@ -526,9 +544,11 @@ class _TodoPageState extends State<TodoPage> {
         );
     }
     return Text(
-      '!!! 中优先级',
+      '! 无优先级',
       style: TextStyle(
-          color: Colors.orange, fontSize: 15, fontWeight: FontWeight.bold),
+          color: Colors.blueGrey,
+          fontSize: 15,
+          fontWeight: FontWeight.bold),
     );
   }
 
@@ -573,7 +593,7 @@ class _TodoPageState extends State<TodoPage> {
             child: new ListBody(
               children: <Widget>[
                 ElevatedButton(
-                  child: Text('学习'),
+                  child: Text(' #学习 '),
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                   ),
@@ -583,7 +603,7 @@ class _TodoPageState extends State<TodoPage> {
                   },
                 ),
                 ElevatedButton(
-                  child: Text('生活'),
+                  child: Text(' #生活 '),
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                   ),
@@ -593,7 +613,7 @@ class _TodoPageState extends State<TodoPage> {
                   },
                 ),
                 ElevatedButton(
-                  child: Text('工作'),
+                  child: Text(' #工作 '),
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                   ),
@@ -603,7 +623,7 @@ class _TodoPageState extends State<TodoPage> {
                   },
                 ),
                 ElevatedButton(
-                  child: Text('娱乐'),
+                  child: Text(' #娱乐 '),
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                   ),
@@ -638,7 +658,7 @@ class _TodoPageState extends State<TodoPage> {
         });
   }
 
-  ElevatedButton getImportanceElevatedButton(int i){
+  ElevatedButton getImportanceElevatedButton(int i) {
     return ElevatedButton(
       onPressed: () {
         arguments.itemImportance = i;
@@ -657,7 +677,7 @@ class _TodoPageState extends State<TodoPage> {
     todoBeanEntity.content = todoContentController.text;
     todoBeanEntity.itemStatus = 0;
     todoBeanEntity.itemImportance = arguments.itemImportance == null
-        ? arguments.itemImportance = 3
+        ? arguments.itemImportance = 1
         : arguments.itemImportance;
     todoBeanEntity.itemDatetime = arguments.itemDatetime == null
         ? arguments.itemDatetime = DateTime.now().toString()
