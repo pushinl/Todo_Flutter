@@ -77,64 +77,69 @@ class _TodoPageState extends State<TodoPage> {
           children: [
             //下面是搜索栏
             Padding(
-              padding: EdgeInsets.fromLTRB(20, 13, 20, 20),
-              child: Container(
-                height: 30,
-                padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                decoration: BoxDecoration(
-                    color: ColorUtils.color_grey_dd,
-                    borderRadius: BorderRadius.all(Radius.circular(40))),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      "assets/search_icon.png",
-                      width: 15,
-                      height: 15,
-                    ),
-                    Expanded(
-                        child: TextField(
-                            style: TextStyle(fontSize: 14),
-                            autofocus: false,
-                            cursorColor: ColorUtils.color_text,
-                            onChanged: (value) {
-                              setState(() {
-                                keyWord = value;
-                                getAllTodo();
-                              });
-                            },
-                            decoration: InputDecoration(
-                                filled: true,
-                                fillColor: ColorUtils.color_grey_dd,
-                                contentPadding:
-                                    EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: ColorUtils.color_grey_dd),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(40))),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: ColorUtils.color_grey_dd),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(40))),
-                                hintText: "Search...",
-                                hintStyle: TextStyle(
-                                    color: ColorUtils.color_grey_666)))),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        icon: Image.asset(
-                          'assets/more_icon.png',
-                          width: 18,
-                          height: 18,
+              padding: EdgeInsets.fromLTRB(20, 10, 0, 10),
+              child: Row(
+                children: [
+                  Container(
+                    height: 30,
+                    width: width - 73,
+                    padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                    decoration: BoxDecoration(
+                        color: ColorUtils.color_grey_dd,
+                        borderRadius: BorderRadius.all(Radius.circular(40))),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          "assets/search_icon.png",
+                          width: 15,
+                          height: 15,
                         ),
-                        onPressed: () {
-                          showPicker(context);
-                        },
+                        Expanded(
+                            child: TextField(
+                                style: TextStyle(fontSize: 14),
+                                autofocus: false,
+                                cursorColor: ColorUtils.color_text,
+                                onChanged: (value) {
+                                  setState(() {
+                                    keyWord = value;
+                                    getAllTodo();
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: ColorUtils.color_grey_dd,
+                                    contentPadding:
+                                    EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                    enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: ColorUtils.color_grey_dd),
+                                        borderRadius:
+                                        BorderRadius.all(Radius.circular(40))),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: ColorUtils.color_grey_dd),
+                                        borderRadius:
+                                        BorderRadius.all(Radius.circular(40))),
+                                    hintText: "Search...",
+                                    hintStyle: TextStyle(
+                                        color: ColorUtils.color_grey_666)))),
+                      ],
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: Image.asset(
+                        'assets/more_icon.png',
+                        width: 15,
+                        height: 18,
                       ),
-                    )
-                  ],
-                ),
+                      onPressed: () {
+                        showPicker(context);
+                      },
+                    ),
+                  )
+                ],
               ),
             ),
             //下面是List

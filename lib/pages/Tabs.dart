@@ -102,7 +102,7 @@ class _TabsState extends State<Tabs> with SingleTickerProviderStateMixin{
       ),
 
       body: AnimatedSwitcher(
-        duration: Duration(milliseconds: 500),
+        duration: Duration(milliseconds: 300),
         child: _bottomPages[_selectedIndex],
       ),
     );

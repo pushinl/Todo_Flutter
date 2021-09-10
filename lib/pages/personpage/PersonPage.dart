@@ -28,7 +28,6 @@ class _PersonPageState extends State<PersonPage> {
     return Scaffold(
       backgroundColor: ColorUtils.color_background_main,
       body: listView,
-
     );
   }
   renderRow(context, i) {
