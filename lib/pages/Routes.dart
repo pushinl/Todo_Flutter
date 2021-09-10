@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:todo_flutter/pages/calendarpage/CalendarPage.dart';
 import 'package:todo_flutter/pages/notepage/NoteMainPage.dart';
 import 'package:todo_flutter/pages/notepage/WriteNotePage.dart';
+import 'package:todo_flutter/pages/randompage/RandomPage.dart';
 
 //配置路由，以后所有的跳转的页面都可以再这里完成
 final routes = {
   '/note': (context) => NoteMainPage(),
   '/writeNote': (context, {arguments}) => WriteNotePage(arguments: arguments,),
   '/Calendar':(context) =>CalendarPage(),
+  '/Random' : (context) => RandomPage(),
 
 };
 

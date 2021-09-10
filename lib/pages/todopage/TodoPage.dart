@@ -26,7 +26,7 @@ class _TodoPageState extends State<TodoPage> {
   TodoSqliteHelper todoSqliteHelper;
   List<TodoBeanEntity> todoList = <TodoBeanEntity>[];
   var selectType = 1;
-  static GlobalKey<ScaffoldState> _globalKey = GlobalKey();
+  GlobalKey<ScaffoldState> _globalKey = GlobalKey();
   RCalendarController todoDateController;
   static List<String> labelList = ['#其他', '#学习', '#生活', '#工作', '#娱乐'];
   var width, height;

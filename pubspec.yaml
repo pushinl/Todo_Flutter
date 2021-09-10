@@ -68,7 +68,8 @@ flutter:
   - assets/team_light_icon.png
   - assets/todo_default_icon.png
   - assets/todo_light_icon.png
-  - assets/calendar_icon.png
+  - assets/calendar_light_icon.png
+  - assets/calendar_default_icon.png
   - assets/message_icon.png
   - assets/search_icon.png
   - assets/ok.png

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_flutter/pages/Color.dart';
+import 'package:todo_flutter/pages/Tabs.dart';
 import 'package:todo_flutter/pages/notepage/sqlite/NoteSqliteHelper.dart';
 import 'package:toast/toast.dart';
 
@@ -23,7 +24,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
   NoteSqliteHelper sqliteHelper;
   List<NoteBeanEntity> noteList = <NoteBeanEntity>[];
   var selectType = 1; //1 按编辑日期 2 按创建日期 3 按标题
-  static GlobalKey<ScaffoldState> _globalKey = GlobalKey();
+  GlobalKey<ScaffoldState> _globalKey = GlobalKey();
 
   @override
   void initState() {
