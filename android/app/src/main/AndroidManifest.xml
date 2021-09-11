@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.todo_flutter">
    <application
-        android:label="todo_flutter"
-        android:icon="@mipmap/ic_launcher">
+        android:label="搞咩"
+        android:icon="@mipmap/icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
