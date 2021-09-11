@@ -27,6 +27,8 @@ dependencies:
   flutter:
     sdk: flutter
   sqflite: ^2.0.0
+  sensors: ^2.0.3
+  vibration: ^1.7.3
 
 
 
@@ -87,6 +89,7 @@ flutter:
   - assets/images/type.png
   - assets/images/type_un.png
   - assets/more_icon.png
+  - assets/shake.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

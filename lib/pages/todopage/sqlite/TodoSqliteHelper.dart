@@ -76,6 +76,9 @@ Future<List<TodoBeanEntity>> getAllTodo(int type) async {
       case 3:
         maps = await todoDb.query(tableTodo, orderBy: '$columnStatus ASC, $columnDateTime ASC, $columnContent ASC');
         break;
+      case 233:
+        maps = await todoDb.query(tableTodo, where: '$columnStatus = 0');
+        break;
     }
     maps.map((e) {
       list.add(TodoBeanEntity().fromJson(e));

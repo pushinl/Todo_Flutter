@@ -63,7 +63,7 @@ class _TabsState extends State<Tabs> with SingleTickerProviderStateMixin{
               onPressed: () {
                 Navigator.pushNamed(context,'/Random').then((value) => null);
               },
-              icon: Image.asset('assets/team_light_icon.png', width: 25.0, height: 25.0),
+              icon: Image.asset('assets/shake.png', width: 30.0, height: 30.0),
           )
         ],
       ),
@@ -96,7 +96,7 @@ class _TabsState extends State<Tabs> with SingleTickerProviderStateMixin{
             setState(() {
               _selectedIndex = index;
             });
-            print(_selectedIndex);
+            // print(_selectedIndex);
           },
         ),
       ),

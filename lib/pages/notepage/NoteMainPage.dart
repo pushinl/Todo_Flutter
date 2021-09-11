@@ -42,7 +42,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: Container(
           width: 50,
-          height: 50,
+          height: height*0.08,
           child: FloatingActionButton(
             onPressed: () {
               Navigator.pushNamed(context, "/writeNote").then((value) {
@@ -71,7 +71,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
               child: Row(
                 children: [
                   Container(
-                    height: 30,
+                    height: height*0.045,
                     width: width - 73,
                     padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
                     decoration: BoxDecoration(
@@ -82,7 +82,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
                         Image.asset(
                           "assets/search_icon.png",
                           width: 15,
-                          height: 15,
+                          height: height*0.03,
                         ),
                         Expanded(
                             child: TextField(
@@ -122,7 +122,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
                       icon: Image.asset(
                         'assets/more_icon.png',
                         width: 15,
-                        height: 18,
+                        height: height*0.03,
                       ),
                       onPressed: () {
                         showPicker(context);
@@ -189,7 +189,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
               elevation: 0,
             ),
             child: Container(
-              height: 60,
+              height: height*0.1,
               child: Row(
                 children: [
                   SizedBox(
@@ -201,15 +201,15 @@ class _NoteMainPageState extends State<NoteMainPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(height: 7,),
+                          SizedBox(height: 5,),
                           Text("${e.title}",
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.normal,
                                   color: ColorUtils.color_text)),
                           getListViewPadding(time1, time2, time3, time4, e),
-                          SizedBox(height: 7,)
+                          SizedBox(height: 5,)
                         ]),
                   )
                 ],
@@ -230,7 +230,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
   Padding getListViewPadding(String time1, String time2, String time3,
       String time4, NoteBeanEntity e) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(0, 7, 0, 0),
+      padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
       child: Flex(
         direction: Axis.horizontal,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -238,7 +238,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
           Text(
             "${time1 == time2 ? time3 : time4}",
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 14,
               color: ColorUtils.color_grey_666,
               fontWeight: FontWeight.normal,
             ),
@@ -246,7 +246,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
           Text(
             '  |  ',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 14,
               color: ColorUtils.color_grey_666,
               fontWeight: FontWeight.normal,
             ),
@@ -254,9 +254,9 @@ class _NoteMainPageState extends State<NoteMainPage> {
           Expanded(
               child: Text("${e.content}",
                   overflow: TextOverflow.ellipsis,
-                  // maxLines: 1,
+                  maxLines: 1,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 14,
                     color: ColorUtils.color_grey_666,
                     fontWeight: FontWeight.normal,
                   )))

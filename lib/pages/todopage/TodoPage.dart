@@ -23,7 +23,7 @@ class _TodoPageState extends State<TodoPage> {
   TodoBeanEntity arguments;
   TextEditingController todoContentController;
   var keyWord; //关键字
-  TodoSqliteHelper todoSqliteHelper;
+  static TodoSqliteHelper todoSqliteHelper;
   List<TodoBeanEntity> todoList = <TodoBeanEntity>[];
   var selectType = 1;
   GlobalKey<ScaffoldState> _globalKey = GlobalKey();
@@ -54,7 +54,7 @@ class _TodoPageState extends State<TodoPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: Container(
           width: 50,
-          height: 50,
+          height: height*0.08,
           child: FloatingActionButton(
             onPressed: () {
               addTodo(0);
@@ -81,7 +81,7 @@ class _TodoPageState extends State<TodoPage> {
               child: Row(
                 children: [
                   Container(
-                    height: 30,
+                    height: height*0.045,
                     width: width - 73,
                     padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
                     decoration: BoxDecoration(
@@ -92,7 +92,7 @@ class _TodoPageState extends State<TodoPage> {
                         Image.asset(
                           "assets/search_icon.png",
                           width: 15,
-                          height: 15,
+                          height: height*0.03,
                         ),
                         Expanded(
                             child: TextField(
@@ -132,7 +132,7 @@ class _TodoPageState extends State<TodoPage> {
                       icon: Image.asset(
                         'assets/more_icon.png',
                         width: 15,
-                        height: 18,
+                        height: height*0.03,
                       ),
                       onPressed: () {
                         showPicker(context);
@@ -203,7 +203,7 @@ class _TodoPageState extends State<TodoPage> {
                   elevation: 0,
                 ),
                 child: Container(
-                  height: 60,
+                  height: height * 0.1,
                   child: Row(
                     children: [
                       InkWell(
@@ -227,17 +227,17 @@ class _TodoPageState extends State<TodoPage> {
                               Text("${e.content}",
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.normal,
                                       color: ColorUtils.color_text)),
                               SizedBox(
-                                height: 3,
+                                height: 5,
                               ),
                               Row(
                                 children: [
                                   Text(label,
                                       style: TextStyle(
-                                          fontSize: 12,
+                                          fontSize: 14,
                                           color: ColorUtils
                                               .color_blue_main)),
                                   SizedBox(
@@ -246,7 +246,7 @@ class _TodoPageState extends State<TodoPage> {
                                   ),
                                   Text(time,
                                       style: TextStyle(
-                                          fontSize: 12,
+                                          fontSize: 14,
                                           fontWeight: FontWeight.normal,
                                           color: DateTime.now().compareTo(
                                                       DateTime.parse(e
@@ -294,7 +294,7 @@ class _TodoPageState extends State<TodoPage> {
                           borderRadius: BorderRadius.circular(10),
                         )),
                     child: Container(
-                      height: 60,
+                      height: height*0.1,
                       child: Row(
                         children: [
                           InkWell(
@@ -306,8 +306,8 @@ class _TodoPageState extends State<TodoPage> {
                             },
                             child: Image(
                               image: AssetImage("assets/circle/finished.png"),
-                              width: 20,
-                              height: 20,
+                              width: 24,
+                              height: 24,
                             ),
                           ),
                           SizedBox(
@@ -322,7 +322,7 @@ class _TodoPageState extends State<TodoPage> {
                                   Text(
                                     "${e.content}",
                                     style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.normal,
                                       decoration: TextDecoration.lineThrough,
                                       color: ColorUtils.color_delete_text,
@@ -330,13 +330,13 @@ class _TodoPageState extends State<TodoPage> {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   SizedBox(
-                                    height: 3,
+                                    height: 5,
                                   ),
                                   Row(
                                     children: [
                                       Text(label,
                                           style: TextStyle(
-                                              fontSize: 12,
+                                              fontSize: 14,
                                               color: ColorUtils
                                                   .color_delete_text)),
                                       SizedBox(
@@ -345,7 +345,7 @@ class _TodoPageState extends State<TodoPage> {
                                       ),
                                       Text(time,
                                           style: TextStyle(
-                                              fontSize: 12,
+                                              fontSize: 14,
                                               fontWeight: FontWeight.normal,
                                               color: ColorUtils
                                                   .color_delete_text)),
@@ -583,8 +583,8 @@ class _TodoPageState extends State<TodoPage> {
   Image getImage(int image) {
     return Image.asset(
       'assets/circle/Todo_$image.png',
-      width: 20,
-      height: 20,
+      width: 24,
+      height: 24,
     );
   }
 
@@ -748,7 +748,7 @@ class _TodoPageState extends State<TodoPage> {
 
   showPicker(BuildContext context) {
     Picker picker = new Picker(
-        adapter: PickerDataAdapter<String>(pickerdata: ["按照ddl排序", "按照优先级排序"]),
+        adapter: PickerDataAdapter<String>(pickerdata: ["按照DDL排序", "按照优先级排序"]),
         changeToFirst: true,
         textAlign: TextAlign.left,
         columnPadding: const EdgeInsets.all(8.0),

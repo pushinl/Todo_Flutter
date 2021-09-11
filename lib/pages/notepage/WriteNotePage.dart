@@ -79,7 +79,7 @@ class _WriteNotePageState extends State<WriteNotePage> {
               child: ListView(
                 children: [
                   TextField(
-                    style: TextStyle(fontSize: 26),
+                    style: TextStyle(fontSize: 30),
                     cursorColor: ColorUtils.color_black,
                     controller: title,
                     decoration: buildInputDecoration("请输入标题"),
@@ -88,11 +88,11 @@ class _WriteNotePageState extends State<WriteNotePage> {
                     arguments == null ? DateFormat("MM月dd日 HH:mm").format(DateTime.now()) : DateFormat("MM月dd日 HH:mm").format(DateTime.parse(arguments.updateTime)),
                     style: TextStyle(
                       color: ColorUtils.color_grey_666,
-                      fontSize: 12
+                      fontSize: 14
                     ),
                   ),
                   TextField(
-                    style: TextStyle(fontSize: 15),
+                    style: TextStyle(fontSize: 16),
                     cursorColor: ColorUtils.color_black,
                     controller: content,
                     minLines: 20,
