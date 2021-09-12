@@ -143,7 +143,7 @@ class _TodoPageState extends State<TodoPage> {
               ),
             ),
             //下面是List
-            Expanded(
+            todoList.length > 0 ? Expanded(
               child: ListView.separated(
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
@@ -159,6 +159,9 @@ class _TodoPageState extends State<TodoPage> {
                 itemCount: todoList.length,
                 itemBuilder: getItemBuilder,
               ),
+            ) : Padding(
+              padding: EdgeInsets.fromLTRB(0,height*0.3,0,0),
+              child: Text('点击右下角按钮添加新的待办~', style: TextStyle(fontSize: 16, color: ColorUtils.color_grey_666),),
             ),
           ],
         ),
@@ -411,6 +414,7 @@ class _TodoPageState extends State<TodoPage> {
                                   //print('$result');
                                   if (result != null)
                                     arguments.itemDatetime = result.toString();
+                                  print(result.toString());
                                   bottomState(() {});
                                 }),
                             IconButton(

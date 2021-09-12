@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:todo_flutter/bean/todo_bean_entity.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -63,7 +64,7 @@ class TodoSqliteHelper {
   }
 
   /// @param type 2 按重要程度 1 按ddl
-Future<List<TodoBeanEntity>> getAllTodo(int type) async {
+  Future<List<TodoBeanEntity>> getAllTodo(int type) async {
     List<TodoBeanEntity> list = [];
     List<Map> maps;
     switch (type) {
@@ -105,6 +106,20 @@ Future<List<TodoBeanEntity>> getAllTodo(int type) async {
             where: where, orderBy: '$columnStatus ASC, $columnContent ASC');
         break;
     }
+    maps.map((e) {
+      list.add(TodoBeanEntity().fromJson(e));
+    }).toList();
+    return list;
+  }
+
+  //日历页面获取待办
+  Future<List<TodoBeanEntity>> getTodoFromDate(DateTime dateTime) async {
+    List<TodoBeanEntity> list = [];
+    var where =
+        "$columnDateTime = $dateTime";
+    List<Map> maps;
+    maps = await todoDb.query(tableTodo,
+        where: where, orderBy: '$columnStatus ASC, $columnImportance desc');
     maps.map((e) {
       list.add(TodoBeanEntity().fromJson(e));
     }).toList();

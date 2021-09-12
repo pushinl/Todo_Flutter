@@ -132,7 +132,7 @@ class _NoteMainPageState extends State<NoteMainPage> {
                 ],
               ),
             ),
-            Expanded(
+            noteList.length > 0 ? Expanded(
                 child: ListView.separated(
               shrinkWrap: true,
               //加上这个就不会因为高度报错了
@@ -148,7 +148,10 @@ class _NoteMainPageState extends State<NoteMainPage> {
               },
               itemCount: noteList.length,
               itemBuilder: getItemBuilder,
-            )),
+            )) : Padding(
+              padding: EdgeInsets.fromLTRB(0,height*0.3,0,0),
+              child: Text('点击右下角按钮添加新的备忘录~', style: TextStyle(fontSize: 16, color: ColorUtils.color_grey_666),),
+            ),
           ],
         ),
       ),
