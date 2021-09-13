@@ -20,10 +20,6 @@ class _CalendarPageState extends State<CalendarPage> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay;
-  DateTime _rangeStart;
-  DateTime _rangeEnd;
-  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
-      .toggledOff;
   TodoSqliteHelper todoSqliteHelper;
   List<TodoBeanEntity> todoList = <TodoBeanEntity>[];
 
@@ -62,9 +58,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 setState(() {
                   _selectedDay = selectedDay;
                   _focusedDay = focusedDay;
-                  _rangeStart = null; // Important to clean those
-                  _rangeEnd = null;
-                  _rangeSelectionMode = RangeSelectionMode.toggledOff;
+                  getEventsForDay(selectedDay);
                 });
               }
             },
@@ -76,10 +70,6 @@ class _CalendarPageState extends State<CalendarPage> {
             },
             onPageChanged: (focusedDay) {
               _focusedDay = focusedDay;
-            },
-            eventLoader: (day) {
-              getEventsForDay(day);
-              return todoList;
             },
           ),
 
@@ -112,6 +102,7 @@ class _CalendarPageState extends State<CalendarPage> {
     setState(() {
       todoList.clear();
       todoList.addAll(list);
+      // print(list);
     });
     await todoSqliteHelper.close();
   }
@@ -119,14 +110,11 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget getItemBuilder(context, index) {
     var e = todoList[index];
     var targetTime = e.itemDatetime;
-    var time = DateFormat("MM月dd日")
-        .format(DateTime.parse(targetTime)); //TODO：TIMEPICKER
     int importance = e.itemImportance;
-    return getDismissible(context, e, time, importance);
+    return getDismissible(context, e, importance);
   }
 
-  Dismissible getDismissible(context, TodoBeanEntity e, String time,
-      int importance) {
+  Dismissible getDismissible(context, TodoBeanEntity e, int importance) {
     return e.itemStatus == 0
         ? Dismissible(
         onDismissed: (_) {

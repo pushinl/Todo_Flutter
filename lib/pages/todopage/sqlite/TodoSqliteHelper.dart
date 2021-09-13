@@ -116,7 +116,7 @@ class TodoSqliteHelper {
   Future<List<TodoBeanEntity>> getTodoFromDate(DateTime dateTime) async {
     List<TodoBeanEntity> list = [];
     var where =
-        "$columnDateTime = $dateTime";
+        "$columnDateTime = '${DateFormat('yyyy-MM-dd 00:mm:ss.SSS').format(dateTime)}'";
     List<Map> maps;
     maps = await todoDb.query(tableTodo,
         where: where, orderBy: '$columnStatus ASC, $columnImportance desc');

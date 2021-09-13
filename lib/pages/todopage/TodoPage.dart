@@ -697,6 +697,7 @@ class _TodoPageState extends State<TodoPage> {
     todoBeanEntity.itemTypeDdlOrRepeat = 1;
     todoBeanEntity.itemTypePersonOrTeam = 2;
     //TODO: Other Params are waited to commit
+    print(todoBeanEntity.itemDatetime);
 
     await todoSqliteHelper.insert(todoBeanEntity).then((value) {
       if (value.todoId > 0) {
