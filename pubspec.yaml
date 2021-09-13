@@ -26,6 +26,8 @@ flutter-json:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   sqflite: ^2.0.0
   sensors: ^2.0.3
   vibration: ^1.7.3

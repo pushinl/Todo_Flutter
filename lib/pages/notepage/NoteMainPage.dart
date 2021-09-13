@@ -40,26 +40,29 @@ class _NoteMainPageState extends State<NoteMainPage> {
     height = size.height;
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: Container(
-          width: 50,
-          height: height*0.08,
-          child: FloatingActionButton(
-            onPressed: () {
-              Navigator.pushNamed(context, "/writeNote").then((value) {
-                if (value == Constants.REFRESH) {
-                  getAllNote();
-                }
-              });
-            },
-            backgroundColor: ColorUtils.color_blue_main,
-            elevation: 0,
-            tooltip: '添加备忘录',
-            child: new Icon(
-              Icons.add,
-              color: Colors.white,
-              size: 30,
-            ),
-          )),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 0, 5, 15),
+        child: Container(
+            width: 50,
+            height: height*0.08,
+            child: FloatingActionButton(
+              onPressed: () {
+                Navigator.pushNamed(context, "/writeNote").then((value) {
+                  if (value == Constants.REFRESH) {
+                    getAllNote();
+                  }
+                });
+              },
+              backgroundColor: ColorUtils.color_blue_main,
+              elevation: 0,
+              tooltip: '添加备忘录',
+              child: new Icon(
+                Icons.add,
+                color: Colors.white,
+                size: 30,
+              ),
+            )),
+      ),
       key: _globalKey,
       body: Container(
         decoration: BoxDecoration(color: ColorUtils.color_background_main),

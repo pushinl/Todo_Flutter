@@ -3,7 +3,6 @@ import 'package:r_calendar/r_calendar.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:todo_flutter/bean/todo_bean_entity.dart';
 import 'package:todo_flutter/pages/Color.dart';
-import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:todo_flutter/pages/Constants.dart';
 import 'package:todo_flutter/pages/todopage/sqlite/TodoSqliteHelper.dart';
@@ -48,7 +47,10 @@ class _CalendarPageState extends State<CalendarPage> {
             firstDay: DateTime(2021),
             lastDay: DateTime(2100),
             calendarStyle: CalendarStyle(
-
+              selectedDecoration: const BoxDecoration(
+                color: ColorUtils.color_blue_main,
+                shape: BoxShape.circle,
+              ),
             ),
             selectedDayPredicate: (day) {
               return isSameDay(_selectedDay, day);
@@ -71,9 +73,19 @@ class _CalendarPageState extends State<CalendarPage> {
             onPageChanged: (focusedDay) {
               _focusedDay = focusedDay;
             },
+            headerStyle: HeaderStyle(
+              formatButtonVisible: false,
+              titleCentered: true,
+              titleTextStyle: TextStyle(
+                color: ColorUtils.color_text,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
           ),
 
-          Expanded(
+          todoList.length > 0 ? Expanded(
             child: ListView.separated(
               shrinkWrap: true,
               scrollDirection: Axis.vertical,
@@ -89,6 +101,9 @@ class _CalendarPageState extends State<CalendarPage> {
               itemCount: todoList.length,
               itemBuilder: getItemBuilder,
             ),
+          ) : Padding(
+            padding: EdgeInsets.fromLTRB(0,height*0.15,0,0),
+            child: Text('这天没有待办哦~', style: TextStyle(fontSize: 16, color: ColorUtils.color_grey_666),),
           )
         ],
       ),
@@ -109,7 +124,6 @@ class _CalendarPageState extends State<CalendarPage> {
 
   Widget getItemBuilder(context, index) {
     var e = todoList[index];
-    var targetTime = e.itemDatetime;
     int importance = e.itemImportance;
     return getDismissible(context, e, importance);
   }
@@ -137,7 +151,7 @@ class _CalendarPageState extends State<CalendarPage> {
               elevation: 0,
             ),
             child: Container(
-              height: height * 0.1,
+              height: height * 0.08,
               child: Row(
                 children: [
                   InkWell(
@@ -157,7 +171,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     child: Text("${e.content}",
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.normal,
                             color: ColorUtils.color_text)),
                   )
@@ -191,7 +205,7 @@ class _CalendarPageState extends State<CalendarPage> {
                       borderRadius: BorderRadius.circular(10),
                     )),
                 child: Container(
-                  height: height*0.1,
+                  height: height*0.08,
                   child: Row(
                     children: [
                       InkWell(
@@ -203,8 +217,8 @@ class _CalendarPageState extends State<CalendarPage> {
                         },
                         child: Image(
                           image: AssetImage("assets/circle/finished.png"),
-                          width: 24,
-                          height: 24,
+                          width: 20,
+                          height: 20,
                         ),
                       ),
                       SizedBox(
@@ -215,7 +229,7 @@ class _CalendarPageState extends State<CalendarPage> {
                         child: Text(
                           "${e.content}",
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.normal,
                             decoration: TextDecoration.lineThrough,
                             color: ColorUtils.color_delete_text,
@@ -235,8 +249,8 @@ class _CalendarPageState extends State<CalendarPage> {
   Image getImage(int image) {
     return Image.asset(
       'assets/circle/Todo_$image.png',
-      width: 24,
-      height: 24,
+      width: 20,
+      height: 20,
     );
   }
 

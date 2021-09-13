@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'pages/Routes.dart';
 import 'pages/Tabs.dart';
@@ -34,6 +35,15 @@ class MyApp extends StatelessWidget {
       initialRoute: "/",
       onGenerateRoute: onGenerateRoute,
       theme: ThemeData(primarySwatch: white),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('zh', 'CH'),
+        const Locale('en', 'US'),
+      ],
+      locale: const Locale('zh'),
       home: Tabs(),
     );
   }

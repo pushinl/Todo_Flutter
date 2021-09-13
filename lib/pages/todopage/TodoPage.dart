@@ -11,6 +11,7 @@ import '../../bean/todo_bean_entity.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:r_calendar/r_calendar.dart';
 import 'dart:ui';
+import 'package:intl/date_symbol_data_local.dart';
 
 class TodoPage extends StatefulWidget {
   const TodoPage({Key key}) : super(key: key);
@@ -37,6 +38,7 @@ class _TodoPageState extends State<TodoPage> {
     todoSqliteHelper = new TodoSqliteHelper();
     todoContentController = new TextEditingController();
     arguments = new TodoBeanEntity();
+    initializeDateFormatting();
     // controller = RCalendarController.multiple(selectedDates: [
     //   DateTime(2019, 12, 1),
     //   DateTime(2019, 12, 2),
@@ -52,22 +54,25 @@ class _TodoPageState extends State<TodoPage> {
     height = size.height;
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: Container(
-          width: 50,
-          height: height*0.08,
-          child: FloatingActionButton(
-            onPressed: () {
-              addTodo(0);
-            },
-            backgroundColor: ColorUtils.color_blue_main,
-            tooltip: '添加待办',
-            elevation: 0,
-            child: new Icon(
-              Icons.add,
-              color: Colors.white,
-              size: 30,
-            ),
-          )),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 0, 5, 15),
+        child: Container(
+            width: 50,
+            height: height*0.08,
+            child: FloatingActionButton(
+              onPressed: () {
+                addTodo(0);
+              },
+              backgroundColor: ColorUtils.color_blue_main,
+              tooltip: '添加待办',
+              elevation: 0,
+              child: new Icon(
+                Icons.add,
+                color: Colors.white,
+                size: 30,
+              ),
+            )),
+      ),
       key: _globalKey,
       body: Container(
         decoration: BoxDecoration(
@@ -253,10 +258,10 @@ class _TodoPageState extends State<TodoPage> {
                                           fontWeight: FontWeight.normal,
                                           color: DateTime.now().compareTo(
                                                       DateTime.parse(e
-                                                          .itemDatetime)) <
+                                                          .itemDatetime)) >
                                                   0
-                                              ? ColorUtils.color_date_text
-                                              : ColorUtils.color_delete)),
+                                              ? ColorUtils.color_delete
+                                              : ColorUtils.color_date_text)),
                                   SizedBox(
                                     width: 20,
                                     height: 15,
@@ -401,16 +406,23 @@ class _TodoPageState extends State<TodoPage> {
                                 ),
                                 onPressed: () async {
                                   result = await showDatePicker(
-                                      context: context,
-                                      initialDate: DateTime.now(),
-                                      firstDate: DateTime(2021),
-                                      lastDate: DateTime(2030),
-                                      builder: (context, child) {
-                                        return Theme(
-                                          data: ThemeData.fallback(),
-                                          child: child,
-                                        );
-                                      });
+                                    context: context,
+                                    initialDate: arguments.itemDatetime == null ? DateTime.now() : DateTime.parse(arguments.itemDatetime),
+                                    firstDate: DateTime(2021),
+                                    lastDate: DateTime(2100),
+                                    builder: (context, child) {
+                                      return Theme(
+                                        data: ThemeData.light().copyWith(
+                                          primaryColor: ColorUtils.color_blue_main,
+                                          accentColor: ColorUtils.color_blue_main,
+                                          colorScheme: ColorScheme.light(primary: ColorUtils.color_blue_main),
+                                          buttonTheme: ButtonThemeData(
+                                              textTheme: ButtonTextTheme.primary
+                                          ),
+                                        ),
+                                        child: child,
+                                      );
+                                    });
                                   //print('$result');
                                   if (result != null)
                                     arguments.itemDatetime = result.toString();
