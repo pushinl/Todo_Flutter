@@ -157,6 +157,7 @@ class _LoginRouteState extends State<LoginRoute> {
       UserBeanResult user;
       UserBeanEntity result1;
       String ticket = base64Encode(utf8.encode(APP_KEY + '.' + APP_SECRET));
+      print(ticket);
       Map<String, String> headers = {"DOMAIN": DOMAIN, "ticket": ticket};
       var result = await Dio().post("http://42.193.115.210:8080/api/login",
           options: Options(headers: headers),
@@ -170,7 +171,7 @@ class _LoginRouteState extends State<LoginRoute> {
         user = result1.result;
         Global.isLogin = true;
         Global.user = user;
-        // print(Global.user.idNumber);
+        // print(Global.user.idNumber);YmFuYW5hLjM3YjU5MDA2M2Q1OTM3MTY0MDVhMmM1YTM4MmIxMTMwYjI4YmY4YTc=
         Navigator.of(context).pop(Constants.REFRESH);
       } else {
         Toast.show('发生了一些错误~', context);
