@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:todo_flutter/bean/user_bean_entity.dart';
 
 import 'pages/Routes.dart';
 import 'pages/Tabs.dart';
@@ -24,6 +25,11 @@ const MaterialColor white = const MaterialColor(
     900: const Color(0xFFFFFFFF),
   },
 );
+
+class Global{
+  static bool isLogin = false;
+  static UserBeanResult user;
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key key}) : super(key: key);

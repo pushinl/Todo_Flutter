@@ -43,6 +43,7 @@ dependencies:
   r_calendar: ^0.1.11
   table_calendar: ^3.0.2
   flutter_cupertino_date_picker: ^1.0.2
+  dio: ^4.0.0
 
 
 dev_dependencies:
@@ -92,6 +93,10 @@ flutter:
   - assets/images/type_un.png
   - assets/more_icon.png
   - assets/shake.png
+  - assets/twt_assets/twt.png
+  - assets/twt_assets/feedback.png
+  - assets/qrcode.png
+  - assets/twt_assets/logout.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

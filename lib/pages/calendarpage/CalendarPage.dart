@@ -78,11 +78,20 @@ class _CalendarPageState extends State<CalendarPage> {
               titleCentered: true,
               titleTextStyle: TextStyle(
                 color: ColorUtils.color_text,
-                fontSize: 20,
+                fontSize: 19,
                 fontWeight: FontWeight.bold,
               ),
             ),
-
+            daysOfWeekStyle: DaysOfWeekStyle(
+              weekdayStyle: TextStyle(
+                fontSize: 13,
+                color: const Color(0xFF4F4F4F),
+              ),
+              weekendStyle: TextStyle(
+                fontSize: 13,
+                color: const Color(0xFF6A6A6A),
+              )
+            ),
           ),
 
           todoList.length > 0 ? Expanded(
