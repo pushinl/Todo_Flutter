@@ -706,8 +706,6 @@ class _TodoPageState extends State<TodoPage> {
     todoBeanEntity.itemLabels = arguments.itemLabels == null
         ? arguments.itemLabels = 0
         : arguments.itemLabels;
-    todoBeanEntity.itemTypeDdlOrRepeat = 1;
-    todoBeanEntity.itemTypePersonOrTeam = 2;
     //TODO: Other Params are waited to commit
     print(todoBeanEntity.itemDatetime);
 

@@ -9,10 +9,6 @@ class TodoBeanEntity with JsonConvert<TodoBeanEntity> {
 	String itemDatetime;
 	@JSONField(name: "item_importance")
 	int itemImportance;
-	@JSONField(name: "item_type_ddl_or_repeat")
-	int itemTypeDdlOrRepeat;
-	@JSONField(name: "item_type_person_or_team")
-	int itemTypePersonOrTeam;
 	@JSONField(name: "item_status")
 	int itemStatus;
 	@JSONField(name: "item_labels")

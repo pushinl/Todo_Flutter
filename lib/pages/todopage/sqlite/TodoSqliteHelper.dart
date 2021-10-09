@@ -8,8 +8,6 @@ final String columnId = 'todo_id';
 final String columnContent = 'content';
 final String columnDateTime = 'item_datetime';
 final String columnStatus = 'item_status';
-final String columnTypeDdlOrRepeat = 'item_type_ddl_or_repeat';
-final String columnTypePersonOrTeam = "item_type_person_or_team";
 final String columnLabels = 'item_labels';
 final String columnImportance = 'item_importance';
 
@@ -29,8 +27,6 @@ class TodoSqliteHelper {
                   '$columnContent TEXT,'
                   '$columnDateTime TEXT,'
                   '$columnStatus INTEGER,'
-                  '$columnTypeDdlOrRepeat INTEGER,'
-                  '$columnTypePersonOrTeam INTEGER,'
                   '$columnImportance INTEGER,'
                   '$columnLabels TEXT)'
           );
@@ -49,8 +45,6 @@ class TodoSqliteHelper {
           columnId,
           columnContent,
           columnDateTime,
-          columnTypeDdlOrRepeat,
-          columnTypePersonOrTeam,
           columnStatus,
           columnLabels,
           columnImportance
