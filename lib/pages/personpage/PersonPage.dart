@@ -12,7 +12,6 @@ import '../Constants.dart';
 
 class PersonPage extends StatefulWidget {
   const PersonPage({Key key}) : super(key: key);
-
   @override
   _PersonPageState createState() => _PersonPageState();
 }
@@ -94,9 +93,10 @@ class _PersonPageState extends State<PersonPage> {
                           options: Options(headers: headers),
                           queryParameters: {});
                       print(result);
-                      setState(() {
-                        Global.isLogin = false;
-                      });
+                      Navigator.of(context).pushAndRemoveUntil(
+                          new MaterialPageRoute(builder: (context) => new MyApp()
+                          ), (route) => route == null);
+                      Global.isLogin = false;
                     },
                     leading: Image.asset('assets/twt_assets/logout.png', width: 25, height: 25,),
                     title: Text('登出', style: TextStyle(fontSize: 15),),

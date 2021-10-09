@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:todo_flutter/bean/user_bean_entity.dart';
+import 'package:todo_flutter/pages/loginpage/LoginPage.dart';
+import 'package:todo_flutter/pages/loginpage/StartPage.dart';
 
 import 'pages/Routes.dart';
 import 'pages/Tabs.dart';
@@ -50,7 +52,7 @@ class MyApp extends StatelessWidget {
         const Locale('en', 'US'),
       ],
       locale: const Locale('zh'),
-      home: Tabs(),
+      home: Global.isLogin ? Tabs() : StartPage()
     );
   }
 }

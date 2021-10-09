@@ -63,7 +63,8 @@ class _LoginRouteState extends State<LoginRoute> {
               Text(
                 '使用天外天账号登录',
                 style: TextStyle(
-                    fontSize: 22
+                  fontSize: 22,
+                  color: ColorUtils.color_text
                 ),
               ),
               SizedBox(
@@ -72,9 +73,11 @@ class _LoginRouteState extends State<LoginRoute> {
               TextFormField(
                   autofocus: _nameAutoFocus,
                   controller: _unameController,
+                  cursorColor: ColorUtils.color_blue_main,
+                  cursorHeight: 23,
                   decoration: InputDecoration(
-                    labelText: 'TWT账号',
-                    hintText: '使用TWT账号登录',
+                    labelText: '用户名',
+                    hintText: '用户名',
                     prefixIcon: Icon(
                       Icons.person,
                       color: ColorUtils.color_blue_main,
@@ -95,9 +98,11 @@ class _LoginRouteState extends State<LoginRoute> {
               TextFormField(
                 controller: _pwdController,
                 autofocus: !_nameAutoFocus,
+                cursorColor: ColorUtils.color_blue_main,
+                cursorHeight: 23,
                 decoration: InputDecoration(
-                  labelText: 'TWT密码',
-                  hintText: '使用TWT密码登录',
+                  labelText: '密码',
+                  hintText: '密码',
                   prefixIcon: Icon(
                     Icons.lock,
                     color: ColorUtils.color_blue_main,
@@ -115,6 +120,7 @@ class _LoginRouteState extends State<LoginRoute> {
                   ),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: ColorUtils.color_grey_666),
+                    borderRadius: BorderRadius.circular(20)
                   ),
                   focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.black),
@@ -155,26 +161,38 @@ class _LoginRouteState extends State<LoginRoute> {
     // 提交前，先验证各个表单字段是否合法
     if ((_formKey.currentState as FormState).validate()) {
       UserBeanResult user;
-      UserBeanEntity result1;
-      String ticket = base64Encode(utf8.encode(APP_KEY + '.' + APP_SECRET));
-      print(ticket);
-      Map<String, String> headers = {"DOMAIN": DOMAIN, "ticket": ticket};
-      var result = await Dio().post("http://42.193.115.210:8080/api/login",
-          options: Options(headers: headers),
-          queryParameters: {
-            "account": _unameController.text,
-            "password": _pwdController.text
-          });
-      print(result);
-      result1 = UserBeanEntity().fromJson(result.data);
-      if (result1.code == 0) {
-        user = result1.result;
+      // UserBeanEntity result1;
+      // String ticket = base64Encode(utf8.encode(APP_KEY + '.' + APP_SECRET));
+      // //print(ticket);
+      // Map<String, String> headers = {"DOMAIN": DOMAIN, "ticket": ticket};
+      // var result = await Dio().post("http://42.193.115.210:8080/api/login",
+      //     options: Options(headers: headers),
+      //     queryParameters: {
+      //       "account": _unameController.text,
+      //       "password": _pwdController.text
+      //     });
+      // result1 = UserBeanEntity().fromJson(result.data);
+      // if (result1.code == 0) {
+      //   user = result1.result;
+      //   Global.isLogin = true;
+      //   Global.user = user;
+      //   //print(Global.user);
+      //   //YmFuYW5hLjM3YjU5MDA2M2Q1OTM3MTY0MDVhMmM1YTM4MmIxMTMwYjI4YmY4YTc=
+      //   Navigator.of(context).pop(Constants.REFRESH);
+      // } else {
+      //   Toast.show('发生了一些错误~', context);
+      // }
+      if ( _unameController.text == 'a'&& _pwdController.text == 'a') {
         Global.isLogin = true;
-        Global.user = user;
-        // print(Global.user.idNumber);YmFuYW5hLjM3YjU5MDA2M2Q1OTM3MTY0MDVhMmM1YTM4MmIxMTMwYjI4YmY4YTc=
-        Navigator.of(context).pop(Constants.REFRESH);
+        Global.user = new UserBeanResult();
+        Global.user.realname = 'a';
+        Global.user.userNumber = '123';
+        Toast.show('成功', context);
+        Navigator.of(context).pushAndRemoveUntil(
+            new MaterialPageRoute(builder: (context) => new MyApp()
+            ), (route) => route == null);
       } else {
-        Toast.show('发生了一些错误~', context);
+        Toast.show('错误', context);
       }
     }
   }
