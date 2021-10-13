@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 import 'package:todo_flutter/bean/user_bean_entity.dart';
 import 'package:todo_flutter/pages/Color.dart';
+import 'package:todo_flutter/service/service.dart';
 
 import '../../main.dart';
 import '../Constants.dart';
@@ -160,40 +161,43 @@ class _LoginRouteState extends State<LoginRoute> {
   void _onLogin() async {
     // 提交前，先验证各个表单字段是否合法
     if ((_formKey.currentState as FormState).validate()) {
-      UserBeanResult user;
-      // UserBeanEntity result1;
-      // String ticket = base64Encode(utf8.encode(APP_KEY + '.' + APP_SECRET));
-      // //print(ticket);
-      // Map<String, String> headers = {"DOMAIN": DOMAIN, "ticket": ticket};
-      // var result = await Dio().post("http://42.193.115.210:8080/api/login",
-      //     options: Options(headers: headers),
-      //     queryParameters: {
-      //       "account": _unameController.text,
-      //       "password": _pwdController.text
-      //     });
-      // result1 = UserBeanEntity().fromJson(result.data);
-      // if (result1.code == 0) {
-      //   user = result1.result;
-      //   Global.isLogin = true;
-      //   Global.user = user;
-      //   //print(Global.user);
-      //   //YmFuYW5hLjM3YjU5MDA2M2Q1OTM3MTY0MDVhMmM1YTM4MmIxMTMwYjI4YmY4YTc=
-      //   Navigator.of(context).pop(Constants.REFRESH);
-      // } else {
-      //   Toast.show('发生了一些错误~', context);
-      // }
-      if ( _unameController.text == 'a'&& _pwdController.text == 'a') {
+      // UserBeanResult user;
+      CommonBody result;
+      String ticket = base64Encode(utf8.encode(APP_KEY + '.' + APP_SECRET));
+      //print(ticket);
+      Map<String, String> headers = {"DOMAIN": DOMAIN, "ticket": ticket};
+      var response = await Dio().post("http://121.43.164.122:3389/user/login",
+          options: Options(headers: headers),
+          queryParameters: {
+            "account": _unameController.text,
+            "password": _pwdController.text
+          });
+      result = CommonBody.fromJson(response.data);
+      print(result.message);
+      if (result.errorCode == 0) {
         Global.isLogin = true;
-        Global.user = new UserBeanResult();
-        Global.user.realname = 'a';
-        Global.user.userNumber = '123';
-        Toast.show('成功', context);
+        Global.result = result.result;
+        //TODO:啥玩意，寄
+        // print(Global.user);
+        //YmFuYW5hLjM3YjU5MDA2M2Q1OTM3MTY0MDVhMmM1YTM4MmIxMTMwYjI4YmY4YTc=
         Navigator.of(context).pushAndRemoveUntil(
             new MaterialPageRoute(builder: (context) => new MyApp()
             ), (route) => route == null);
       } else {
-        Toast.show('错误', context);
+        Toast.show('发生了一些错误~', context);
       }
+      // if ( _unameController.text == 'a'&& _pwdController.text == 'a') {
+      //   Global.isLogin = true;
+      //   Global.user = new UserBeanResult();
+      //   Global.user.realname = 'a';
+      //   Global.user.userNumber = '123';
+      //   Toast.show('成功', context);
+      //   Navigator.of(context).pushAndRemoveUntil(
+      //       new MaterialPageRoute(builder: (context) => new MyApp()
+      //       ), (route) => route == null);
+      // } else {
+      //   Toast.show('错误', context);
+      // }
     }
   }
 }

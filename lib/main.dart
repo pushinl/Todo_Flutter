@@ -30,7 +30,8 @@ const MaterialColor white = const MaterialColor(
 
 class Global{
   static bool isLogin = false;
-  static UserBeanResult user;
+  // static UserBeanResult user;
+  static String result = '';
 }
 
 class MyApp extends StatelessWidget {

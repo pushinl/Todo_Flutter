@@ -32,6 +32,7 @@ dependencies:
   sensors: ^2.0.3
   vibration: ^1.7.3
   connectivity: ^3.0.6
+  shared_preferences: ^0.5.8
 
 
 

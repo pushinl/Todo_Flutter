@@ -114,7 +114,7 @@ class _PersonPageState extends State<PersonPage> {
 ElevatedButton _getUserProfile(BuildContext context){
   return ElevatedButton(
     onPressed: () {
-      Toast.show('你的身份证号是：${Global.user.idNumber}', context);
+      Toast.show('你的身份证号xxx', context);
     },
     child: Row(
       children: [
@@ -124,8 +124,7 @@ ElevatedButton _getUserProfile(BuildContext context){
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('${Global.user.realname}', style: TextStyle(color: Color(0xFF222222), fontSize: 22, fontWeight: FontWeight.normal),),
-            Text('${Global.user.userNumber}', style: TextStyle(color: Color(0xFF222222), fontSize: 18, fontWeight: FontWeight.normal),),
+            Text('${Global.result}', style: TextStyle(color: Color(0xFF222222), fontSize: 22, fontWeight: FontWeight.normal),),
           ],
         ),
       ],
