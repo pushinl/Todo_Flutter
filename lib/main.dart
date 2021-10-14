@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:todo_flutter/bean/user_bean_entity.dart';
-import 'package:todo_flutter/pages/loginpage/LoginPage.dart';
-import 'package:todo_flutter/pages/loginpage/StartPage.dart';
+import 'package:todo_flutter/pages/loginpage/login_page.dart';
+import 'package:todo_flutter/pages/loginpage/start_page.dart';
 
-import 'pages/Routes.dart';
-import 'pages/Tabs.dart';
+import 'pages/routes.dart';
+import 'pages/tabs.dart';
 
 void main() {
   runApp(MyApp());

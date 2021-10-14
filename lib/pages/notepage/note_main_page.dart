@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:todo_flutter/pages/Color.dart';
-import 'package:todo_flutter/pages/Tabs.dart';
-import 'package:todo_flutter/pages/notepage/sqlite/NoteSqliteHelper.dart';
+import 'package:todo_flutter/pages/color_utils.dart';
+import 'package:todo_flutter/pages/tabs.dart';
+import 'package:todo_flutter/pages/notepage/sqlite/note_sqlite_helper.dart';
 import 'package:toast/toast.dart';
 
-import '../Constants.dart';
+import '../constants.dart';
 import 'package:todo_flutter/bean/note_bean_entity.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 

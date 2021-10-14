@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:todo_flutter/pages/Color.dart';
-import 'package:todo_flutter/pages/Constants.dart';
-import 'package:todo_flutter/pages/notepage/sqlite/NoteSqliteHelper.dart';
+import 'package:todo_flutter/pages/color_utils.dart';
+import 'package:todo_flutter/pages/constants.dart';
+import 'package:todo_flutter/pages/notepage/sqlite/note_sqlite_helper.dart';
 
 import '../../bean/note_bean_entity.dart';
 import 'package:toast/toast.dart';

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:todo_flutter/pages/Color.dart';
-import 'package:todo_flutter/pages/todopage/sqlite/TodoSqliteHelper.dart';
+import 'package:todo_flutter/pages/color_utils.dart';
+import 'package:todo_flutter/pages/todopage/sqlite/todo_sqlite_helper.dart';
 import '../../bean/todo_bean_entity.dart';
 import 'dart:math';
 import 'package:sensors/sensors.dart';

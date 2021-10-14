@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:r_calendar/r_calendar.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:todo_flutter/bean/todo_bean_entity.dart';
-import 'package:todo_flutter/pages/Color.dart';
+import 'package:todo_flutter/pages/color_utils.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:todo_flutter/pages/Constants.dart';
-import 'package:todo_flutter/pages/todopage/sqlite/TodoSqliteHelper.dart';
+import 'package:todo_flutter/pages/constants.dart';
+import 'package:todo_flutter/pages/todopage/sqlite/todo_sqlite_helper.dart';
 import 'package:toast/toast.dart';
 
 class CalendarPage extends StatefulWidget {

@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_flutter/bean/todo_bean_entity.dart';
-import 'package:todo_flutter/pages/Color.dart';
-import 'package:todo_flutter/pages/todopage/sqlite/TodoSqliteHelper.dart';
+import 'package:todo_flutter/pages/color_utils.dart';
+import 'package:todo_flutter/pages/todopage/sqlite/todo_sqlite_helper.dart';
 import 'package:toast/toast.dart';
 import 'dart:async';
-import '../Constants.dart';
+import '../constants.dart';
 import '../../bean/todo_bean_entity.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:r_calendar/r_calendar.dart';
@@ -663,15 +663,15 @@ class _TodoPageState extends State<TodoPage> {
     return showDialog(
         context: context,
         barrierDismissible: true,
-        builder: (BuildContext context) {
+        builder: (BuildContext dialogContext) {
           return AlertDialog(
             content: new SingleChildScrollView(
               child: new ListBody(
                 children: <Widget>[
-                  getImportanceElevatedButton(4),
-                  getImportanceElevatedButton(3),
-                  getImportanceElevatedButton(2),
-                  getImportanceElevatedButton(1),
+                  getImportanceElevatedButton(4, dialogContext),
+                  getImportanceElevatedButton(3, dialogContext),
+                  getImportanceElevatedButton(2, dialogContext),
+                  getImportanceElevatedButton(1, dialogContext),
                 ],
               ),
             ),
@@ -679,7 +679,7 @@ class _TodoPageState extends State<TodoPage> {
         });
   }
 
-  ElevatedButton getImportanceElevatedButton(int i) {
+  ElevatedButton getImportanceElevatedButton(int i, BuildContext context) {
     return ElevatedButton(
       onPressed: () {
         arguments.itemImportance = i;

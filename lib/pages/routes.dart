@@ -1,15 +1,15 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:todo_flutter/pages/Tabs.dart';
-import 'package:todo_flutter/pages/calendarpage/CalendarPage.dart';
-import 'package:todo_flutter/pages/loginpage/LoginPage.dart';
-import 'package:todo_flutter/pages/notepage/NoteMainPage.dart';
-import 'package:todo_flutter/pages/notepage/WriteNotePage.dart';
-import 'package:todo_flutter/pages/randompage/RandomPage.dart';
-import 'package:todo_flutter/pages/todopage/TodoPage.dart';
+import 'package:todo_flutter/pages/tabs.dart';
+import 'package:todo_flutter/pages/calendarpage/calendar_page.dart';
+import 'package:todo_flutter/pages/loginpage/login_page.dart';
+import 'package:todo_flutter/pages/notepage/note_main_page.dart';
+import 'package:todo_flutter/pages/notepage/write_note_page.dart';
+import 'package:todo_flutter/pages/randompage/random_page.dart';
+import 'package:todo_flutter/pages/todopage/todo_page.dart';
 
-import 'FeedbackPage.dart';
+import 'feedback_page.dart';
 
 //配置路由，以后所有的跳转的页面都可以再这里完成
 final routes = {
