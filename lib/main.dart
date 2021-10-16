@@ -5,6 +5,7 @@ import 'package:todo_flutter/bean/user_bean_entity.dart';
 import 'package:todo_flutter/pages/loginpage/login_page.dart';
 import 'package:todo_flutter/pages/loginpage/start_page.dart';
 
+import 'bean/user_model.dart';
 import 'pages/routes.dart';
 import 'pages/tabs.dart';
 
@@ -29,9 +30,8 @@ const MaterialColor white = const MaterialColor(
 );
 
 class Global{
-  static bool isLogin = false;
-  // static UserBeanResult user;
-  static String result = '';
+  static bool isLogin = false;//TODO:记得修改
+  static UserModel user = UserModel();
 }
 
 class MyApp extends StatelessWidget {

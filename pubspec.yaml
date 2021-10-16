@@ -65,8 +65,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-  - assets/images/icon_down_narrow.png
-  - assets/images/avatar_default.jpg
+  - assets/images/avatar_default.png
   - assets/person_default_icon.png
   - assets/person_light_icon.png
   - assets/note_default_icon.png
@@ -77,7 +76,6 @@ flutter:
   - assets/todo_light_icon.png
   - assets/calendar_light_icon.png
   - assets/calendar_default_icon.png
-  - assets/message_icon.png
   - assets/search_icon.png
   - assets/ok.png
   - assets/back.png
@@ -85,14 +83,15 @@ flutter:
   - assets/circle/Todo_2.png
   - assets/circle/Todo_3.png
   - assets/circle/Todo_4.png
+  - assets/circle/Ellipse.png
   - assets/circle/finished.png
   - assets/images/priority.png
-  - assets/images/priority_un.png
+  - assets/images/pri_ok.png
   - assets/images/time.png
-  - assets/images/time_un.png
+  - assets/images/time_ok.png
   - assets/images/reok.png
   - assets/images/type.png
-  - assets/images/type_un.png
+  - assets/images/type_ok.png
   - assets/more_icon.png
   - assets/shake.png
   - assets/twt_assets/twt.png

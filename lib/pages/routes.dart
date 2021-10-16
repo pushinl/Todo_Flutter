@@ -1,6 +1,8 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:todo_flutter/pages/loginpage/register_page.dart';
+import 'package:todo_flutter/pages/personpage/person_page.dart';
 import 'package:todo_flutter/pages/tabs.dart';
 import 'package:todo_flutter/pages/calendarpage/calendar_page.dart';
 import 'package:todo_flutter/pages/loginpage/login_page.dart';
@@ -19,7 +21,9 @@ final routes = {
   '/Calendar':(context) =>CalendarPage(),
   '/Random' : (context) => RandomPage(),
   '/Login' : (context) => LoginRoute(),
+  '/Register' : (context) => RegisterPage(),
   '/feedback' : (context) => FeedbackPage(),
+  '/Person' : (context) => PersonPage(),
 
 };
 

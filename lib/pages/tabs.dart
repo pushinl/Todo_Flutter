@@ -47,28 +47,12 @@ class _TabsState extends State<Tabs> with SingleTickerProviderStateMixin{
         getTabImage('assets/note_default_icon.png'),
         getTabImage('assets/note_light_icon.png')
       ],
-      [
-        getTabImage('assets/person_default_icon.png'),
-        getTabImage('assets/person_light_icon.png')
-      ]
     ];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorUtils.color_background_main,
         elevation: 0,
-        leading: IconButton(
-          icon: Image.asset('assets/message_icon.png', width: 22.0, height: 22.0),
-          onPressed: () {
-          },
-        ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context,'/Random').then((value) => null);
-              },
-              icon: Image.asset('assets/shake.png', width: 30.0, height: 30.0),
-          )
-        ],
+        toolbarHeight: 10,
       ),
 
       bottomNavigationBar: Container(
@@ -79,7 +63,6 @@ class _TabsState extends State<Tabs> with SingleTickerProviderStateMixin{
             BottomNavigationBarItem(title: Container(),icon: getTabIcon(0), backgroundColor: ColorUtils.color_background_main),
             BottomNavigationBarItem(title: Container(),icon: getTabIcon(1), backgroundColor: ColorUtils.color_background_main),
             BottomNavigationBarItem(title: Container(),icon: getTabIcon(2), backgroundColor: ColorUtils.color_background_main),
-            BottomNavigationBarItem(title: Container(),icon: getTabIcon(3), backgroundColor: ColorUtils.color_background_main),
           ],
           // selectedIconTheme: IconThemeData(
           //     color: ColorUtils.color_background_main,

@@ -6,6 +6,7 @@ import 'package:todo_flutter/pages/tabs.dart';
 import 'package:todo_flutter/pages/notepage/sqlite/note_sqlite_helper.dart';
 import 'package:toast/toast.dart';
 
+import '../../main.dart';
 import '../constants.dart';
 import 'package:todo_flutter/bean/note_bean_entity.dart';
 import 'package:flutter_picker/flutter_picker.dart';
@@ -55,7 +56,6 @@ class _NoteMainPageState extends State<NoteMainPage> {
               },
               backgroundColor: ColorUtils.color_blue_main,
               elevation: 0,
-              tooltip: '添加备忘录',
               child: new Icon(
                 Icons.add,
                 color: Colors.white,
@@ -65,76 +65,124 @@ class _NoteMainPageState extends State<NoteMainPage> {
       ),
       key: _globalKey,
       body: Container(
+        height: height,
+        width: width,
         decoration: BoxDecoration(color: ColorUtils.color_background_main),
         child: Column(
           children: [
-            //搜索栏：
-            Padding(
-              padding: EdgeInsets.fromLTRB(20, 10, 0, 10),
-              child: Row(
+            Container(
+              height: height * 0.15,
+              width: width - 40,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF656DFD), Color(0xFF6BAEF0)],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  )
+              ),
+              child: Column(
                 children: [
-                  Container(
-                    height: height*0.045,
-                    width: width - 73,
-                    padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                    decoration: BoxDecoration(
-                        color: ColorUtils.color_grey_dd,
-                        borderRadius: BorderRadius.all(Radius.circular(40))),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          "assets/search_icon.png",
-                          width: 15,
-                          height: height*0.03,
+                  SizedBox(height: height*0.015,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: IconButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context,'/Person').then((value) => null);
+                            },
+                            icon: Image.asset('assets/images/avatar_default.png', width: 35.0, height: 35.0),
+                          )
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context,'/Person').then((value) => null);
+                        },
+                        child: Text(
+                          '${Global.user.account}',
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.white,
+                          ),
                         ),
-                        Expanded(
-                            child: TextField(
-                                style: TextStyle(fontSize: 14),
-                                autofocus: false,
-                                cursorColor: ColorUtils.color_text,
-                                onChanged: (value) {
-                                  setState(() {
-                                    keyWord = value;
-                                    getAllNote();
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: ColorUtils.color_grey_dd,
-                                    contentPadding:
-                                    EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: ColorUtils.color_grey_dd),
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(40))),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: ColorUtils.color_grey_dd),
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(40))),
-                                    hintText: "Search...",
-                                    hintStyle: TextStyle(
-                                        color: ColorUtils.color_grey_666)))),
-                      ],
+                      ),
+                      SizedBox(width: width*0.25,),
+                      Align(
+                          alignment: Alignment.centerRight,
+                          child: IconButton(
+                            onPressed: () {
+                              showPicker(context);
+                            },
+                            icon: Image.asset('assets/more_icon.png', width: 18.0, height: 18.0),
+                          )
+                      ),
+                      Align(
+                          alignment: Alignment.centerRight,
+                          child: IconButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context,'/Random').then((value) => null);
+                            },
+                            icon: Image.asset('assets/shake.png', width: 25.0, height: 25.0),
+                          )
+                      ),
+                    ],
+                  ),
+                  //下面是搜索栏
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+                    child: Container(
+                      height: height*0.045,
+                      width: width*0.8,
+                      padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(40))),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            "assets/search_icon.png",
+                            width: 20,
+                          ),
+                          Expanded(
+                              child: TextField(
+                                  style: TextStyle(fontSize: 15),
+                                  autofocus: false,
+                                  cursorColor: ColorUtils.color_text,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      keyWord = value;
+                                      getAllNote();
+                                    });
+                                  },
+                                  decoration: InputDecoration(
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      contentPadding:
+                                      EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                      enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.white),
+                                          borderRadius:
+                                          BorderRadius.all(Radius.circular(40))),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.white),
+                                          borderRadius:
+                                          BorderRadius.all(Radius.circular(40))),
+                                      hintText: "搜索事项",
+                                      hintStyle: TextStyle(
+                                          color: ColorUtils.color_blue_main, fontSize: 15)))),
+                        ],
+                      ),
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      icon: Image.asset(
-                        'assets/more_icon.png',
-                        width: 15,
-                        height: height*0.03,
-                      ),
-                      onPressed: () {
-                        showPicker(context);
-                      },
-                    ),
-                  )
                 ],
               ),
             ),
+            SizedBox(height: 15,),
             noteList.length > 0 ? Expanded(
                 child: ListView.separated(
               shrinkWrap: true,

@@ -77,7 +77,7 @@ class _CalendarPageState extends State<CalendarPage> {
               formatButtonVisible: false,
               titleCentered: true,
               titleTextStyle: TextStyle(
-                color: ColorUtils.color_text,
+                color: ColorUtils.color_blue_main,
                 fontSize: 19,
                 fontWeight: FontWeight.bold,
               ),
@@ -170,20 +170,21 @@ class _CalendarPageState extends State<CalendarPage> {
                       setTodoStatus();
                       getAllTodo();
                     },
-                    child: getImage(e.itemImportance),
+                    child: Image.asset('assets/circle/Ellipse.png', width: 20, height: 20,),
                   ),
                   SizedBox(
                     width: 10,
                   ),
                   SizedBox(
-                    width: width * 0.7,
+                    width: width * 0.65,
                     child: Text("${e.content}",
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.normal,
                             color: ColorUtils.color_text)),
-                  )
+                  ),
+                  getImage(e.itemImportance),
                 ],
               ),
             ),
@@ -234,7 +235,7 @@ class _CalendarPageState extends State<CalendarPage> {
                         width: 10,
                       ),
                       SizedBox(
-                        width: width * 0.7,
+                        width: width * 0.65,
                         child: Text(
                           "${e.content}",
                           style: TextStyle(
@@ -245,7 +246,8 @@ class _CalendarPageState extends State<CalendarPage> {
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
-                      )
+                      ),
+                      getImage(e.itemImportance),
                     ],
                   ),
                 ),
@@ -258,8 +260,8 @@ class _CalendarPageState extends State<CalendarPage> {
   Image getImage(int image) {
     return Image.asset(
       'assets/circle/Todo_$image.png',
-      width: 20,
-      height: 20,
+      width: 22,
+      height: 22,
     );
   }
 

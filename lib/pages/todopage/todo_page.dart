@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_flutter/bean/todo_bean_entity.dart';
+import 'package:todo_flutter/main.dart';
 import 'package:todo_flutter/pages/color_utils.dart';
 import 'package:todo_flutter/pages/todopage/sqlite/todo_sqlite_helper.dart';
 import 'package:toast/toast.dart';
+import 'package:todo_flutter/pages/todopage/todo_service.dart';
 import 'dart:async';
 import '../constants.dart';
 import '../../bean/todo_bean_entity.dart';
@@ -29,7 +31,7 @@ class _TodoPageState extends State<TodoPage> {
   var selectType = 1;
   GlobalKey<ScaffoldState> _globalKey = GlobalKey();
   RCalendarController todoDateController;
-  static List<String> labelList = ['#其他', '#学习', '#生活', '#工作', '#娱乐'];
+  static List<String> labelList = ['其他', '学习', '生活', '工作', '娱乐'];
   var width, height;
 
   @override
@@ -38,6 +40,7 @@ class _TodoPageState extends State<TodoPage> {
     todoSqliteHelper = new TodoSqliteHelper();
     todoContentController = new TextEditingController();
     arguments = new TodoBeanEntity();
+
     initializeDateFormatting();
     // controller = RCalendarController.multiple(selectedDates: [
     //   DateTime(2019, 12, 1),
@@ -64,7 +67,6 @@ class _TodoPageState extends State<TodoPage> {
                 addTodo(0);
               },
               backgroundColor: ColorUtils.color_blue_main,
-              tooltip: '添加待办',
               elevation: 0,
               child: new Icon(
                 Icons.add,
@@ -75,78 +77,126 @@ class _TodoPageState extends State<TodoPage> {
       ),
       key: _globalKey,
       body: Container(
+        height: height,
+        width: width,
         decoration: BoxDecoration(
           color: ColorUtils.color_background_main,
         ),
         child: Column(
           children: [
-            //下面是搜索栏
-            Padding(
-              padding: EdgeInsets.fromLTRB(20, 10, 0, 10),
-              child: Row(
+            Container(
+              height: height * 0.15,
+              width: width - 40,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF656DFD), Color(0xFF6BAEF0)],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  )
+              ),
+              child: Column(
                 children: [
-                  Container(
-                    height: height*0.045,
-                    width: width - 73,
-                    padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
-                    decoration: BoxDecoration(
-                        color: ColorUtils.color_grey_dd,
-                        borderRadius: BorderRadius.all(Radius.circular(40))),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          "assets/search_icon.png",
-                          width: 15,
-                          height: height*0.03,
+                  SizedBox(height: height*0.015,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: IconButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context,'/Person').then((value) => null);
+                            },
+                            icon: Image.asset('assets/images/avatar_default.png', width: 35.0, height: 35.0),
+                          )
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context,'/Person').then((value) => null);
+                        },
+                        child: Text(
+                          '${Global.user.account}',
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.white,
+                          ),
                         ),
-                        Expanded(
-                            child: TextField(
-                                style: TextStyle(fontSize: 14),
-                                autofocus: false,
-                                cursorColor: ColorUtils.color_text,
-                                onChanged: (value) {
-                                  setState(() {
-                                    keyWord = value;
-                                    getAllTodo();
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: ColorUtils.color_grey_dd,
-                                    contentPadding:
-                                    EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: ColorUtils.color_grey_dd),
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(40))),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: ColorUtils.color_grey_dd),
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(40))),
-                                    hintText: "Search...",
-                                    hintStyle: TextStyle(
-                                        color: ColorUtils.color_grey_666)))),
-                      ],
+                      ),
+                      SizedBox(width: width*0.25,),
+                      Align(
+                          alignment: Alignment.centerRight,
+                          child: IconButton(
+                            onPressed: () {
+                              showPicker(context);
+                            },
+                            icon: Image.asset('assets/more_icon.png', width: 18.0, height: 18.0),
+                          )
+                      ),
+                      Align(
+                          alignment: Alignment.centerRight,
+                          child: IconButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context,'/Random').then((value) => null);
+                            },
+                            icon: Image.asset('assets/shake.png', width: 25.0, height: 25.0),
+                          )
+                      ),
+                    ],
+                  ),
+                  //下面是搜索栏
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+                    child: Container(
+                      height: height*0.045,
+                      width: width*0.8,
+                      padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(40))),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            "assets/search_icon.png",
+                            width: 20,
+                          ),
+                          Expanded(
+                              child: TextField(
+                                  style: TextStyle(fontSize: 15),
+                                  autofocus: false,
+                                  cursorColor: ColorUtils.color_text,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      keyWord = value;
+                                      getAllTodo();
+                                    });
+                                  },
+                                  decoration: InputDecoration(
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      contentPadding:
+                                      EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                      enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.white),
+                                          borderRadius:
+                                          BorderRadius.all(Radius.circular(40))),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.white),
+                                          borderRadius:
+                                          BorderRadius.all(Radius.circular(40))),
+                                      hintText: "搜索待办",
+                                      hintStyle: TextStyle(
+                                          color: ColorUtils.color_blue_main, fontSize: 15)))),
+                        ],
+                      ),
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      icon: Image.asset(
-                        'assets/more_icon.png',
-                        width: 15,
-                        height: height*0.03,
-                      ),
-                      onPressed: () {
-                        showPicker(context);
-                      },
-                    ),
-                  )
                 ],
               ),
             ),
+            SizedBox(height: 15,),
             //下面是List
             todoList.length > 0 ? Expanded(
               child: ListView.separated(
@@ -221,13 +271,17 @@ class _TodoPageState extends State<TodoPage> {
                           setTodoStatus();
                           getAllTodo();
                         },
-                        child: getImage(e.itemImportance),
+                        child: Image.asset(
+                          'assets/circle/Ellipse.png',
+                          width: 24,
+                          height: 24,
+                        ),
                       ),
                       SizedBox(
                         width: 10,
                       ),
                       SizedBox(
-                        width: width * 0.7,
+                        width: width * 0.63,
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -269,7 +323,11 @@ class _TodoPageState extends State<TodoPage> {
                                 ],
                               )
                             ]),
-                      )
+                      ),
+                      Align(
+                          alignment: Alignment.centerRight,
+                          child: getImage(e.itemImportance),
+                      ),
                     ],
                   ),
                 ),
@@ -322,7 +380,7 @@ class _TodoPageState extends State<TodoPage> {
                             width: 10,
                           ),
                           SizedBox(
-                            width: width * 0.7,
+                            width: width * 0.63,
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -330,7 +388,7 @@ class _TodoPageState extends State<TodoPage> {
                                   Text(
                                     "${e.content}",
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 19,
                                       fontWeight: FontWeight.normal,
                                       decoration: TextDecoration.lineThrough,
                                       color: ColorUtils.color_delete_text,
@@ -360,7 +418,11 @@ class _TodoPageState extends State<TodoPage> {
                                     ],
                                   )
                                 ]),
-                          )
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: getImage(e.itemImportance),
+                          ),
                         ],
                       ),
                     ),
@@ -382,10 +444,27 @@ class _TodoPageState extends State<TodoPage> {
     }
     showModalBottomSheet(
         context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20.0),
+            topRight: Radius.circular(20.0),
+          ),
+        ),
         builder: (BuildContext context) {
           return StatefulBuilder(builder: (context1, bottomState) {
             return Container(
-              height: 200.0,
+              height: 140.0,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [Color(0xFF656DFD), Color(0xFF6BAEF0)],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20.0),
+                  topRight: Radius.circular(20.0),
+                ),
+              ),
               child: Column(
                 children: <Widget>[
                   Stack(
@@ -399,8 +478,12 @@ class _TodoPageState extends State<TodoPage> {
                             ),
                             IconButton(
                                 //设置时间与重复
-                                icon: Image.asset(
+                                icon: arguments.itemDatetime==null ? Image.asset(
                                   'assets/images/time.png',
+                                  width: 18,
+                                  height: 18,
+                                ):Image.asset(
+                                  'assets/images/time_ok.png',
                                   width: 18,
                                   height: 18,
                                 ),
@@ -426,12 +509,15 @@ class _TodoPageState extends State<TodoPage> {
                                   //print('$result');
                                   if (result != null)
                                     arguments.itemDatetime = result.toString();
-                                  print(result.toString());
                                   bottomState(() {});
                                 }),
                             IconButton(
-                                icon: Image.asset(
+                                icon: arguments.itemImportance == null ? Image.asset(
                                   'assets/images/priority.png',
+                                  width: 18,
+                                  height: 18,
+                                ) : Image.asset(
+                                  'assets/images/pri_ok.png',
                                   width: 18,
                                   height: 18,
                                 ),
@@ -440,8 +526,12 @@ class _TodoPageState extends State<TodoPage> {
                                   bottomState(() {});
                                 }),
                             IconButton(
-                                icon: Image.asset(
+                                icon: arguments.itemLabels == null ? Image.asset(
                                   'assets/images/type.png',
+                                  width: 18,
+                                  height: 18,
+                                ) : Image.asset(
+                                  'assets/images/type_ok.png',
                                   width: 18,
                                   height: 18,
                                 ),
@@ -458,8 +548,8 @@ class _TodoPageState extends State<TodoPage> {
                               padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                               icon: Image.asset(
                                 'assets/images/reok.png',
-                                width: 18,
-                                height: 18,
+                                width: 20,
+                                height: 20,
                               ),
                               onPressed: () {
                                 if (todoContentController.text == '') {
@@ -473,54 +563,17 @@ class _TodoPageState extends State<TodoPage> {
                               })),
                     ],
                   ),
-                  Container(
-                    height: 25,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Container(
-                          child: Text(
-                            arguments.itemDatetime == null
-                                ? ' 请选择日期！ '
-                                : DateFormat(" MM月dd日 ").format(
-                                    DateTime.parse(arguments.itemDatetime)),
-                            style: TextStyle(
-                                fontSize: 15,
-                                color: ColorUtils.color_blue_main),
-                          ),
-                          color: ColorUtils.color_background_main,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        getImportanceText(arguments.itemImportance),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Container(
-                          child: Text(
-                            arguments.itemLabels == null
-                                ? ' #其他 '
-                                : labelList[arguments.itemLabels],
-                            style: TextStyle(
-                                fontSize: 15,
-                                color: ColorUtils.color_blue_main),
-                          ),
-                          color: ColorUtils.color_background_main,
-                        )
-                      ],
-                    ),
-                  ),
                   Padding(
-                      padding: EdgeInsets.fromLTRB(20, 5, 20, 0),
-                      child: TextField(
-                        style: TextStyle(fontSize: 15),
-                        cursorColor: ColorUtils.color_text,
-                        controller: todoContentController,
-                        decoration: buildInputDecoration(" 想做点什么？ "),
+                      padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                      child: Container(
+                        height: height*0.07,
+                        child: TextField(
+                          style: TextStyle(fontSize: 15),
+                          cursorHeight: 20,
+                          cursorColor: ColorUtils.color_blue_main,
+                          controller: todoContentController,
+                          decoration: buildInputDecoration(" 想做点什么？ "),
+                        ),
                       )),
                 ],
               ),
@@ -559,7 +612,7 @@ class _TodoPageState extends State<TodoPage> {
         return Text(
           '! 无优先级',
           style: TextStyle(
-              color: Colors.blueGrey,
+              color: Colors.grey,
               fontSize: 15,
               fontWeight: FontWeight.bold),
         );
@@ -567,7 +620,7 @@ class _TodoPageState extends State<TodoPage> {
     return Text(
       '! 无优先级',
       style: TextStyle(
-          color: Colors.blueGrey,
+          color: Colors.grey,
           fontSize: 15,
           fontWeight: FontWeight.bold),
     );
@@ -586,14 +639,18 @@ class _TodoPageState extends State<TodoPage> {
 
   InputDecoration buildInputDecoration(text) {
     return InputDecoration(
-        enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: ColorUtils.color_grey_dd),
-            borderRadius: BorderRadius.all(Radius.circular(10))),
-        focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: ColorUtils.color_grey_dd),
-            borderRadius: BorderRadius.all(Radius.circular(10))),
-        hintText: text,
-        hintStyle: TextStyle(color: ColorUtils.color_grey_dd));
+      contentPadding: EdgeInsets.only(left: 15),
+      enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: ColorUtils.color_white),
+          borderRadius: BorderRadius.all(Radius.circular(30))),
+      focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: ColorUtils.color_white),
+          borderRadius: BorderRadius.all(Radius.circular(30))),
+      hintText: text,
+      hintStyle: TextStyle(color: ColorUtils.color_grey_666),
+      filled: true,
+      fillColor: ColorUtils.color_white,
+    );
   }
 
   Image getImage(int image) {
@@ -614,7 +671,7 @@ class _TodoPageState extends State<TodoPage> {
             child: new ListBody(
               children: <Widget>[
                 ElevatedButton(
-                  child: Text(' #学习 '),
+                  child: Text(' 学习 '),
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                   ),
@@ -624,7 +681,7 @@ class _TodoPageState extends State<TodoPage> {
                   },
                 ),
                 ElevatedButton(
-                  child: Text(' #生活 '),
+                  child: Text(' 生活 '),
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                   ),
@@ -634,7 +691,7 @@ class _TodoPageState extends State<TodoPage> {
                   },
                 ),
                 ElevatedButton(
-                  child: Text(' #工作 '),
+                  child: Text(' 工作 '),
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                   ),
@@ -644,7 +701,7 @@ class _TodoPageState extends State<TodoPage> {
                   },
                 ),
                 ElevatedButton(
-                  child: Text(' #娱乐 '),
+                  child: Text(' 娱乐 '),
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                   ),

@@ -12,7 +12,7 @@ class StartPage extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(30, 50, 0, 0),
             child: Text("Hello,\n搞咩",
                 style: TextStyle(
-                    color: Color.fromRGBO(98, 103, 124, 1),
+                    color: ColorUtils.color_blue_main,
                     fontSize: 50,
                     fontWeight: FontWeight.w300)),
           ),
@@ -28,7 +28,7 @@ class StartPage extends StatelessWidget {
                       Navigator.pushNamed(context,'/Login'),
                   child: Text('登录',
                       style: TextStyle(
-                          color: ColorUtils.color_text, fontSize: 13)),
+                          color: ColorUtils.color_blue_main, fontSize: 13)),
                   style: ElevatedButton.styleFrom(
                     elevation: 3.0,
                     shape: RoundedRectangleBorder(
@@ -42,10 +42,10 @@ class StartPage extends StatelessWidget {
                 margin: const EdgeInsets.only(left: 50),
                 child: ElevatedButton(
                   onPressed: () =>
-                      Navigator.pushNamed(context, '/Login'),
+                      Navigator.pushNamed(context, '/Register'),
                   child: Text('注册',
                       style: TextStyle(
-                          color: ColorUtils.color_text, fontSize: 13)),
+                          color: ColorUtils.color_blue_main, fontSize: 13)),
                   style: ElevatedButton.styleFrom(
                     elevation: 3.0,
                     shape: RoundedRectangleBorder(

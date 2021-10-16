@@ -10,16 +10,16 @@ import 'package:todo_flutter/service/service.dart';
 import '../../main.dart';
 import '../constants.dart';
 
-class LoginRoute extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   @override
-  _LoginRouteState createState() => _LoginRouteState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
 const APP_KEY = "banana";
 const APP_SECRET = "37b590063d593716405a2c5a382b1130b28bf8a7";
 const DOMAIN = "weipeiyang.twt.edu.cn";
 
-class _LoginRouteState extends State<LoginRoute> {
+class _RegisterPageState extends State<RegisterPage> {
 
   TextEditingController _unameController = new TextEditingController();
   TextEditingController _pwdController = new TextEditingController();
@@ -40,7 +40,7 @@ class _LoginRouteState extends State<LoginRoute> {
     // var gm = GmLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('登录'),
+        title: Text('注册'),
         elevation: 0,
         leading: IconButton(
           iconSize: 36,
@@ -62,11 +62,10 @@ class _LoginRouteState extends State<LoginRoute> {
             children: <Widget>[
               Image.asset('assets/twt_assets/twt.png', height: 200,),
               Text(
-                '使用搞咩账号登录',
+                '注册搞咩账号',
                 style: TextStyle(
-                  fontSize: 22,
-                  color: ColorUtils.color_blue_main,
-                  fontWeight: FontWeight.bold
+                    fontSize: 22,
+                    color: ColorUtils.color_text
                 ),
               ),
               SizedBox(
@@ -121,8 +120,8 @@ class _LoginRouteState extends State<LoginRoute> {
                     },
                   ),
                   enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: ColorUtils.color_grey_666),
-                    borderRadius: BorderRadius.circular(20)
+                      borderSide: BorderSide(color: ColorUtils.color_grey_666),
+                      borderRadius: BorderRadius.circular(20)
                   ),
                   focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.black),
@@ -141,12 +140,12 @@ class _LoginRouteState extends State<LoginRoute> {
                 child: ConstrainedBox(
                   constraints: BoxConstraints.expand(height: 55.0),
                   child: ElevatedButton(
-                    onPressed: _onLogin,
-                    child: Text('登录'),
+                    onPressed: _onRegister,
+                    child: Text('注册'),
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
+                            borderRadius: BorderRadius.circular(30.0),
                           )
                       ),
                       backgroundColor:
@@ -164,7 +163,7 @@ class _LoginRouteState extends State<LoginRoute> {
     );
   }
 
-  void _onLogin() async {
+  void _onRegister() async {
     // 提交前，先验证各个表单字段是否合法
     if ((_formKey.currentState as FormState).validate()) {
       // UserBeanResult user;
@@ -172,21 +171,19 @@ class _LoginRouteState extends State<LoginRoute> {
       String ticket = base64Encode(utf8.encode(APP_KEY + '.' + APP_SECRET));
       //print(ticket);
       Map<String, String> headers = {"DOMAIN": DOMAIN, "ticket": ticket};
-      var response = await Dio().post("http://121.43.164.122:3389/user/login",
+      var response = await Dio().post("http://121.43.164.122:3389/user/register",
           options: Options(headers: headers),
           queryParameters: {
             "account": _unameController.text,
             "password": _pwdController.text
           });
+      Global.user.account = _unameController.text;
+      Global.user.password = _pwdController.text;
       result = CommonBody.fromJson(response.data);
       print(result.message);
       if (result.errorCode == 0) {
+        Toast.show('注册成功', context);
         Global.isLogin = true;
-        Global.user.account = _unameController.text;
-        Global.user.password = _pwdController.text;
-        //TODO:啥玩意，寄
-        // print(Global.user);
-        //YmFuYW5hLjM3YjU5MDA2M2Q1OTM3MTY0MDVhMmM1YTM4MmIxMTMwYjI4YmY4YTc=
         Navigator.of(context).pushAndRemoveUntil(
             new MaterialPageRoute(builder: (context) => new MyApp()
             ), (route) => route == null);
