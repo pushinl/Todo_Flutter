@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 import 'package:todo_flutter/bean/user_bean_entity.dart';
 import 'package:todo_flutter/pages/color_utils.dart';
+import 'package:todo_flutter/service/error_interceptor.dart';
 import 'package:todo_flutter/service/service.dart';
 
 import '../../main.dart';
@@ -171,7 +172,7 @@ class _RegisterPageState extends State<RegisterPage> {
       String ticket = base64Encode(utf8.encode(APP_KEY + '.' + APP_SECRET));
       //print(ticket);
       Map<String, String> headers = {"DOMAIN": DOMAIN, "ticket": ticket};
-      var response = await Dio().post("http://121.43.164.122:3389/user/register",
+      var response = await Dio().post("http://121.43.164.122:3391/user/register",
           options: Options(headers: headers),
           queryParameters: {
             "account": _unameController.text,
@@ -181,27 +182,22 @@ class _RegisterPageState extends State<RegisterPage> {
       Global.user.password = _pwdController.text;
       result = CommonBody.fromJson(response.data);
       print(result.message);
-      if (result.errorCode == 0) {
-        Toast.show('注册成功', context);
-        Global.isLogin = true;
-        Navigator.of(context).pushAndRemoveUntil(
-            new MaterialPageRoute(builder: (context) => new MyApp()
-            ), (route) => route == null);
-      } else {
-        Toast.show('发生了一些错误~', context);
+      switch (result.errorCode) {
+        case 0:
+          Global.isLogin = true;
+          Global.user.account = _unameController.text;
+          Global.user.password = _pwdController.text;
+          Navigator.of(context).pushAndRemoveUntil(
+              new MaterialPageRoute(builder: (context) => new MyApp()
+              ), (route) => route == null);
+          break;
+        case 40002:
+          throw TodoDioError(error: "该用户不存在");
+        case 40003:
+          throw TodoDioError(error: "用户名或密码错误");
+        case 40004:
+          throw TodoDioError(error: "用户名已存在");
       }
-      // if ( _unameController.text == 'a'&& _pwdController.text == 'a') {
-      //   Global.isLogin = true;
-      //   Global.user = new UserBeanResult();
-      //   Global.user.realname = 'a';
-      //   Global.user.userNumber = '123';
-      //   Toast.show('成功', context);
-      //   Navigator.of(context).pushAndRemoveUntil(
-      //       new MaterialPageRoute(builder: (context) => new MyApp()
-      //       ), (route) => route == null);
-      // } else {
-      //   Toast.show('错误', context);
-      // }
     }
   }
 }
