@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:todo_flutter/bean/user_bean_entity.dart';
 import 'package:todo_flutter/pages/loginpage/login_page.dart';
-import 'package:todo_flutter/pages/loginpage/start_page.dart';
 
 import 'bean/user_model.dart';
 import 'pages/routes.dart';
@@ -30,7 +28,7 @@ const MaterialColor white = const MaterialColor(
 );
 
 class Global{
-  static bool isLogin = false;//TODO:记得修改
+  static bool isLogin = false;
   static UserModel user = UserModel();
 }
 
@@ -53,7 +51,7 @@ class MyApp extends StatelessWidget {
         const Locale('en', 'US'),
       ],
       locale: const Locale('zh'),
-      home: Global.isLogin ? Tabs() : StartPage()
+      home: Global.isLogin ? Tabs() : LoginRoute()
     );
   }
 }

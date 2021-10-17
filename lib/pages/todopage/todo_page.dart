@@ -6,7 +6,6 @@ import 'package:todo_flutter/main.dart';
 import 'package:todo_flutter/pages/color_utils.dart';
 import 'package:todo_flutter/pages/todopage/sqlite/todo_sqlite_helper.dart';
 import 'package:toast/toast.dart';
-import 'package:todo_flutter/pages/todopage/todo_service.dart';
 import 'dart:async';
 import '../constants.dart';
 import '../../bean/todo_bean_entity.dart';
@@ -596,7 +595,7 @@ class _TodoPageState extends State<TodoPage> {
         return Text(
           '!!! 中优先级',
           style: TextStyle(
-              color: ColorUtils.color_blue_light,
+              color: Color(0xFFFFC086),
               fontSize: 15,
               fontWeight: FontWeight.bold),
         );
@@ -604,7 +603,7 @@ class _TodoPageState extends State<TodoPage> {
         return Text(
           '!! 低优先级',
           style: TextStyle(
-              color: ColorUtils.color_green,
+              color: Color(0xFFA2E5D0),
               fontSize: 15,
               fontWeight: FontWeight.bold),
         );
@@ -612,7 +611,7 @@ class _TodoPageState extends State<TodoPage> {
         return Text(
           '! 无优先级',
           style: TextStyle(
-              color: Colors.grey,
+              color: Color(0xFFACD8F9),
               fontSize: 15,
               fontWeight: FontWeight.bold),
         );
@@ -671,7 +670,7 @@ class _TodoPageState extends State<TodoPage> {
             child: new ListBody(
               children: <Widget>[
                 ElevatedButton(
-                  child: Text(' 学习 '),
+                  child: Text(' 学习 ', style: TextStyle(color: ColorUtils.color_blue_main),),
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                   ),
@@ -681,7 +680,7 @@ class _TodoPageState extends State<TodoPage> {
                   },
                 ),
                 ElevatedButton(
-                  child: Text(' 生活 '),
+                  child: Text(' 生活 ', style: TextStyle(color: ColorUtils.color_blue_main),),
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                   ),
@@ -691,7 +690,7 @@ class _TodoPageState extends State<TodoPage> {
                   },
                 ),
                 ElevatedButton(
-                  child: Text(' 工作 '),
+                  child: Text(' 工作 ', style: TextStyle(color: ColorUtils.color_blue_main),),
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                   ),
@@ -701,7 +700,7 @@ class _TodoPageState extends State<TodoPage> {
                   },
                 ),
                 ElevatedButton(
-                  child: Text(' 娱乐 '),
+                  child: Text(' 娱乐 ', style: TextStyle(color: ColorUtils.color_blue_main),),
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                   ),

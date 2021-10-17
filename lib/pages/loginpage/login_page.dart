@@ -3,13 +3,11 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
-import 'package:todo_flutter/bean/user_bean_entity.dart';
 import 'package:todo_flutter/pages/color_utils.dart';
 import 'package:todo_flutter/service/error_interceptor.dart';
 import 'package:todo_flutter/service/service.dart';
 
 import '../../main.dart';
-import '../constants.dart';
 
 class LoginRoute extends StatefulWidget {
   @override
@@ -40,39 +38,22 @@ class _LoginRouteState extends State<LoginRoute> {
   Widget build(BuildContext context) {
     // var gm = GmLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('登录'),
-        elevation: 0,
-        leading: IconButton(
-          iconSize: 36,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Image.asset(
-            'assets/back.png',
-            width: 25,
-            height: 20,
-          ),
-        ),
-      ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Form(
           key: _formKey,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image.asset('assets/twt_assets/twt.png', height: 200,),
-              Text(
-                '使用搞咩账号登录',
-                style: TextStyle(
-                  fontSize: 22,
-                  color: ColorUtils.color_blue_main,
-                  fontWeight: FontWeight.bold
-                ),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Text("Hello,\n搞咩",
+                    style: TextStyle(
+                        color: ColorUtils.color_blue_main,
+                        fontSize: 40,
+                        fontWeight: FontWeight.w300)),
               ),
-              SizedBox(
-                height: 8,
-              ),
+              Image.asset('assets/twt_assets/twt.png', height: 180,),
               TextFormField(
                   autofocus: _nameAutoFocus,
                   controller: _unameController,
@@ -87,6 +68,7 @@ class _LoginRouteState extends State<LoginRoute> {
                     ),
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: ColorUtils.color_grey_666),
+                      borderRadius: BorderRadius.circular(20)
                     ),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.black),
@@ -137,13 +119,29 @@ class _LoginRouteState extends State<LoginRoute> {
                       .isNotEmpty ? null : '密码不能为空';
                 },
               ),
+              SizedBox(height: 20,),
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/Register');
+                  },
+                  child: Text(
+                    '没有搞咩账号？点击注册',
+                    style: TextStyle(
+                      color: ColorUtils.color_grey_666,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 25),
                 child: ConstrainedBox(
                   constraints: BoxConstraints.expand(height: 55.0),
                   child: ElevatedButton(
                     onPressed: _onLogin,
-                    child: Text('登录'),
+                    child: Text('登录',style: TextStyle(fontSize: 18),),
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
@@ -158,6 +156,7 @@ class _LoginRouteState extends State<LoginRoute> {
                   ),
                 ),
               ),
+              SizedBox(height: 40,),
             ],
           ),
         ),
@@ -183,19 +182,17 @@ class _LoginRouteState extends State<LoginRoute> {
       print(result.message);
       switch (result.errorCode) {
         case 0:
-            Global.isLogin = true;
-            Global.user.account = _unameController.text;
-            Global.user.password = _pwdController.text;
-            Navigator.of(context).pushAndRemoveUntil(
-                new MaterialPageRoute(builder: (context) => new MyApp()
-                ), (route) => route == null);
-            break;
-        case 40002:
-          throw TodoDioError(error: "该用户不存在");
-        case 40003:
-          throw TodoDioError(error: "用户名或密码错误");
+          Toast.show('登录成功', context);
+          Global.isLogin = true;
+          Global.user.account = _unameController.text;
+          Global.user.password = _pwdController.text;
+          Navigator.of(context).pushAndRemoveUntil(
+              new MaterialPageRoute(builder: (context) => new MyApp()
+              ), (route) => route == null);
+          break;
         case 40004:
-          throw TodoDioError(error: "用户名已存在");
+          Toast.show('用户名或密码错误', context);
+          throw TodoDioError(error: '用户名或密码错误');
       }
     }
   }

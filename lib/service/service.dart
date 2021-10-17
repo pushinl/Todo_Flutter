@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 
 import 'error_interceptor.dart';
-import 'net_check_interceptor.dart';
 
 /// [OnSuccess]和[OnResult]均为请求成功；[OnFailure]为请求失败
 typedef OnSuccess = void Function();
@@ -11,7 +10,7 @@ typedef OnFailure = void Function(DioError e);
 abstract class DioAbstract {
   String baseUrl;
   Map<String, String> headers;
-  List<InterceptorsWrapper> interceptors = List();
+  List<InterceptorsWrapper> interceptors = [];
   ResponseType responseType = ResponseType.json;
   bool responseBody = false;
   Dio _dio;
@@ -27,7 +26,6 @@ abstract class DioAbstract {
         headers: headers);
     _dio = Dio()
       ..options = options
-      ..interceptors.add(NetCheckInterceptor())
       ..interceptors.addAll(interceptors)
       ..interceptors.add(ErrorInterceptor())
       ..interceptors.add(LogInterceptor(responseBody: responseBody));
@@ -35,7 +33,6 @@ abstract class DioAbstract {
 }
 
 extension DioRequests on DioAbstract {
-  /// 普通的[get]、[post]、[put]与[download]方法，返回[Response]
   Future<Response<dynamic>> get(String path,
       {Map<String, dynamic> queryParameters}) {
     return dio
@@ -62,36 +59,6 @@ extension DioRequests on DioAbstract {
       throw error;
     });
   }
-
-  Future<Response<dynamic>> download(String urlPath, String savePath,
-      {ProgressCallback onReceiveProgress, Options options}) {
-    return dio
-        .download(urlPath, savePath,
-        onReceiveProgress: onReceiveProgress, options: options)
-        .catchError((error, stack) {
-      throw error;
-    });
-  }
-
-  /// twt后台包装的[get]与[post]方法，返回[CommonBody.result]
-  // Future<Map> getRst(String path, {Map<String, dynamic> queryParameters}) {
-  //   return dio
-  //       .get(path, queryParameters: queryParameters)
-  //       .then((value) => CommonBody.fromJson(value.data).result)
-  //       .catchError((error, stack) {
-  //     throw error;
-  //   });
-  // }
-  //
-  // Future<Map> postRst(String path,
-  //     {Map<String, dynamic> queryParameters, FormData formData}) {
-  //   return dio
-  //       .post(path, queryParameters: queryParameters, data: formData)
-  //       .then((value) => CommonBody.fromJson(value.data).result)
-  //       .catchError((error, stack) {
-  //     throw error;
-  //   });
-  // }
 }
 
 mixin AsyncTimer {
